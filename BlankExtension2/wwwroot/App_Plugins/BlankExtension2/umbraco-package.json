@@ -1,0 +1,14 @@
+{
+  "id": "BlankExtension2",
+  "name": "BlankExtension2",
+  "version": "0.0.0",
+  "allowTelemetry": true,
+  "extensions": [
+    {
+      "name": "Blank Extension 2Bundle",
+      "alias": "BlankExtension2.Bundle",
+      "type": "bundle",
+      "js": "/App_Plugins/BlankExtension2/blank-extension-2.js"
+    }
+  ]
+}

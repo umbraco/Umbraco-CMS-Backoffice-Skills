@@ -19,7 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyExtension\MyExtension.csproj" />
+    <ProjectReference Include="../BlankExtension/BlankExtension.csproj" />
+    <ProjectReference Include="../BlankExtension2/BlankExtension2.csproj" />
+    <ProjectReference Include="../.claude/skills/umbraco-backoffice/examples/Section_Sidebase_Menu_Workspace/MyExtension.csproj" />
+    <ProjectReference Include="../.claude/skills/umbraco-backoffice/examples/TimeDashboard/TimeDashboard.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
