@@ -1,6 +1,6 @@
-import { UMB_WORKSPACE_CONDITION_ALIAS as m, UmbWorkspaceActionBase as l } from "@umbraco-cms/backoffice/workspace";
-import { UMB_NOTIFICATION_CONTEXT as n } from "@umbraco-cms/backoffice/notification";
-import { UMB_DOCUMENT_DETAIL_REPOSITORY_ALIAS as c, UMB_DOCUMENT_ENTITY_TYPE as r } from "@umbraco-cms/backoffice/document";
+import { UMB_WORKSPACE_CONDITION_ALIAS as e, UmbWorkspaceActionBase as c } from "@umbraco-cms/backoffice/workspace";
+import { UMB_NOTIFICATION_CONTEXT as m } from "@umbraco-cms/backoffice/notification";
+import { UMB_DOCUMENT_ENTITY_TYPE as r } from "@umbraco-cms/backoffice/document";
 import { UmbEntityActionBase as p } from "@umbraco-cms/backoffice/entity-action";
 const d = [
   {
@@ -42,7 +42,7 @@ const d = [
       match: "TimeDashboard.Section.Main"
     }
   ]
-}, T = {
+}, w = {
   type: "menu",
   alias: "TimeDashboard.Menu.Main",
   name: "TimeDashboard Sidebar Menu",
@@ -62,7 +62,7 @@ const d = [
     ]
   },
   element: () => import("./nested-menu.element-BKrWPEgz.js")
-}, o = {
+}, n = {
   type: "menu",
   alias: "TimeDashboard.Menu.Nested",
   name: "TimeDashboard Nested Menu",
@@ -72,14 +72,14 @@ const d = [
     icon: "icon-alarm-clock",
     entityType: "time-workspace"
   }
-}, w = [
+}, T = [
   {
     type: "time-menu-item",
     alias: "TimeDashboard.MenuItem.Child1",
     name: "TimeDashboard Child Item 1",
     weight: 200,
     meta: {
-      menus: [o.alias],
+      menus: [n.alias],
       icon: "icon-alarm-clock",
       label: "Child Item 1",
       entityType: "time-workspace"
@@ -89,20 +89,20 @@ const d = [
     type: "time-menu-item",
     alias: "TimeDashboard.MenuItem.Child2",
     name: "TimeDashboard Child Item 2",
-    weight: 200,
+    weight: 100,
     meta: {
-      menus: [o.alias],
-      icon: "icon-alarm-clock",
+      menus: [n.alias],
+      icon: "icon-globe",
       label: "Child Item 2",
-      entityType: "time-workspace"
+      entityType: "time-workspace2"
     }
   }
 ], k = [
   y,
-  T,
+  w,
   u,
-  o,
-  ...w
+  n,
+  ...T
 ], g = [
   {
     type: "dashboard",
@@ -122,7 +122,8 @@ const d = [
       }
     ]
   }
-], e = "time.workspace", A = [
+], t = "time.workspace", s = "time.workspace2", f = [
+  // Workspace 1 (Child Item 1)
   {
     type: "workspaceContext",
     alias: "time.workspace.context",
@@ -130,14 +131,14 @@ const d = [
     api: () => import("./context-BPPHcj4a.js"),
     conditions: [
       {
-        alias: m,
-        match: e
+        alias: e,
+        match: t
       }
     ]
   },
   {
     type: "workspace",
-    alias: e,
+    alias: t,
     name: "time workspace",
     element: () => import("./workspace.element-B0UG53Er.js"),
     meta: {
@@ -157,8 +158,8 @@ const d = [
     },
     conditions: [
       {
-        alias: "Umb.Condition.WorkspaceAlias",
-        match: e
+        alias: e,
+        match: t
       }
     ]
   },
@@ -175,8 +176,8 @@ const d = [
     },
     conditions: [
       {
-        alias: "Umb.Condition.WorkspaceAlias",
-        match: e
+        alias: e,
+        match: t
       }
     ]
   },
@@ -193,8 +194,36 @@ const d = [
     },
     conditions: [
       {
-        alias: "Umb.Condition.WorkspaceAlias",
-        match: e
+        alias: e,
+        match: t
+      }
+    ]
+  },
+  // Workspace 2 (Child Item 2)
+  {
+    type: "workspace",
+    alias: s,
+    name: "time workspace 2",
+    element: () => import("./workspace2.element-CyLKc_MX.js"),
+    meta: {
+      entityType: "time-workspace2"
+    }
+  },
+  {
+    type: "workspaceView",
+    alias: "time.workspace2.main",
+    name: "workspace 2 main view",
+    js: () => import("./workspace2View.element-C2lGWsk0.js"),
+    weight: 300,
+    meta: {
+      icon: "icon-globe",
+      pathname: "overview",
+      label: "Overview"
+    },
+    conditions: [
+      {
+        alias: e,
+        match: s
       }
     ]
   }
@@ -217,14 +246,14 @@ const d = [
     name: "time header modal",
     js: () => import("./time-header-modal-PDNRHjor.js")
   }
-], f = [
+], D = [
   {
     type: "modal",
     alias: "time.custom.modal",
     name: "Time custom modal",
     js: () => import("./custom-modal-element-D9nt2jeQ.js")
   }
-], D = [
+], A = [
   {
     type: "propertyEditorSchema",
     name: "Styled textbox",
@@ -283,11 +312,11 @@ border:none; border-bottom: 1px solid #444;`
     ]
   }
 ];
-class C extends l {
+class C extends c {
   #e;
-  constructor(t, a) {
-    super(t, a), this.consumeContext(n, (i) => {
-      this.#e = i;
+  constructor(a, i) {
+    super(a, i), this.consumeContext(m, (o) => {
+      this.#e = o;
     });
   }
   async execute() {
@@ -299,11 +328,13 @@ class C extends l {
     });
   }
 }
-const U = [
+const E = [
   {
     type: "workspaceAction",
+    kind: "default",
     alias: "time.workspace.action",
-    name: "time workspace action",
+    name: "Time Workspace Action",
+    weight: 900,
     api: C,
     meta: {
       label: "Time Action",
@@ -312,45 +343,45 @@ const U = [
     },
     conditions: [
       {
-        alias: "Umb.Condition.WorkspaceAlias",
+        alias: e,
         match: "Umb.Workspace.Document"
       }
     ]
   }
 ];
-class E extends p {
+class S extends p {
   #e;
-  constructor(t, a) {
-    super(t, a), this.consumeContext(n, (i) => {
-      this.#e = i;
+  constructor(a, i) {
+    super(a, i), this.consumeContext(m, (o) => {
+      this.#e = o;
     });
   }
   async execute() {
     this.#e?.peek("warning", {
       data: {
-        headline: "A thing has happened !",
-        message: "What that thing is? only time will tell."
+        headline: "A thing has happened!",
+        message: "What that thing is? Only time will tell."
       }
     });
   }
 }
-const S = [
+const I = [
   {
     type: "entityAction",
+    kind: "default",
     alias: "time.entity.action",
     name: "tell me the time action",
     weight: -100,
     forEntityTypes: [
       r
     ],
-    api: E,
+    api: S,
     meta: {
       icon: "icon-alarm-clock",
-      label: "time action",
-      repositoryAlias: c
+      label: "Time Action"
     }
   }
-], I = [
+], U = [
   {
     type: "localization",
     alias: "time.lang.enus",
@@ -371,22 +402,22 @@ const S = [
     },
     js: () => import("./en-gb-D3ueGTry.js")
   }
-], j = [
+], O = [
   ...d,
   ...h,
   ...b,
   ...k,
   ...g,
-  ...A,
-  ...x,
   ...f,
+  ...x,
   ...D,
+  ...A,
   ...M,
-  ...U,
-  ...S,
-  ...I
+  ...E,
+  ...I,
+  ...U
 ];
 export {
-  j as manifests
+  O as manifests
 };
 //# sourceMappingURL=time-dashboard.js.map

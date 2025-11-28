@@ -70,20 +70,20 @@ const nestedMenuItems: ManifestTimeMenuItem[] = [
             icon: 'icon-alarm-clock',
             label: 'Child Item 1',
             entityType: 'time-workspace',
-        }
+        },
     },
     {
         type: 'time-menu-item',
         alias: 'TimeDashboard.MenuItem.Child2',
         name: 'TimeDashboard Child Item 2',
-        weight: 200,
+        weight: 100,
         meta: {
             menus: [nestedMenuManifest.alias],
-            icon: 'icon-alarm-clock',
+            icon: 'icon-globe',
             label: 'Child Item 2',
-            entityType: 'time-workspace',
-        }
-    }
+            entityType: 'time-workspace2',
+        },
+    },
 ];
 
 export const manifests: Array<UmbExtensionManifest> = [
