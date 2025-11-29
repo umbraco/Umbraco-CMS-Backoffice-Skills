@@ -10,7 +10,7 @@
 import { NOTE_WORKSPACE_CONTEXT } from "./note-workspace.context-token.js";
 import { css, html, customElement, state } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
-import { NOTES_NOTE_WORKSPACE_ALIAS } from "../manifest.js";
+import { NOTES_NOTE_WORKSPACE_ALIAS } from "../constants.js";
 
 @customElement("notes-note-workspace-editor")
 export class NoteWorkspaceEditorElement extends UmbLitElement {
@@ -46,7 +46,7 @@ export class NoteWorkspaceEditorElement extends UmbLitElement {
     });
 
     this.observe(this.#workspaceContext.isNew, (isNew) => {
-      this._isNew = isNew;
+      this._isNew = isNew ?? false;
     });
   }
 

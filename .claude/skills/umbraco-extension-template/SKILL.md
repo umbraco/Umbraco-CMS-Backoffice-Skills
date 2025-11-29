@@ -145,6 +145,14 @@ export const onInit: UmbEntryPointOnInit = (_host, _extensionRegistry) => {
 };
 ```
 
+## IMPORTANT: Add Extension to Umbraco Instance
+
+After creating a new extension, you **MUST** add it as a project reference to the main Umbraco instance. Without this step, the extension will not load.
+
+**Reference skill: `umbraco-add-extension-reference`**
+
+This skill explains how to add the new extension's `.csproj` file as a `<ProjectReference>` in the main Umbraco project (e.g., `Umbraco-CMS.Skills.csproj`).
+
 ## Related Skills
 
 After creating your extension, use these skills to add functionality:
@@ -158,4 +166,4 @@ After creating your extension, use these skills to add functionality:
 For complete extension blueprints with working examples:
 - Reference skill: `umbraco-backoffice`
 
-That's it! Always fetch fresh docs, use the template to scaffold, then add extension types as needed.
+That's it! Always fetch fresh docs, use the template to scaffold, add the project reference, then add extension types as needed.

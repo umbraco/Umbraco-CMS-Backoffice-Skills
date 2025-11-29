@@ -1,28 +1,36 @@
 /**
  * Folder Workspace Context
  *
- * The workspace context manages the state and operations for editing a folder.
- * Folders are simpler than notes - they only have a name.
+ * The workspace context for viewing a folder and its contents.
+ * This is a read-only workspace - folders are renamed via entity actions.
  *
  * Skills used: umbraco-workspace, umbraco-context-api, umbraco-state-management
  */
 
-import { FOLDER_WORKSPACE_CONTEXT } from "./folder-workspace.context-token.js";
-import { NOTES_FOLDER_WORKSPACE_ALIAS } from "../manifest.js";
+import { NOTES_FOLDER_WORKSPACE_ALIAS } from "../constants.js";
 import { FolderWorkspaceEditorElement } from "./folder-workspace-editor.element.js";
-import { UmbWorkspaceRouteManager } from "@umbraco-cms/backoffice/workspace";
-import { UmbStringState, UmbBooleanState } from "@umbraco-cms/backoffice/observable-api";
+import { UmbSubmittableWorkspaceContextBase } from "@umbraco-cms/backoffice/workspace";
+import { UmbStringState } from "@umbraco-cms/backoffice/observable-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
-import { UmbContextBase } from "@umbraco-cms/backoffice/class-api";
 import { NOTES_FOLDER_ENTITY_TYPE } from "../../constants.js";
 import { NoteswikiService } from "../../api/index.js";
 
 /**
- * Workspace context for editing folders
+ * Model for folder data
  */
-export class FolderWorkspaceContext extends UmbContextBase {
-  public readonly workspaceAlias = NOTES_FOLDER_WORKSPACE_ALIAS;
+export interface FolderWorkspaceData {
+  unique: string;
+  name: string;
+  parentUnique: string | null;
+}
 
+/**
+ * Workspace context for viewing folders
+ *
+ * Extends UmbSubmittableWorkspaceContextBase to get routing support.
+ * This is a read-only workspace - submit() is a no-op.
+ */
+export class FolderWorkspaceContext extends UmbSubmittableWorkspaceContextBase<FolderWorkspaceData> {
   // Observable state
   #unique = new UmbStringState(undefined);
   readonly unique = this.#unique.asObservable();
@@ -30,25 +38,16 @@ export class FolderWorkspaceContext extends UmbContextBase {
   #name = new UmbStringState("");
   readonly name = this.#name.asObservable();
 
-  #icon = new UmbStringState("icon-folder");
-  readonly icon = this.#icon.asObservable();
-
-  #isNew = new UmbBooleanState(false);
-  readonly isNew = this.#isNew.asObservable();
-
   #parentUnique = new UmbStringState(undefined);
   readonly parentUnique = this.#parentUnique.asObservable();
 
-  // Route manager for workspace navigation
-  readonly routes = new UmbWorkspaceRouteManager(this);
-
   constructor(host: UmbControllerHost) {
-    super(host, FOLDER_WORKSPACE_CONTEXT);
+    super(host, NOTES_FOLDER_WORKSPACE_ALIAS);
 
     // Define workspace routes
     this.routes.setRoutes([
       {
-        // Edit existing folder
+        // View folder contents
         path: "edit/:unique",
         component: FolderWorkspaceEditorElement,
         setup: (_component, info) => {
@@ -56,27 +55,14 @@ export class FolderWorkspaceContext extends UmbContextBase {
           this.load(unique);
         },
       },
-      {
-        // Create new folder
-        path: "create/parent/:parentEntityType/:parentUnique",
-        component: FolderWorkspaceEditorElement,
-        setup: (_component, info) => {
-          const parentUnique =
-            info.match.params.parentUnique === "null"
-              ? null
-              : info.match.params.parentUnique;
-          this.createScaffold(parentUnique);
-        },
-      },
     ]);
   }
 
   /**
-   * Load an existing folder from the API
+   * Load folder data from the API
    */
   async load(unique: string) {
     this.#unique.setValue(unique);
-    this.#isNew.setValue(false);
 
     try {
       const response = await NoteswikiService.getFolder({
@@ -92,53 +78,7 @@ export class FolderWorkspaceContext extends UmbContextBase {
     }
   }
 
-  /**
-   * Create a scaffold for a new folder
-   */
-  createScaffold(parentUnique: string | null) {
-    const newUnique = crypto.randomUUID();
-    this.#unique.setValue(newUnique);
-    this.#isNew.setValue(true);
-    this.#parentUnique.setValue(parentUnique ?? undefined);
-    this.#name.setValue("");
-  }
-
-  /**
-   * Save the folder to the API
-   */
-  async save(): Promise<boolean> {
-    const unique = this.#unique.getValue();
-    const isNew = this.#isNew.getValue();
-
-    if (!unique) return false;
-
-    try {
-      if (isNew) {
-        await NoteswikiService.createFolder({
-          body: {
-            unique,
-            parentUnique: this.#parentUnique.getValue() || null,
-            name: this.#name.getValue(),
-          },
-        });
-      } else {
-        await NoteswikiService.updateFolder({
-          path: { id: unique },
-          body: {
-            name: this.#name.getValue(),
-          },
-        });
-      }
-
-      this.#isNew.setValue(false);
-      return true;
-    } catch (error) {
-      console.error("Error saving folder:", error);
-      return false;
-    }
-  }
-
-  // Getters
+  // Getters required by UmbSubmittableWorkspaceContextBase
   getUnique() {
     return this.#unique.getValue();
   }
@@ -147,16 +87,28 @@ export class FolderWorkspaceContext extends UmbContextBase {
     return NOTES_FOLDER_ENTITY_TYPE;
   }
 
-  // Setters for editing
-  setName(name: string) {
-    this.#name.setValue(name);
+  getData(): FolderWorkspaceData | undefined {
+    const unique = this.#unique.getValue();
+    if (!unique) return undefined;
+
+    return {
+      unique,
+      name: this.#name.getValue(),
+      parentUnique: this.#parentUnique.getValue() || null,
+    };
+  }
+
+  /**
+   * Submit is a no-op for the read-only folder workspace.
+   * Folders are renamed via entity actions, not the workspace.
+   */
+  protected async submit(): Promise<void> {
+    // No-op - this is a read-only workspace
   }
 
   override destroy() {
     this.#unique.destroy();
     this.#name.destroy();
-    this.#icon.destroy();
-    this.#isNew.destroy();
     this.#parentUnique.destroy();
     super.destroy();
   }

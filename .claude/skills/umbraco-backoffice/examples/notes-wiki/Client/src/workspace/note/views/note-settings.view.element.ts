@@ -21,6 +21,18 @@ export class NoteSettingsViewElement extends UmbLitElement {
   @state()
   private _newTag = "";
 
+  @state()
+  private _createdDate?: string;
+
+  @state()
+  private _modifiedDate?: string;
+
+  @state()
+  private _createdBy?: string;
+
+  @state()
+  private _modifiedBy?: string;
+
   constructor() {
     super();
 
@@ -35,6 +47,34 @@ export class NoteSettingsViewElement extends UmbLitElement {
 
     this.observe(this.#workspaceContext.tags, (tags) => {
       this._tags = tags || [];
+    });
+
+    this.observe(this.#workspaceContext.createdDate, (date) => {
+      this._createdDate = date;
+    });
+
+    this.observe(this.#workspaceContext.modifiedDate, (date) => {
+      this._modifiedDate = date;
+    });
+
+    this.observe(this.#workspaceContext.createdBy, (user) => {
+      this._createdBy = user;
+    });
+
+    this.observe(this.#workspaceContext.modifiedBy, (user) => {
+      this._modifiedBy = user;
+    });
+  }
+
+  #formatDate(dateString?: string): string {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    return date.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   }
 
@@ -85,18 +125,16 @@ export class NoteSettingsViewElement extends UmbLitElement {
             ${this._tags.length > 0
               ? this._tags.map(
                   (tag) => html`
-                    <uui-tag>
+                    <span class="tag">
                       ${tag}
-                      <uui-button
-                        compact
-                        look="primary"
-                        color="danger"
+                      <button
+                        class="tag-remove"
                         @click=${() => this.#handleRemoveTag(tag)}
-                        label="Remove tag"
+                        aria-label="Remove tag"
                       >
-                        <uui-icon name="icon-delete"></uui-icon>
-                      </uui-button>
-                    </uui-tag>
+                        <uui-icon name="icon-wrong"></uui-icon>
+                      </button>
+                    </span>
                   `
                 )
               : html`<p class="no-tags">No tags yet. Add some tags to organize your notes.</p>`}
@@ -108,19 +146,19 @@ export class NoteSettingsViewElement extends UmbLitElement {
         <div class="info-grid">
           <div class="info-item">
             <span class="info-label">Created</span>
-            <span class="info-value">-</span>
+            <span class="info-value">${this.#formatDate(this._createdDate)}</span>
           </div>
           <div class="info-item">
             <span class="info-label">Modified</span>
-            <span class="info-value">-</span>
+            <span class="info-value">${this.#formatDate(this._modifiedDate)}</span>
           </div>
           <div class="info-item">
             <span class="info-label">Created by</span>
-            <span class="info-value">-</span>
+            <span class="info-value">${this._createdBy || "-"}</span>
           </div>
           <div class="info-item">
             <span class="info-label">Modified by</span>
-            <span class="info-value">-</span>
+            <span class="info-value">${this._modifiedBy || "-"}</span>
           </div>
         </div>
       </uui-box>
@@ -160,14 +198,36 @@ export class NoteSettingsViewElement extends UmbLitElement {
         gap: var(--uui-size-space-2);
       }
 
-      .tags-list uui-tag {
-        display: flex;
+      .tag {
+        display: inline-flex;
         align-items: center;
         gap: var(--uui-size-space-2);
+        padding: var(--uui-size-space-1) var(--uui-size-space-3);
+        background: var(--uui-color-surface-alt);
+        border: 1px solid var(--uui-color-border);
+        border-radius: var(--uui-border-radius);
+        font-size: var(--uui-type-small-size);
+        color: var(--uui-color-text);
       }
 
-      .tags-list uui-tag uui-button {
-        margin-left: var(--uui-size-space-1);
+      .tag-remove {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: var(--uui-color-text-alt);
+        transition: color 0.1s ease;
+      }
+
+      .tag-remove:hover {
+        color: var(--uui-color-danger);
+      }
+
+      .tag-remove uui-icon {
+        font-size: 12px;
       }
 
       .no-tags {

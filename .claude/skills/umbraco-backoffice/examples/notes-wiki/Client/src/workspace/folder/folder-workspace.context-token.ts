@@ -1,27 +1,16 @@
 /**
  * Folder Workspace Context Token
  *
- * The context token is used for dependency injection.
- * Components consume this token to access the workspace context.
- *
- * CRITICAL: The first argument MUST be "UmbWorkspaceContext" so that:
- * 1. The workspace alias condition can find it
- * 2. WorkspaceViews can be displayed based on their conditions
+ * Token for consuming the folder workspace context in child elements.
+ * Note: Usually you would use UMB_WORKSPACE_CONTEXT directly since the
+ * workspace context is already provided by the base class.
  *
  * Skills used: umbraco-context-api
  */
 
-import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
-import type { UmbWorkspaceContext } from "@umbraco-cms/backoffice/workspace";
-import type { FolderWorkspaceContext } from "./folder-workspace.context.js";
-import { NOTES_FOLDER_ENTITY_TYPE } from "../../constants.js";
+import { UMB_WORKSPACE_CONTEXT } from "@umbraco-cms/backoffice/workspace";
 
-export const FOLDER_WORKSPACE_CONTEXT = new UmbContextToken<
-  UmbWorkspaceContext,
-  FolderWorkspaceContext
->(
-  "UmbWorkspaceContext", // MUST match UMB_WORKSPACE_CONTEXT for conditions to work
-  undefined,
-  (context): context is FolderWorkspaceContext =>
-    context.getEntityType?.() === NOTES_FOLDER_ENTITY_TYPE
-);
+// Re-export UMB_WORKSPACE_CONTEXT as the folder workspace context token
+// The FolderWorkspaceContext extends UmbSubmittableWorkspaceContextBase
+// which provides itself under UMB_WORKSPACE_CONTEXT
+export const FOLDER_WORKSPACE_CONTEXT = UMB_WORKSPACE_CONTEXT;

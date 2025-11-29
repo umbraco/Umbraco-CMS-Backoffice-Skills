@@ -20,15 +20,15 @@
       "entityType": "notes-note",
       "parentUnique": "b052f201-a76e-4a70-9d82-e02162f3a6ef",
       "title": "How to Create Notes",
-      "content": "1. Click the \u002B button in the tree\n2. Select \u0027Create Note\u0027\n3. Enter a title and content\n4. Add tags for organization\n5. Click Save",
+      "content": "1. Click the \u002B button in the tree\n2. Select \u0027Create Note\u0027\n3. Enter a title and content\n4. Add tags for organization\n5. Click Save\n6. Grab a beer",
       "tags": [
         "tutorial",
         "getting-started"
       ],
       "createdDate": "2025-11-28T21:18:18.292074Z",
-      "modifiedDate": "2025-11-28T21:18:18.292074Z",
+      "modifiedDate": "2025-11-29T08:29:40.126343Z",
       "createdBy": "System",
-      "modifiedBy": "System"
+      "modifiedBy": "admin@example.com"
     },
     {
       "unique": "7566dc59-b569-4481-8cf9-bfe76f2ed788",
@@ -44,6 +44,32 @@
       "modifiedDate": "2025-11-28T21:18:18.292075Z",
       "createdBy": "System",
       "modifiedBy": "System"
+    },
+    {
+      "unique": "ec3580e1-470b-4316-bf48-e4db57e0609e",
+      "entityType": "notes-note",
+      "parentUnique": "b052f201-a76e-4a70-9d82-e02162f3a6ef",
+      "title": "Another Note",
+      "content": "klfdlkdskl",
+      "tags": [
+        "test"
+      ],
+      "createdDate": "2025-11-29T08:32:09.521056Z",
+      "modifiedDate": "2025-11-29T08:35:53.078343Z",
+      "createdBy": "admin@example.com",
+      "modifiedBy": "admin@example.com"
+    },
+    {
+      "unique": "5df5c57d-21f5-4057-ac7a-e84ab111c3e5",
+      "entityType": "notes-note",
+      "parentUnique": "ed75ed18-a81c-49f6-a8c1-9d0b08f924fa",
+      "title": "axdsssxa",
+      "content": "asxxasxsa",
+      "tags": [],
+      "createdDate": "2025-11-29T21:27:06.873859Z",
+      "modifiedDate": "2025-11-29T21:27:06.873859Z",
+      "createdBy": "admin@example.com",
+      "modifiedBy": "admin@example.com"
     }
   ],
   "Folders": [
@@ -60,6 +86,27 @@
       "parentUnique": null,
       "name": "Project Notes",
       "createdDate": "2025-11-28T21:18:18.291946Z"
+    },
+    {
+      "unique": "5296fba7-fda2-4c6d-bc79-c703c578fec0",
+      "entityType": "notes-folder",
+      "parentUnique": "150cf68e-15a0-43b9-8f74-037b36dce0bc",
+      "name": "Test2",
+      "createdDate": "2025-11-29T14:53:52.852855Z"
+    },
+    {
+      "unique": "a1f3909c-3d52-44bf-b790-fb4b2fc2aa8d",
+      "entityType": "notes-folder",
+      "parentUnique": "b052f201-a76e-4a70-9d82-e02162f3a6ef",
+      "name": "test",
+      "createdDate": "2025-11-29T19:09:41.98155Z"
+    },
+    {
+      "unique": "ed75ed18-a81c-49f6-a8c1-9d0b08f924fa",
+      "entityType": "notes-folder",
+      "parentUnique": "a1f3909c-3d52-44bf-b790-fb4b2fc2aa8d",
+      "name": "test 2",
+      "createdDate": "2025-11-29T19:09:54.788883Z"
     }
   ]
 }

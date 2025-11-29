@@ -256,6 +256,7 @@ Essential patterns used across all extensions:
 | Bundle | `umbraco-bundle` | Manifest aggregation |
 | Entry Point | `umbraco-entry-point` | Runtime initialization |
 | Extension Template | `umbraco-extension-template` | Project scaffolding |
+| **Add Extension Reference** | `umbraco-add-extension-reference` | **Register extension in Umbraco instance** |
 
 ---
 
@@ -318,6 +319,7 @@ Reference this from your `umbraco-package.json`.
      "extensions": ["./Client/dist/bundle.manifests.js"]
    }
    ```
+6. **Add project reference** to the main Umbraco instance - use skill `umbraco-add-extension-reference`
 
 ---
 

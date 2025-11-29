@@ -1,27 +1,48 @@
 /**
- * Notes Wiki Types
+ * @fileoverview Notes Wiki Types
  *
- * TypeScript interfaces for the Notes Wiki extension.
- * These match the C# models on the server side.
+ * Central type definitions for the Notes Wiki extension.
+ * These TypeScript interfaces match the C# models on the server side.
+ *
+ * **Organization:**
+ * - Domain types (Note, Folder) are defined here
+ * - Tree types are re-exported from `tree/types.ts`
+ * - API types are auto-generated in `api/types.gen.ts`
+ *
+ * @example
+ * import type { NoteModel, NotesTreeItemModel } from "../types/index.js";
+ *
+ * Skills demonstrated: TypeScript interfaces, module organization
  */
 
-import type { UmbTreeItemModel, UmbTreeRootModel } from "@umbraco-cms/backoffice/tree";
 import {
-  NOTES_ROOT_ENTITY_TYPE,
   NOTES_FOLDER_ENTITY_TYPE,
   NOTES_NOTE_ENTITY_TYPE,
 } from "../constants.js";
+
+// =============================================================================
+// RE-EXPORTS
+// Tree types live with tree code, re-exported here for convenience
+// =============================================================================
+
+export type { NotesTreeItemModel, NotesTreeRootModel } from "../tree/types.js";
 
 // =============================================================================
 // BASE INTERFACES
 // =============================================================================
 
 /**
- * Base interface for all Notes entities
+ * Base interface for all Notes entities.
+ *
+ * All notes and folders share these common properties.
+ * Extend this interface for specific entity types.
  */
 export interface NotesEntityBase {
+  /** Unique identifier (GUID) for the entity */
   unique: string;
+  /** Parent folder ID, or null if at root level */
   parentUnique: string | null;
+  /** ISO 8601 date string when the entity was created */
   createdDate: string;
 }
 
@@ -30,20 +51,33 @@ export interface NotesEntityBase {
 // =============================================================================
 
 /**
- * Note model - represents an individual note
+ * Note model - represents an individual note.
+ *
+ * Notes are the primary content items in the Notes Wiki.
+ * They contain markdown content and can be tagged for organization.
  */
 export interface NoteModel extends NotesEntityBase {
+  /** Entity type discriminator for type guards */
   entityType: typeof NOTES_NOTE_ENTITY_TYPE;
+  /** Note title displayed in tree and workspace */
   title: string;
+  /** Markdown content of the note */
   content: string;
+  /** Tags for categorization and filtering */
   tags: string[];
+  /** ISO 8601 date string when the note was last modified */
   modifiedDate: string;
+  /** Username who created the note */
   createdBy: string;
+  /** Username who last modified the note */
   modifiedBy: string;
 }
 
 /**
- * Detail model for workspace context
+ * Detail model for the note workspace context.
+ *
+ * This is the shape used by the workspace context when loading
+ * and saving notes. Matches the API response structure.
  */
 export interface NoteDetailModel {
   unique: string;
@@ -63,15 +97,20 @@ export interface NoteDetailModel {
 // =============================================================================
 
 /**
- * Folder model - represents a folder containing notes
+ * Folder model - represents a folder containing notes.
+ *
+ * Folders organize notes into a hierarchical structure.
+ * They can contain both notes and other folders.
  */
 export interface FolderModel extends NotesEntityBase {
+  /** Entity type discriminator for type guards */
   entityType: typeof NOTES_FOLDER_ENTITY_TYPE;
+  /** Folder name displayed in tree */
   name: string;
 }
 
 /**
- * Detail model for folder workspace context
+ * Detail model for the folder workspace context.
  */
 export interface FolderDetailModel {
   unique: string;
@@ -82,36 +121,30 @@ export interface FolderDetailModel {
 }
 
 // =============================================================================
-// TREE MODELS
+// API RESPONSE MODEL
+// Used for tree item API responses before transformation
 // =============================================================================
 
 /**
- * Tree item model for notes tree
- */
-export interface NotesTreeItemModel extends UmbTreeItemModel {
-  entityType:
-    | typeof NOTES_ROOT_ENTITY_TYPE
-    | typeof NOTES_FOLDER_ENTITY_TYPE
-    | typeof NOTES_NOTE_ENTITY_TYPE;
-}
-
-/**
- * Tree root model
- */
-export interface NotesTreeRootModel extends UmbTreeRootModel {
-  entityType: typeof NOTES_ROOT_ENTITY_TYPE;
-}
-
-/**
- * API response model for tree items
+ * API response model for tree items.
+ *
+ * This matches the JSON structure returned by the tree API endpoint.
+ * The tree data source transforms this into `NotesTreeItemModel`.
  */
 export interface NotesTreeItemResponseModel {
+  /** Unique identifier */
   id: string;
+  /** Display name (title for notes, name for folders) */
   name: string;
+  /** Entity type string */
   entityType: string;
+  /** Whether this item has child items */
   hasChildren: boolean;
+  /** Whether this is a folder (vs a note) */
   isFolder: boolean;
+  /** Icon name for display */
   icon: string;
+  /** Parent item ID, null if at root */
   parentId: string | null;
 }
 
