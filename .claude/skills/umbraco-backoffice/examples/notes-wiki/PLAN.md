@@ -14,6 +14,55 @@ Create a comprehensive **Notes/Wiki** demonstration for the `umbraco-backoffice`
 
 ---
 
+## Skills Reference
+
+This demo leverages the following Umbraco backoffice skills. Use these when implementing each feature:
+
+### Core Extension Skills (Direct Use)
+| Skill | Purpose in Demo |
+|-------|-----------------|
+| `umbraco-sections` | Section registration, sidebar app |
+| `umbraco-dashboard` | Welcome dashboard with search/recent |
+| `umbraco-menu` | Menu container in sidebar |
+| `umbraco-menu-items` | MenuItem with tree kind |
+| `umbraco-tree` | Hierarchical tree navigation |
+| `umbraco-tree-item` | Custom tree item rendering |
+| `umbraco-workspace` | Note & Folder editing workspaces |
+| `umbraco-entity-actions` | Save, Delete actions |
+| `umbraco-modals` | Create note/folder dialogs |
+
+### Foundational Concept Skills
+| Skill | Purpose in Demo |
+|-------|-----------------|
+| `umbraco-context-api` | Workspace context, consuming contexts |
+| `umbraco-state-management` | Observable state in workspace |
+| `umbraco-repository-pattern` | Tree & detail repositories |
+| `umbraco-conditions` | Section-based visibility |
+| `umbraco-routing` | URL structure, path segments |
+| `umbraco-extension-registry` | Understanding manifest registration |
+| `umbraco-notifications` | Toast messages for save/delete |
+| `umbraco-umbraco-element` | Base class for Lit elements |
+| `umbraco-controllers` | C# API controllers |
+
+### Build & Structure Skills
+| Skill | Purpose in Demo |
+|-------|-----------------|
+| `umbraco-bundle` | Manifest aggregation |
+| `umbraco-entry-point` | Runtime initialization (if needed) |
+| `umbraco-icons` | Custom note/folder icons |
+| `umbraco-localization` | Translatable strings |
+
+### Enhancement Skills (Phase 4+)
+| Skill | Purpose in Demo |
+|-------|-----------------|
+| `umbraco-search-provider` | Global search integration |
+| `umbraco-search-result-item` | Custom search result rendering |
+| `umbraco-collection` | List view of notes |
+| `umbraco-collection-view` | Custom collection layout |
+| `umbraco-entity-create-option-action` | Create note/folder options |
+
+---
+
 ## Architecture
 
 ### Extension Types Demonstrated
@@ -239,6 +288,14 @@ interface TreeItemModel {
 - `bundle.manifests.ts`
 - `NotesExtension.csproj`, `NotesApiComposer.cs`
 
+**Skills to Use**:
+- `umbraco-sections` - Section manifest structure
+- `umbraco-dashboard` - Dashboard manifest and element
+- `umbraco-bundle` - Aggregating manifests
+- `umbraco-umbraco-element` - Base element class
+- `umbraco-conditions` - SectionAlias condition for dashboard
+- `umbraco-controllers` - C# API controller setup
+
 ### Phase 2: Navigation (Sidebar + Menu + Tree)
 
 1. Add SectionSidebarApp manifest
@@ -254,6 +311,16 @@ interface TreeItemModel {
 - `tree/manifest.ts`, `notes-tree.repository.ts`, `notes-tree.server.data-source.ts`
 - `NotesTreeController.cs`
 - `NotesService.cs` (JSON persistence)
+
+**Skills to Use**:
+- `umbraco-sections` - SectionSidebarApp manifest
+- `umbraco-menu` - Menu manifest structure
+- `umbraco-menu-items` - MenuItem with tree kind
+- `umbraco-tree` - Tree manifest and repository
+- `umbraco-tree-item` - TreeItem manifest for custom rendering
+- `umbraco-repository-pattern` - Tree repository pattern
+- `umbraco-icons` - Custom icons for notes/folders
+- `umbraco-controllers` - Tree API endpoints
 
 ### Phase 3: Workspaces (Note + Folder editing)
 
@@ -271,6 +338,16 @@ interface TreeItemModel {
 - `repository/detail/note-detail.repository.ts`
 - `NotesController.cs`, `FoldersController.cs`
 
+**Skills to Use**:
+- `umbraco-workspace` - Workspace manifest, views, actions
+- `umbraco-context-api` - Workspace context pattern
+- `umbraco-state-management` - Observable state for editing
+- `umbraco-repository-pattern` - Detail repository for CRUD
+- `umbraco-entity-actions` - Save and Delete actions
+- `umbraco-routing` - entityType linking to workspace
+- `umbraco-notifications` - Success/error toast messages
+- `umbraco-controllers` - CRUD API endpoints
+
 ### Phase 4: Dashboard Enhancement
 
 1. Add search functionality (calls API)
@@ -282,12 +359,39 @@ interface TreeItemModel {
 - `dashboard/notes-dashboard.element.ts` (enhance)
 - Add search/recent endpoints to `NotesController.cs`
 
+**Skills to Use**:
+- `umbraco-dashboard` - Enhanced dashboard patterns
+- `umbraco-modals` - Create note/folder dialogs
+- `umbraco-entity-create-option-action` - Quick create actions
+- `umbraco-localization` - Translatable UI strings
+
 ### Phase 5: Polish & Documentation
 
 1. Add educational comments to all manifests
 2. Update SKILL.md with notes-wiki as primary example
 3. Add sample seed data (JSON file with example notes)
 4. Test all user journeys
+
+**Skills to Use**:
+- `umbraco-localization` - Ensure all strings are localized
+- `umbraco-extension-registry` - Document registration patterns
+
+### Phase 6: Advanced Features (Optional)
+
+1. Integrate with global search
+2. Add collection view for notes
+3. Add bulk actions for notes
+
+**Files**:
+- `search/manifest.ts`, `notes-search.provider.ts`
+- `collection/manifest.ts`, `notes-collection.view.ts`
+
+**Skills to Use**:
+- `umbraco-search-provider` - Global search integration
+- `umbraco-search-result-item` - Custom search results
+- `umbraco-collection` - Collection configuration
+- `umbraco-collection-view` - Custom collection layout
+- `umbraco-entity-bulk-actions` - Multi-select operations
 
 ---
 

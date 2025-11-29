@@ -24,6 +24,7 @@
     <ProjectReference Include="../.claude/skills/umbraco-backoffice/examples/Blueprint/Blueprint.csproj" />
     <ProjectReference Include="../.claude/skills/umbraco-backoffice/examples/TimeDashboard/TimeDashboard.csproj" />
     <ProjectReference Include="../.claude/skills/umbraco-backoffice/examples/tree-example/UmbTreeClient.csproj" />
+    <ProjectReference Include="../.claude/skills/umbraco-backoffice/examples/notes-wiki/NotesWiki.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

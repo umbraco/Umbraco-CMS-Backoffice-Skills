@@ -1,0 +1,65 @@
+{
+  "Notes": [
+    {
+      "unique": "59cd78f6-5e31-4e74-8184-c59a9b2da590",
+      "entityType": "notes-note",
+      "parentUnique": "b052f201-a76e-4a70-9d82-e02162f3a6ef",
+      "title": "Welcome to Notes Wiki",
+      "content": "This is your internal wiki for documentation and notes.\n\nUse folders to organize your content and tags to categorize notes.",
+      "tags": [
+        "welcome",
+        "getting-started"
+      ],
+      "createdDate": "2025-11-28T21:18:18.292041Z",
+      "modifiedDate": "2025-11-28T21:18:18.292049Z",
+      "createdBy": "System",
+      "modifiedBy": "System"
+    },
+    {
+      "unique": "037bd2b1-ff46-432e-8da2-63b4cc63e133",
+      "entityType": "notes-note",
+      "parentUnique": "b052f201-a76e-4a70-9d82-e02162f3a6ef",
+      "title": "How to Create Notes",
+      "content": "1. Click the \u002B button in the tree\n2. Select \u0027Create Note\u0027\n3. Enter a title and content\n4. Add tags for organization\n5. Click Save",
+      "tags": [
+        "tutorial",
+        "getting-started"
+      ],
+      "createdDate": "2025-11-28T21:18:18.292074Z",
+      "modifiedDate": "2025-11-28T21:18:18.292074Z",
+      "createdBy": "System",
+      "modifiedBy": "System"
+    },
+    {
+      "unique": "7566dc59-b569-4481-8cf9-bfe76f2ed788",
+      "entityType": "notes-note",
+      "parentUnique": "150cf68e-15a0-43b9-8f74-037b36dce0bc",
+      "title": "Sample Project Note",
+      "content": "This is a sample note in the Project Notes folder.\n\nReplace this with your actual project documentation.",
+      "tags": [
+        "sample",
+        "project"
+      ],
+      "createdDate": "2025-11-28T21:18:18.292075Z",
+      "modifiedDate": "2025-11-28T21:18:18.292075Z",
+      "createdBy": "System",
+      "modifiedBy": "System"
+    }
+  ],
+  "Folders": [
+    {
+      "unique": "b052f201-a76e-4a70-9d82-e02162f3a6ef",
+      "entityType": "notes-folder",
+      "parentUnique": null,
+      "name": "Getting Started",
+      "createdDate": "2025-11-28T21:18:18.291936Z"
+    },
+    {
+      "unique": "150cf68e-15a0-43b9-8f74-037b36dce0bc",
+      "entityType": "notes-folder",
+      "parentUnique": null,
+      "name": "Project Notes",
+      "createdDate": "2025-11-28T21:18:18.291946Z"
+    }
+  ]
+}

@@ -11,6 +11,12 @@ allowed-tools: Read, Write, Edit, WebFetch
 ## What is it?
 Repositories are the Backoffice's entry point for data requests and update notifications, abstracting data access from various sources (server, offline database, store, Signal-R). They provide a structured way to manage data operations, separating business logic from direct data access for easier maintenance and scalability. Repositories use data sources behind the scenes, allowing consumers to work with data without knowing where or how it's stored.
 
+## CRITICAL: API Authentication
+
+**NEVER use raw `fetch()` for custom API calls.** This will result in 401 Unauthorized errors.
+
+**ALWAYS use a generated OpenAPI client** configured with Umbraco's auth context. See the `umbraco-openapi-client` skill for setup instructions.
+
 ## Documentation
 Always fetch the latest docs before implementing:
 
@@ -43,10 +49,12 @@ const repositoryManifest = {
 umbExtensionsRegistry.register(repositoryManifest);
 ```
 
-### Basic Repository Implementation
+### Basic Repository Implementation (Using OpenAPI Client)
 ```typescript
 import { UmbControllerBase } from '@umbraco-cms/backoffice/class-api';
 import type { UmbControllerHost } from '@umbraco-cms/backoffice/controller-api';
+// Import from generated OpenAPI client (see umbraco-openapi-client skill)
+import { MyExtensionService } from '../api/index.js';
 
 export class MyRepository extends UmbControllerBase {
   constructor(host: UmbControllerHost) {
@@ -54,38 +62,31 @@ export class MyRepository extends UmbControllerBase {
   }
 
   async getAll() {
-    // Fetch data from server or data source
-    const response = await fetch('/umbraco/api/my-data');
-    return await response.json();
+    // Use generated OpenAPI client - handles auth automatically
+    const response = await MyExtensionService.getAll();
+    return response.data;
   }
 
   async getById(id: string) {
-    const response = await fetch(`/umbraco/api/my-data/${id}`);
-    return await response.json();
+    const response = await MyExtensionService.getById({ path: { id } });
+    return response.data;
   }
 
   async create(data: any) {
-    const response = await fetch('/umbraco/api/my-data', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    return await response.json();
+    const response = await MyExtensionService.create({ body: data });
+    return response.data;
   }
 
   async update(id: string, data: any) {
-    const response = await fetch(`/umbraco/api/my-data/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+    const response = await MyExtensionService.update({
+      path: { id },
+      body: data,
     });
-    return await response.json();
+    return response.data;
   }
 
   async delete(id: string) {
-    await fetch(`/umbraco/api/my-data/${id}`, {
-      method: 'DELETE'
-    });
+    await MyExtensionService.delete({ path: { id } });
   }
 }
 ```
@@ -121,7 +122,7 @@ export class MyContext extends UmbContextBase<MyContext> {
 }
 ```
 
-### Repository with Data Source
+### Repository with Data Source (Using OpenAPI Client)
 ```typescript
 import { UmbControllerBase } from '@umbraco-cms/backoffice/class-api';
 import { MyDataSource } from './my-data-source.js';
@@ -138,17 +139,19 @@ export class MyRepository extends UmbControllerBase {
   }
 }
 
-// Data Source
+// Data Source - uses generated OpenAPI client
+import { MyExtensionService } from '../api/index.js';
+
 export class MyDataSource extends UmbControllerBase {
   async getAll() {
-    // Actual data fetching logic
-    const response = await fetch('/umbraco/api/my-data');
-    return await response.json();
+    // Use OpenAPI client - NEVER raw fetch()
+    const response = await MyExtensionService.getAll();
+    return response.data;
   }
 
   async getById(id: string) {
-    const response = await fetch(`/umbraco/api/my-data/${id}`);
-    return await response.json();
+    const response = await MyExtensionService.getById({ path: { id } });
+    return response.data;
   }
 }
 ```

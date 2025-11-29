@@ -176,4 +176,6 @@ export class NotificationController extends UmbControllerBase {
 - Reusing logic across multiple elements
 - Managing API calls and data fetching
 
+**API Calls**: When making API calls from controllers, NEVER use raw `fetch()`. Always use a generated OpenAPI client configured with Umbraco's auth context. See the `umbraco-openapi-client` skill for setup.
+
 That's it! Always fetch fresh docs, keep examples minimal, generate complete working code.
