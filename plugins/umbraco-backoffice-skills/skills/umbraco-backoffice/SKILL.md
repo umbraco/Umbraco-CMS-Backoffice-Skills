@@ -329,7 +329,7 @@ Reference this from your `umbraco-package.json`.
 
 A comprehensive example demonstrating 13 different extension types working together:
 
-**Location**: `./examples/TimeDashboard/`
+**Location**: `examples/TimeDashboard/` (from repository root)
 
 **Structure**:
 ```
@@ -375,7 +375,7 @@ TimeDashboard/Client/src/
 
 A focused example showing tree navigation in Settings section with workspace:
 
-**Location**: `./examples/tree-example/`
+**Location**: `examples/tree-example/` (from repository root)
 
 **Structure**:
 ```
@@ -422,7 +422,7 @@ Tree (appears in Settings via conditions)
 
 A comprehensive example showing Section + Tree + Workspace with C# backend:
 
-**Location**: `./examples/notes-wiki/`
+**Location**: `examples/notes-wiki/` (from repository root)
 
 **Features demonstrated**:
 - Full hierarchical tree with folders and notes
@@ -431,7 +431,7 @@ A comprehensive example showing Section + Tree + Workspace with C# backend:
 - Dashboard with search and recent items
 - Entity actions (Save, Delete)
 
-**Skills used**: 27 different skills - see `./examples/notes-wiki/PLAN.md` for the full mapping.
+**Skills used**: 27 different skills - see `examples/notes-wiki/PLAN.md` (from repository root) for the full mapping.
 
 This is the most complete example, demonstrating how all extension types work together in a real-world feature.
 

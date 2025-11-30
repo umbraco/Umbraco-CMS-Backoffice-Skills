@@ -1,0 +1,24 @@
+{
+  "name": "umbraco-backoffice-skills",
+  "version": "1.0.0",
+  "description": "Complete skill set for Umbraco backoffice customization - 57 skills covering Foundation concepts, Extension Types, Property Editors, Rich Text, Backend integration, and Setup tools",
+  "author": {
+    "name": "Phil W",
+    "email": "pjw@umbraco.com",
+    "url": "https://github.com/hifi-phil"
+  },
+  "homepage": "https://github.com/hifi-phil/UmbracoCMS_Skills",
+  "license": "MIT",
+  "keywords": [
+    "umbraco",
+    "backoffice",
+    "extension",
+    "customization",
+    "dashboard",
+    "property-editor",
+    "tree",
+    "section",
+    "workspace"
+  ],
+  "skills": "./skills/"
+}

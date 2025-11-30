@@ -1,0 +1,35 @@
+{
+  "name": "umbraco-skills-marketplace",
+  "owner": {
+    "name": "Phil W",
+    "email": "pjw@umbraco.com"
+  },
+  "metadata": {
+    "description": "Umbraco backoffice customization skills for Claude Code",
+    "version": "1.0.0",
+    "homepage": "https://github.com/hifi-phil/UmbracoCMS_Skills"
+  },
+  "plugins": [
+    {
+      "name": "umbraco-backoffice-skills",
+      "source": "./plugins/umbraco-backoffice-skills",
+      "description": "57 skills for Umbraco backoffice customization covering Foundation, Extension Types, Property Editors, Rich Text, Backend, and Setup",
+      "version": "1.0.0",
+      "category": "development",
+      "author": {
+        "name": "Phil W",
+        "email": "pjw@umbraco.com",
+        "url": "https://github.com/hifi-phil"
+      },
+      "keywords": [
+        "umbraco",
+        "backoffice",
+        "cms",
+        "dotnet",
+        "typescript",
+        "lit",
+        "web-components"
+      ]
+    }
+  ]
+}

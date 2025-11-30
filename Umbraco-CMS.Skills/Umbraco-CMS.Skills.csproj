@@ -19,12 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../BlankExtension/BlankExtension.csproj" />
-    <ProjectReference Include="../BlankExtension2/BlankExtension2.csproj" />
-    <ProjectReference Include="../.claude/skills/umbraco-backoffice/examples/Blueprint/Blueprint.csproj" />
-    <ProjectReference Include="../.claude/skills/umbraco-backoffice/examples/TimeDashboard/TimeDashboard.csproj" />
-    <ProjectReference Include="../.claude/skills/umbraco-backoffice/examples/tree-example/UmbTreeClient.csproj" />
-    <ProjectReference Include="../.claude/skills/umbraco-backoffice/examples/notes-wiki/NotesWiki.csproj" />
+    <ProjectReference Include="../plugins/umbraco-backoffice-skills/skills/umbraco-backoffice/examples/Blueprint/Blueprint.csproj" />
+    <ProjectReference Include="../plugins/umbraco-backoffice-skills/skills/umbraco-backoffice/examples/TimeDashboard/TimeDashboard.csproj" />
+    <ProjectReference Include="../plugins/umbraco-backoffice-skills/skills/umbraco-backoffice/examples/tree-example/UmbTreeClient.csproj" />
+    <ProjectReference Include="../plugins/umbraco-backoffice-skills/skills/umbraco-backoffice/examples/notes-wiki/NotesWiki.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
