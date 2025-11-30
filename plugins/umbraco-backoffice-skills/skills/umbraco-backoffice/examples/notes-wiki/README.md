@@ -1,42 +1,116 @@
-# Notes Wiki - Umbraco Backoffice Extension Example
+# Notes Wiki - Full-Stack Umbraco Extension Example
 
-A comprehensive example demonstrating how multiple Umbraco backoffice extension types work together to create a real-world feature.
+A comprehensive example demonstrating how multiple Umbraco backoffice extension types work together with a C# backend to create a real-world feature.
 
 ## What This Example Shows
 
 This example creates an internal wiki/notes system that demonstrates:
 
-### Extension Types Used
+- Full hierarchical tree with folders and notes
+- Multiple workspace types (Note, Folder)
+- C# API controllers with JSON persistence
+- Dashboard with search and recent items
+- Entity actions (Create, Delete, Rename)
+- Collection view for browsing notes
 
-| Extension Type | Purpose |
-|----------------|---------|
-| Section | Top-level navigation in backoffice header |
-| SectionSidebarApp | Sidebar container for the section |
-| Menu + MenuItem | Sidebar navigation structure |
-| Dashboard | Welcome panel when nothing selected |
-| Tree + TreeItem | Hierarchical navigation of notes/folders |
-| Workspace | Editing views for notes and folders |
-| WorkspaceView | Multiple tabs within workspaces |
-| Localization | Multi-language support |
+## Extension Types Used
 
-### Key Patterns Demonstrated
+| Extension Type | Alias | Purpose |
+|----------------|-------|---------|
+| Section | `Notes.Section` | Top-level navigation in backoffice header |
+| SectionSidebarApp | `Notes.SidebarApp` | Sidebar container for the section |
+| Menu | `Notes.Menu` | Menu container in sidebar |
+| MenuItem | `Notes.MenuItem` | Tree navigation (kind: "tree") |
+| Dashboard | `Notes.Dashboard`, `Notes.BrowseDashboard` | Welcome panel and browse view |
+| Tree | `Notes.Tree` | Hierarchical navigation of notes/folders |
+| TreeItem | `Notes.TreeItem.*` | Individual tree nodes |
+| Workspace | `Notes.Workspace.Note`, `Notes.Workspace.Folder` | Editing views for notes and folders |
+| WorkspaceView | `Notes.WorkspaceView.*` | Multiple tabs within workspaces |
+| Collection | `Notes.Collection` | List view of notes |
+| Entity Action | Multiple | Create, Delete, Rename actions |
+| Localization | en-us | Multi-language support |
 
-1. **Section → Dashboard Connection**
-   - Dashboard uses `conditions` with `Umb.Condition.SectionAlias` to appear only in the Notes section
+## Visual Structure
 
-2. **Section → SidebarApp → Menu → MenuItem → Tree Chain**
-   - SidebarApp uses condition to appear in section
-   - SidebarApp references Menu via `meta.menu`
-   - MenuItem belongs to Menu via `meta.menus`
-   - MenuItem shows Tree via `meta.treeAlias`
+```
++--------------------------------------------------+
+| Content | Media | Settings | [NOTES]              |  <- Section in top nav
++--------------------------------------------------+
+| SIDEBAR          |  MAIN AREA                     |
+| +-------------+  |  +-------------------------+   |
+| | Notes       |  |  | Dashboard               |   |  <- Shows when no item selected
+| | ├─ Folder   |  |  | Search, Recent notes    |   |
+| | │  ├─ Note  |  |  +-------------------------+   |
+| | │  └─ Note  |  |                                |
+| | └─ Note     |  |  +-------------------------+   |
+| +-------------+  |  | Note Workspace          |   |  <- Shows when note clicked
+|      ^           |  | [Content] [Settings]    |   |
+|      |           |  | Title: ___________      |   |
+|   Tree with      |  | Content: __________     |   |
+|   folders        |  +-------------------------+   |
++--------------------------------------------------+
+```
 
-3. **Tree Item → Workspace via entityType** (The Critical Link)
-   - Tree items have an `entityType` property
-   - Workspaces declare which `entityType` they handle
-   - Clicking a tree item opens the matching workspace
+## How Components Connect
 
-4. **Workspace → WorkspaceView via Condition**
-   - WorkspaceViews use condition to appear in specific workspaces
+```
+Section (alias: "Notes.Section")
+    │
+    ├── Dashboard
+    │   └── conditions: SectionAlias = "Notes.Section"
+    │
+    └── SectionSidebarApp
+        └── conditions: SectionAlias = "Notes.Section"
+        └── meta.menu: "Notes.Menu"
+                │
+                └── MenuItem (kind: "tree")
+                    ├── meta.treeAlias: "Notes.Tree"
+                    └── meta.entityType: "notes-root"
+                            │
+                            └── Tree
+                                ├── TreeItem (notes-folder) → Folder Workspace
+                                └── TreeItem (notes-note) → Note Workspace
+                                        │
+                                        └── entityType links to Workspace
+```
+
+## Key Pattern: Multiple Entity Types
+
+This example uses three entity types for different item types:
+
+```typescript
+// constants.ts
+export const NOTES_ROOT_ENTITY_TYPE = 'notes-root';    // Tree root
+export const NOTES_FOLDER_ENTITY_TYPE = 'notes-folder'; // Folders
+export const NOTES_NOTE_ENTITY_TYPE = 'notes-note';     // Notes
+```
+
+Each entity type has its own workspace:
+
+```typescript
+// Folder workspace
+meta: { entityType: NOTES_FOLDER_ENTITY_TYPE }
+
+// Note workspace
+meta: { entityType: NOTES_NOTE_ENTITY_TYPE }
+```
+
+## Key Pattern: Tree with Folders
+
+The tree supports nested folders with different icons:
+
+```typescript
+// tree/manifests.ts
+const treeItemManifest: UmbExtensionManifest = {
+  type: 'treeItem',
+  kind: 'default',
+  forEntityTypes: [
+    NOTES_ROOT_ENTITY_TYPE,
+    NOTES_FOLDER_ENTITY_TYPE,
+    NOTES_NOTE_ENTITY_TYPE
+  ],
+};
+```
 
 ## Project Structure
 
@@ -50,8 +124,10 @@ notes-wiki/
 │   │   ├── section/             # Section registration
 │   │   ├── sidebar/             # SectionSidebarApp
 │   │   ├── menu/                # Menu + MenuItem (tree kind)
-│   │   ├── dashboard/           # Welcome dashboard
+│   │   ├── dashboard/           # Welcome dashboard + browse
 │   │   ├── tree/                # Tree + Repository + DataSource
+│   │   ├── collection/          # Collection view
+│   │   ├── entity-actions/      # Create, Delete, Rename
 │   │   │
 │   │   ├── workspace/
 │   │   │   ├── note/            # Note workspace + views
@@ -59,7 +135,7 @@ notes-wiki/
 │   │   │
 │   │   ├── types/               # TypeScript interfaces
 │   │   ├── localization/        # Multi-language support
-│   │   └── entrypoints/         # Entry point initialization
+│   │   └── api/                 # Generated OpenAPI client
 │   │
 │   ├── package.json
 │   ├── tsconfig.json
@@ -94,6 +170,13 @@ This builds the client to `wwwroot/App_Plugins/NotesWiki/`.
 2. Build and run
 3. Navigate to the backoffice and look for the "Notes" section
 
+### File Watching (Development)
+
+```bash
+cd Client
+npm run watch
+```
+
 ### API Endpoints
 
 | Method | Endpoint | Description |
@@ -114,31 +197,34 @@ This builds the client to `wwwroot/App_Plugins/NotesWiki/`.
 
 ## Skills Referenced
 
-This example uses the following skills from the umbraco-backoffice skill collection:
-
-- `umbraco-sections` - Section and SidebarApp
-- `umbraco-dashboard` - Dashboard registration
-- `umbraco-menu` - Menu container
-- `umbraco-menu-items` - MenuItem with tree kind
-- `umbraco-tree` - Tree structure
-- `umbraco-tree-item` - Tree item rendering
-- `umbraco-workspace` - Workspace registration
-- `umbraco-context-api` - Workspace context pattern
-- `umbraco-state-management` - Observable state
-- `umbraco-repository-pattern` - Data access layer
-- `umbraco-conditions` - Extension visibility
-- `umbraco-routing` - URL structure
-- `umbraco-localization` - Multi-language support
-- `umbraco-controllers` - C# API controllers
-- `umbraco-umbraco-element` - Base element class
-- `umbraco-bundle` - Manifest aggregation
-- `umbraco-entry-point` - Initialization
+| Skill | What It Covers |
+|-------|----------------|
+| `umbraco-sections` | Section and SidebarApp |
+| `umbraco-dashboard` | Dashboard registration |
+| `umbraco-menu` | Menu container |
+| `umbraco-menu-items` | MenuItem with tree kind |
+| `umbraco-tree` | Tree structure |
+| `umbraco-tree-item` | Tree item rendering |
+| `umbraco-workspace` | Workspace registration |
+| `umbraco-context-api` | Workspace context pattern |
+| `umbraco-state-management` | Observable state |
+| `umbraco-repository-pattern` | Data access layer |
+| `umbraco-collection` | Collection view |
+| `umbraco-entity-actions` | Create, Delete actions |
+| `umbraco-conditions` | Extension visibility |
+| `umbraco-routing` | URL structure |
+| `umbraco-localization` | Multi-language support |
+| `umbraco-controllers` | C# API controllers |
+| `umbraco-openapi-client` | Generated API client |
+| `umbraco-umbraco-element` | Base element class |
+| `umbraco-bundle` | Manifest aggregation |
+| `umbraco-entry-point` | Initialization |
 
 ## Learning Path
 
-1. **Beginner**: Start with `section/manifest.ts` and `dashboard/manifest.ts`
-2. **Intermediate**: Add `tree/manifest.ts` and understand entityType linking
-3. **Advanced**: Study `workspace/` and the context pattern
+1. **Beginner**: Start with `section/manifests.ts` and `dashboard/manifests.ts`
+2. **Intermediate**: Study `tree/manifests.ts` and understand entityType linking
+3. **Advanced**: Explore `workspace/` and the context pattern with multiple workspaces
 
 ## Data Storage
 
@@ -146,3 +232,16 @@ This example uses JSON file persistence in `App_Data/NotesWiki/data.json`.
 Sample data is created automatically on first run.
 
 For production use, replace `NotesService` with a proper database implementation.
+
+## When to Use This Example
+
+Use notes-wiki when you need:
+
+- **Full-Stack**: C# backend with API endpoints
+- **Hierarchical Data**: Folders containing items
+- **Multiple Workspaces**: Different editors for different entity types
+- **CRUD Operations**: Create, Read, Update, Delete
+- **Collection View**: List/grid display of items
+
+For simpler patterns without backend, see `Blueprint`.
+For tree without full CRUD, see `tree-example`.

@@ -15,9 +15,11 @@ Backoffice customisations are **combinations of extension types** working togeth
 - A "data management tool" = Section + Menu + Workspace
 - A "hierarchical browser" = Section + Menu + Tree + Workspace
 
-This skill provides complete working blueprints. The source code is in `./src/` - copy and adapt for your needs.
+This skill provides complete working blueprints. The source code is in `./examples/` - copy and adapt for your needs.
 
 For details on individual extension types, invoke the referenced sub-skills.
+
+> **TIP**: If the Umbraco CMS source code is available in your workspace, use it as a reference and for inspiration. The backoffice client code in `src/Umbraco.Web.UI.Client/src/packages/` shows production implementations of all extension types - study how the core team structures sections, workspaces, trees, and other patterns.
 
 ---
 
@@ -105,52 +107,23 @@ This diagram shows where ALL extension types appear in the Umbraco backoffice UI
 
 ---
 
-## Blueprint 1: Section with Menu, Dashboard & Workspace
+## Available Examples
 
-A complete custom section with:
-- **Section** - Top-level navigation item
-- **Menu + MenuItem** - Sidebar navigation
-- **Dashboard** - Welcome panel (shows when nothing selected)
-- **Workspace** - Editing view (shows when item selected)
+Each example has a detailed README.md with full documentation. See the `examples/` folder.
 
-### Visual Structure
+| Example | Complexity | What It Shows |
+|---------|------------|---------------|
+| **Blueprint** | Starter | Section + Menu + Dashboard + Workspace - the fundamental pattern |
+| **tree-example** | Intermediate | Tree navigation in Settings section with Workspace |
+| **TimeDashboard** | Advanced | 13+ extension types including Header Apps, Modals, Property Editors |
+| **notes-wiki** | Full-stack | Complete C# backend with CRUD, hierarchical tree, multiple workspaces |
 
-```
-+--------------------------------------------------+
-| Content | Media | Settings | [BLUEPRINT]         |  <- Section in top nav
-+--------------------------------------------------+
-| SIDEBAR          |  MAIN AREA                    |
-| +-------------+  |  +-------------------------+  |
-| | Navigation  |  |  | Dashboard               |  |  <- Shows when no item selected
-| | - My Item   |  |  | "Welcome to Blueprint"  |  |
-| +-------------+  |  +-------------------------+  |
-|      ^           |                               |
-|      |           |  +-------------------------+  |
-|   Menu +         |  | Workspace               |  |  <- Shows when item clicked
-|   MenuItem       |  | "Edit Item"             |  |
-|                  |  +-------------------------+  |
-+--------------------------------------------------+
-```
+### Quick Reference
 
-### How Components Connect
-
-```
-Section (alias: "Blueprint.Section")
-    |
-    +-- conditions: SectionAlias --> Dashboard (shows in this section)
-    |
-    +-- conditions: SectionAlias --> SectionSidebarApp
-                                        |
-                                        +-- meta.menu --> Menu (alias: "Blueprint.Menu")
-                                                            |
-                                                            +-- MenuItem
-                                                                  |
-                                                                  +-- entityType: "blueprint-entity"
-                                                                            |
-                                                                            v
-                                                                      Workspace
-                                                                      (entityType: "blueprint-entity")
-```
+- **Need a new section?** Start with `Blueprint`
+- **Need tree navigation?** See `tree-example`
+- **Need specific extension type?** Check `TimeDashboard` for examples
+- **Need full-stack with API?** Study `notes-wiki`
 
 ---
 
@@ -260,187 +233,12 @@ Essential patterns used across all extensions:
 
 ---
 
-## Source Code
+## Using the Examples
 
-The complete working source code is in this skill's `./src/` folder:
-
-```
-src/
-├── entrypoints/
-│   ├── entrypoint.ts     # Extension lifecycle hooks
-│   └── manifest.ts       # Entry point registration
-├── sections/
-│   └── manifest.ts       # Section + SidebarApp + Menu + MenuItem
-├── dashboards/
-│   ├── dashboard.element.ts   # Dashboard UI component
-│   └── manifest.ts            # Dashboard registration
-├── workspaces/
-│   ├── workspace.element.ts   # Workspace UI component
-│   └── manifest.ts            # Workspace + WorkspaceView registration
-└── bundle.manifests.ts   # Aggregates all manifests
-```
-
-### Key Files Explained
-
-**bundle.manifests.ts** - The entry point that collates all manifests:
-```typescript
-export const manifests: Array<UmbExtensionManifest> = [
-  ...entrypoints,
-  ...dashboards,
-  ...sections,
-  ...workspaces,
-];
-```
-Reference this from your `umbraco-package.json`.
-
-**sections/manifest.ts** - Shows how Section, Menu, MenuItem, and SidebarApp connect:
-- Section has an alias
-- SidebarApp uses condition to appear only in that section
-- SidebarApp references a Menu via `meta.menu`
-- MenuItem belongs to that Menu via `meta.menus`
-- MenuItem links to Workspace via `entityType`
-
-**workspaces/manifest.ts** - Shows Workspace and WorkspaceView pattern:
-- Workspace has `entityType` that matches MenuItem
-- WorkspaceView uses condition to appear in that Workspace
-
----
-
-## Using This Blueprint
-
-1. **Copy** the `src/` folder to your extension's Client folder
-2. **Rename** aliases from `Blueprint.*` to your own namespace
-3. **Update** the entityType to match your domain
-4. **Customise** the dashboard and workspace UI
-5. **Register** with Umbraco via umbraco-package.json:
-   ```json
-   {
-     "name": "My Extension",
-     "extensions": ["./Client/dist/bundle.manifests.js"]
-   }
-   ```
-6. **Add project reference** to the main Umbraco instance - use skill `umbraco-add-extension-reference`
-
----
-
-## Additional Blueprints
-
-### Blueprint 2: Time Dashboard (Comprehensive Multi-Extension Example)
-
-A comprehensive example demonstrating 13 different extension types working together:
-
-**Location**: `examples/TimeDashboard/` (from repository root)
-
-**Structure**:
-```
-TimeDashboard/Client/src/
-├── bundle.manifests.ts       # Aggregates all 13 extension types
-├── sections/manifest.ts      # Section registration
-├── menus/                    # Menu + MenuItem
-├── dashboards/               # Dashboard with time display
-├── workspaces/               # Multiple workspaces + views
-├── headerApps/               # Header app + modal trigger
-├── modals/                   # Custom modal with token
-├── propertyEditors/          # Custom property editor UI
-├── documentApps/             # Document workspace app
-├── actions/
-│   ├── workspace/            # Workspace actions
-│   └── entity/               # Entity actions
-├── contexts/                 # Custom context provider
-├── repository/               # Data repository + datasource
-├── localization/             # en-us, en-gb translations
-└── entrypoints/              # Entry point initialization
-```
-
-**Extension types demonstrated**:
-1. Section + SectionSidebarApp
-2. Menu + MenuItem
-3. Dashboard
-4. Workspace + WorkspaceViews (multiple)
-5. Header App
-6. Modal (with custom token)
-7. Property Editor UI
-8. Document App (workspace view)
-9. Workspace Actions
-10. Entity Actions
-11. Context (custom provider)
-12. Repository + DataSource
-13. Localization
-
-**Skills used**: `umbraco-sections`, `umbraco-menu`, `umbraco-menu-items`, `umbraco-dashboard`, `umbraco-workspace`, `umbraco-header-apps`, `umbraco-modals`, `umbraco-property-editor-ui`, `umbraco-entity-actions`, `umbraco-context-api`, `umbraco-repository-pattern`, `umbraco-localization`, `umbraco-entry-point`
-
----
-
-### Blueprint 3: Tree Example (Settings Tree with Workspace)
-
-A focused example showing tree navigation in Settings section with workspace:
-
-**Location**: `examples/tree-example/` (from repository root)
-
-**Structure**:
-```
-tree-example/Client/src/
-├── bundle.manifests.ts       # Aggregates tree + workspace
-├── settingsTree/
-│   ├── manifest.ts           # Tree + TreeItem + Repository registration
-│   ├── ourtree.repository.ts # Repository extending UmbTreeRepositoryBase
-│   ├── ourtree.data-source.ts # Data source with API calls
-│   ├── ourtree.store.ts      # Tree store for caching
-│   └── types.ts              # Type definitions
-├── workspace/
-│   ├── manifest.ts           # Workspace + WorkspaceView
-│   ├── ourtree-workspace.context.ts       # Workspace context
-│   ├── ourtree-workspace.context-token.ts # Context token
-│   ├── ourtree-workspace-editor.element.ts # Workspace editor
-│   └── views/
-│       └── ourtree-workspace-view.element.ts
-└── entrypoints/
-```
-
-**Features demonstrated**:
-- Tree appearing in Settings section (via conditions)
-- Tree repository with data source pattern
-- Tree store for state management
-- Workspace context with token pattern
-- Workspace editor element
-- entityType linking tree items to workspace
-
-**Key connections**:
-```
-Tree (appears in Settings via conditions)
-    └── TreeItem (entityType: "ourtree-entity")
-            └── Click → Workspace
-                    └── WorkspaceContext (via token)
-                            └── WorkspaceView
-```
-
-**Skills used**: `umbraco-tree`, `umbraco-tree-item`, `umbraco-workspace`, `umbraco-context-api`, `umbraco-repository-pattern`, `umbraco-state-management`, `umbraco-conditions`
-
----
-
-### Blueprint 4: Notes/Wiki (Full-Stack with C# Backend)
-
-A comprehensive example showing Section + Tree + Workspace with C# backend:
-
-**Location**: `examples/notes-wiki/` (from repository root)
-
-**Features demonstrated**:
-- Full hierarchical tree with folders and notes
-- Multiple workspace types (Note, Folder)
-- C# API controllers with JSON persistence
-- Dashboard with search and recent items
-- Entity actions (Save, Delete)
-
-**Skills used**: 27 different skills - see `examples/notes-wiki/PLAN.md` (from repository root) for the full mapping.
-
-This is the most complete example, demonstrating how all extension types work together in a real-world feature.
-
----
-
-### Future Blueprints
-
-More blueprints planned:
-- **Blueprint 5**: Dashboard-only (add to existing section)
-- **Blueprint 6**: Header App with Modal
-- **Blueprint 7**: Property Editor (custom data type)
-- **Blueprint 8**: Search Provider integration
+1. **Browse** the `examples/` folder and read the README.md for each example
+2. **Copy** the example closest to your needs into your project
+3. **Rename** aliases from the example namespace to your own (e.g., `Blueprint.*` to `MyApp.*`)
+4. **Update** the `entityType` values to match your domain
+5. **Customise** the UI components for your use case
+6. **Register** with Umbraco via `umbraco-package.json`
+7. **Add project reference** to the main Umbraco instance - use skill `umbraco-add-extension-reference`
