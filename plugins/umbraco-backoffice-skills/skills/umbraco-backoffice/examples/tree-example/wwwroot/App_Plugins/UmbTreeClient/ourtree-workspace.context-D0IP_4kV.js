@@ -3,8 +3,8 @@ var w = (e) => {
 };
 var T = (e, t, s) => t.has(e) || w("Cannot " + s);
 var r = (e, t, s) => (T(e, t, "read from private field"), s ? s.call(e) : t.get(e)), _ = (e, t, s) => t.has(e) ? w("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, s), m = (e, t, s, i) => (T(e, t, "write to private field"), i ? i.call(e, s) : t.set(e, s), s);
-import { b as R, O as W } from "./bundle.manifests-BdbixqNY.js";
-import { O as y } from "./ourtree-workspace.context-token-CZstg8PQ.js";
+import { b as R, O as W } from "./bundle.manifests-D-kuPIxP.js";
+import { O as y } from "./ourtree-workspace.context-token-D6vAhhCS.js";
 import { html as x, css as S, state as g, customElement as U } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement as P } from "@umbraco-cms/backoffice/lit-element";
 import { UmbWorkspaceRouteManager as A } from "@umbraco-cms/backoffice/workspace";
@@ -109,4 +109,4 @@ export {
   X as OurTreeWorkspaceContext,
   X as api
 };
-//# sourceMappingURL=ourtree-workspace.context-B-6U_rcP.js.map
+//# sourceMappingURL=ourtree-workspace.context-D0IP_4kV.js.map

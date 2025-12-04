@@ -1,4 +1,4 @@
-import { O as o } from "./bundle.manifests-BdbixqNY.js";
+import { O as o } from "./bundle.manifests-D-kuPIxP.js";
 import { UmbContextToken as _ } from "@umbraco-cms/backoffice/context-api";
 const O = new _(
   "UmbWorkspaceContext",
@@ -11,4 +11,4 @@ const O = new _(
 export {
   O
 };
-//# sourceMappingURL=ourtree-workspace.context-token-CZstg8PQ.js.map
+//# sourceMappingURL=ourtree-workspace.context-token-D6vAhhCS.js.map

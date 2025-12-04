@@ -1,6 +1,6 @@
 import { UmbTreeServerDataSourceBase as n, UmbTreeRepositoryBase as i } from "@umbraco-cms/backoffice/tree";
 import { OUR_TREE_STORE_CONTEXT as s } from "./ourtree.store-CiK112rZ.js";
-import { O as l, a as u } from "./bundle.manifests-BdbixqNY.js";
+import { O as l, a as u } from "./bundle.manifests-D-kuPIxP.js";
 import { c as t } from "./client.gen-CinYYOVQ.js";
 class a {
   static getAncestors(e) {
@@ -99,4 +99,4 @@ export {
   g as OurTreeRepository,
   g as api
 };
-//# sourceMappingURL=ourtree.repository-CK-xG7UB.js.map
+//# sourceMappingURL=ourtree.repository-B9x7s5CC.js.map

@@ -10,7 +10,7 @@ const o = [
   type: "repository",
   alias: "OurTree.Repository",
   name: "OurTree Repository",
-  api: () => import("./ourtree.repository-CK-xG7UB.js")
+  api: () => import("./ourtree.repository-B9x7s5CC.js")
 }, m = {
   type: "treeStore",
   alias: "OurTree.Store",
@@ -80,7 +80,7 @@ const o = [
   kind: "routable",
   alias: n,
   name: "OurTree Item Workspace",
-  api: () => import("./ourtree-workspace.context-B-6U_rcP.js"),
+  api: () => import("./ourtree-workspace.context-D0IP_4kV.js"),
   meta: {
     entityType: a
   }
@@ -88,7 +88,7 @@ const o = [
   type: "workspaceView",
   alias: "OurTree.WorkspaceView.Details",
   name: "OurTree Workspace Details View",
-  element: () => import("./ourtree-workspace-view.element-BwO8GKSV.js"),
+  element: () => import("./ourtree-workspace-view.element-BZe02kie.js"),
   weight: 100,
   meta: {
     label: "Details",
@@ -115,4 +115,4 @@ export {
   n as b,
   E as m
 };
-//# sourceMappingURL=bundle.manifests-BdbixqNY.js.map
+//# sourceMappingURL=bundle.manifests-D-kuPIxP.js.map

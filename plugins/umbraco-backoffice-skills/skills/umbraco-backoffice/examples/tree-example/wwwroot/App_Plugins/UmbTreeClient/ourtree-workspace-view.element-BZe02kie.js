@@ -1,17 +1,17 @@
-import { O as m } from "./ourtree-workspace.context-token-CZstg8PQ.js";
+import { O as m } from "./ourtree-workspace.context-token-D6vAhhCS.js";
 import { nothing as y, html as b, css as x, state as v, customElement as w } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement as g } from "@umbraco-cms/backoffice/lit-element";
 import { UmbTextStyles as E } from "@umbraco-cms/backoffice/style";
-var O = Object.defineProperty, T = Object.getOwnPropertyDescriptor, _ = (e) => {
+var O = Object.defineProperty, T = Object.getOwnPropertyDescriptor, h = (e) => {
   throw TypeError(e);
 }, n = (e, r, t, o) => {
-  for (var i = o > 1 ? void 0 : o ? T(r, t) : r, c = e.length - 1, u; c >= 0; c--)
-    (u = e[c]) && (i = (o ? u(r, t, i) : u(i)) || i);
+  for (var i = o > 1 ? void 0 : o ? T(r, t) : r, u = e.length - 1, c; u >= 0; u--)
+    (c = e[u]) && (i = (o ? c(r, t, i) : c(i)) || i);
   return o && i && O(r, t, i), i;
-}, d = (e, r, t) => r.has(e) || _("Cannot " + t), p = (e, r, t) => (d(e, r, "read from private field"), r.get(e)), h = (e, r, t) => r.has(e) ? _("Cannot add the same private member more than once") : r instanceof WeakSet ? r.add(e) : r.set(e, t), C = (e, r, t, o) => (d(e, r, "write to private field"), r.set(e, t), t), W = (e, r, t) => (d(e, r, "access private method"), t), s, l, f;
+}, d = (e, r, t) => r.has(e) || h("Cannot " + t), p = (e, r, t) => (d(e, r, "read from private field"), r.get(e)), _ = (e, r, t) => r.has(e) ? h("Cannot add the same private member more than once") : r instanceof WeakSet ? r.add(e) : r.set(e, t), C = (e, r, t, o) => (d(e, r, "write to private field"), r.set(e, t), t), W = (e, r, t) => (d(e, r, "access private method"), t), s, l, f;
 let a = class extends g {
   constructor() {
-    super(), h(this, l), h(this, s), this.consumeContext(m, (e) => {
+    super(), _(this, l), _(this, s), this.consumeContext(m, (e) => {
       C(this, s, e), W(this, l, f).call(this);
     });
   }
@@ -108,4 +108,4 @@ export {
   a as OurTreeWorkspaceViewElement,
   P as default
 };
-//# sourceMappingURL=ourtree-workspace-view.element-BwO8GKSV.js.map
+//# sourceMappingURL=ourtree-workspace-view.element-BZe02kie.js.map
