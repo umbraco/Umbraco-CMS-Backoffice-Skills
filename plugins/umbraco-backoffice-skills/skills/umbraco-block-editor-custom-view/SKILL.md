@@ -23,6 +23,14 @@ Always fetch the latest docs before implementing:
 - **Umbraco Element**: For implementing the custom view element
   - Reference skill: `umbraco-umbraco-element`
 
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/block-custom-view/`
+
+This example demonstrates a custom block view implementation. Study this for production patterns.
+
 ## Workflow
 
 1. **Fetch docs** - Use WebFetch on the URLs above

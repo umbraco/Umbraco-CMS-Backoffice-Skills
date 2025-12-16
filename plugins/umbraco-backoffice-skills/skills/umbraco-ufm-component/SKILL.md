@@ -18,6 +18,14 @@ Always fetch the latest docs before implementing:
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 - **UFM**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/ufm-component
 
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/ufm-custom-component/`
+
+This example demonstrates a custom UFM component with marker syntax. Study this for production patterns.
+
 ## Related Foundation Skills
 
 - **Localization**: When creating localized UFM components

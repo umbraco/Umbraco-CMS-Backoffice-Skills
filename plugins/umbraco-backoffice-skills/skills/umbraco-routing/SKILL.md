@@ -19,6 +19,14 @@ Always fetch the latest docs before implementing:
 - **Dashboards**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/dashboard
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/modal-routed/`
+
+This example demonstrates routed modals with URL-based navigation and deep-linking support. Study this for complex routing patterns.
+
 ## Workflow
 
 1. **Fetch docs** - Use WebFetch on the URLs above

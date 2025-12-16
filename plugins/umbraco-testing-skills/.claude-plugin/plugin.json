@@ -1,0 +1,25 @@
+{
+  "name": "umbraco-testing-skills",
+  "version": "1.0.0",
+  "description": "Complete skill set for testing Umbraco backoffice extensions - Unit testing with @open-wc/testing, MSW mocking, and E2E testing with Playwright + Testhelpers",
+  "author": {
+    "name": "Phil W",
+    "email": "pjw@umbraco.com",
+    "url": "https://github.com/hifi-phil"
+  },
+  "homepage": "https://github.com/hifi-phil/UmbracoCMS_Skills",
+  "license": "MIT",
+  "keywords": [
+    "umbraco",
+    "testing",
+    "unit-testing",
+    "e2e-testing",
+    "playwright",
+    "playwright-testhelpers",
+    "msw",
+    "open-wc",
+    "web-test-runner",
+    "json-models-builders"
+  ],
+  "skills": "./skills/"
+}

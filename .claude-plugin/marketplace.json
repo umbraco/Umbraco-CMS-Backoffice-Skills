@@ -30,7 +30,6 @@
         "lit",
         "web-components"
       ],
-      "agents": "./agents/",
       "skills": "./skills/"
     }
   ]

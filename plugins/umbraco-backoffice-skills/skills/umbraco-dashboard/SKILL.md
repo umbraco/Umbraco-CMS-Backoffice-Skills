@@ -19,6 +19,14 @@ Always fetch the latest docs before implementing:
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 - **Tutorial**: https://docs.umbraco.com/umbraco-cms/tutorials/creating-a-custom-dashboard
 
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/dashboard-with-property-dataset/`
+
+This example demonstrates a dashboard that uses property datasets for data binding. Study this for production patterns.
+
 ## Related Foundation Skills
 
 If you need to explain these foundational concepts when implementing dashboards, reference these skills:

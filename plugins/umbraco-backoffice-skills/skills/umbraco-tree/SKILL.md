@@ -42,6 +42,14 @@ Workspace Views (conditioned to workspace alias)
 When implementing trees with clickable items, you MUST also implement workspaces:
 - Reference skill: `umbraco-workspace`
 
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/tree/`
+
+This example demonstrates a complete custom tree with data source, repository, and menu integration. Study this for production patterns.
+
 ## Related Foundation Skills
 
 If you need to explain these foundational concepts when implementing trees, reference these skills:

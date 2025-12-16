@@ -20,6 +20,5 @@
     "section",
     "workspace"
   ],
-  "agents": "./agents/",
   "skills": "./skills/"
 }
