@@ -169,3 +169,4 @@ lerna-debug.log*
 
 # Skill validation
 validation-report.json
+code-analysis-report.json
