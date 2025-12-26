@@ -1,0 +1,17 @@
+{
+  "name": "umbraco-skill-test-runner",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Run tests from skill examples and generate a report",
+  "scripts": {
+    "test": "npx tsx run-tests.ts"
+  },
+  "dependencies": {
+    "glob": "^11.0.0",
+    "tsx": "^4.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}

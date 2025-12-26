@@ -8,6 +8,7 @@ allowed-tools: Bash, Read, Glob, Task, AskUserQuestion, Edit
 Run validation on all SKILL.md files to check:
 1. **Links** - Broken URLs, missing skill refs, invalid paths
 2. **Code** - Import paths, extension types, deprecated patterns
+3. **Tests** - Run unit, mocked, and E2E tests from skill examples
 
 ## Workflow
 
@@ -29,13 +30,32 @@ CHECK_TYPESCRIPT=false npx tsx analyze-code.ts
 
 Set `CHECK_TYPESCRIPT=true` for TypeScript compilation checking (slower but more thorough).
 
-### Phase 3: Read Reports
+### Phase 3: Run Tests
 
-Read both JSON reports:
+```bash
+cd .claude/skills/umbraco-skill-test-runner/scripts
+npm install --silent
+npx tsx run-tests.ts
+```
+
+This runs all tests from skill examples:
+- **Unit tests** - Component tests with `@open-wc/testing`
+- **Mocked tests** - Integration tests against mocked backoffice
+- **E2E tests** - Full tests against real Umbraco (auto-starts if needed)
+
+For E2E tests, set credentials:
+```bash
+UMBRACO_USER_LOGIN=admin@example.com UMBRACO_USER_PASSWORD=password npx tsx run-tests.ts
+```
+
+### Phase 4: Read Reports
+
+Read all JSON reports:
 - `validation-report.json` (links)
 - `code-analysis-report.json` (code)
+- `test-report.json` (tests)
 
-### Phase 4: Present Combined Report
+### Phase 5: Present Combined Report
 
 Display a combined markdown report:
 
@@ -46,6 +66,7 @@ Display a combined markdown report:
 - Skills scanned: X
 - Link issues: Y
 - Code issues: Z
+- Tests passed: X / Y (Z skipped)
 
 ## Link Issues
 
@@ -66,6 +87,21 @@ Display a combined markdown report:
 | 58 | Unknown type | 'fooBar' extension type | warning |
 | 101 | Deprecated | UmbElementMixin is deprecated | warning |
 
+## Test Results
+
+| Example | Type | Status | Duration |
+|---------|------|--------|----------|
+| counter-dashboard | unit | passed | 1.2s |
+| tree-example | mocked | passed | 3.4s |
+| document-type-crud | e2e | failed | 45.2s |
+
+### Failed Tests
+
+#### `document-type-crud` (e2e)
+```
+Error: Timed out waiting for selector...
+```
+
 ## Statistics
 - External URLs checked: X (Y broken)
 - Skill references checked: X (Y missing)
@@ -73,16 +109,17 @@ Display a combined markdown report:
 - Import issues: X
 - Extension type issues: X
 - Deprecated patterns: X
+- Test suites: X (Y passed, Z failed, W skipped)
 ```
 
-### Phase 5: Fix Approval
+### Phase 6: Fix Approval
 
 If issues found, use AskUserQuestion:
 - "Apply all high-confidence fixes"
 - "Spawn AI agent for detailed analysis"
 - "Skip fixes, show report only"
 
-### Phase 6: Execute Fixes
+### Phase 7: Execute Fixes
 
 **For link issues**: Use Edit tool directly (URL replacements are deterministic)
 
@@ -107,9 +144,13 @@ Only execute fixes the user explicitly approves.
 |----------|---------|-------------|
 | `CHECK_TYPESCRIPT` | `false` | Enable TypeScript compilation checks |
 | `UMBRACO_CMS_PATH` | (auto) | Path to local Umbraco-CMS for path validation |
+| `UMBRACO_USER_LOGIN` | - | Admin email for E2E test authentication |
+| `UMBRACO_USER_PASSWORD` | - | Admin password for E2E test authentication |
+| `UMBRACO_URL` | `https://localhost:44325` | Umbraco instance URL for E2E tests |
 
 ## Report Files
 
-Both validators save JSON reports to the project root:
+All validators save JSON reports to the project root:
 - `validation-report.json` - Link validation results
 - `code-analysis-report.json` - Code analysis results
+- `test-report.json` - Test execution results
