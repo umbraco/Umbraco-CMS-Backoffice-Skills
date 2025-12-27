@@ -10,29 +10,27 @@ allowed-tools: Read, Write, Edit, WebFetch
 
 End-to-end testing for Umbraco backoffice extensions using Playwright and `@umbraco/playwright-testhelpers`. This approach tests against a real running Umbraco instance, validating complete user workflows.
 
-## Critical: Always Use Testhelpers and Builders
+## Critical: Use Testhelpers for Core Umbraco
 
-**NEVER write raw Playwright tests for Umbraco.** Always use:
+Use `@umbraco/playwright-testhelpers` for **core Umbraco operations**:
 
 | Package | Purpose | Why Required |
 |---------|---------|--------------|
-| `@umbraco/playwright-testhelpers` | UI and API helpers | Handles Umbraco-specific selectors, auth, navigation |
+| `@umbraco/playwright-testhelpers` | UI and API helpers | Handles auth, navigation, core entity CRUD |
 | `@umbraco/json-models-builders` | Test data builders | Creates valid Umbraco entities with correct structure |
 
-**Why?**
+**Why use testhelpers for core Umbraco?**
 - Umbraco uses `data-mark` instead of `data-testid` - testhelpers handle this
 - Auth token management is complex - testhelpers manage `STORAGE_STAGE_PATH`
 - API setup/teardown requires specific payload formats - builders ensure correctness
-- UI navigation has async loading patterns - helpers include proper waits
 - Selectors change between versions - testhelpers abstract these away
 
 ```typescript
-// WRONG - Raw Playwright (brittle, breaks between versions)
+// WRONG - Raw Playwright for core Umbraco (brittle)
 await page.goto('/umbraco');
 await page.fill('[name="email"]', 'admin@example.com');
-await page.click('button[type="submit"]');
 
-// CORRECT - Using testhelpers (stable, maintained)
+// CORRECT - Testhelpers for core Umbraco
 import { test } from '@umbraco/playwright-testhelpers';
 
 test('my test', async ({ umbracoApi, umbracoUi }) => {
@@ -40,6 +38,29 @@ test('my test', async ({ umbracoApi, umbracoUi }) => {
   await umbracoUi.login.enterEmail('admin@example.com');
 });
 ```
+
+### When to Use Raw Playwright
+
+For **custom extensions**, use `umbracoUi.page` (raw Playwright) because testhelpers don't know about your custom elements:
+
+```typescript
+test('my custom extension', async ({ umbracoUi }) => {
+  // Testhelpers for core navigation
+  await umbracoUi.goToBackOffice();
+  await umbracoUi.content.goToSection(ConstantHelper.sections.settings);
+
+  // Raw Playwright for YOUR custom elements
+  await umbracoUi.page.getByRole('link', { name: 'My Custom Item' }).click();
+  await expect(umbracoUi.page.locator('my-custom-workspace')).toBeVisible();
+});
+```
+
+| Use Testhelpers For | Use `umbracoUi.page` For |
+|---------------------|--------------------------|
+| Login/logout | Custom tree items |
+| Navigate to ANY section (including custom) | Custom workspace elements |
+| Create/edit documents via API | Custom entity actions |
+| Built-in UI interactions | Custom UI components |
 
 ## When to Use
 
@@ -189,7 +210,15 @@ Create `.env` (add to `.gitignore`):
 UMBRACO_URL=https://localhost:44325
 UMBRACO_USER_LOGIN=admin@example.com
 UMBRACO_USER_PASSWORD=yourpassword
+UMBRACO_DATA_PATH=/path/to/Umbraco.Web.UI/App_Data  # Optional: for data reset
 ```
+
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `UMBRACO_URL` | Yes | Backoffice URL |
+| `UMBRACO_USER_LOGIN` | Yes | Admin email |
+| `UMBRACO_USER_PASSWORD` | Yes | Admin password |
+| `UMBRACO_DATA_PATH` | No | App_Data path for test data reset (see "Testing with Persistent Data") |
 
 ### Directory Structure
 
@@ -462,6 +491,260 @@ Key files:
 - `tests/playwright.e2e.config.ts` - E2E configuration with auth setup
 - `tests/auth.setup.ts` - Authentication using testhelpers
 - `tests/tree-e2e.spec.ts` - Tests for custom tree in Settings sidebar
+
+### Working Example: notes-wiki (Full-Stack with Data Reset)
+
+The `notes-wiki` demonstrates E2E testing with **persistent data** and **CRUD operations**:
+
+**Location**: `umbraco-backoffice/examples/notes-wiki/Client/`
+
+```bash
+# Run E2E tests (with data reset)
+URL=https://localhost:44325 \
+UMBRACO_USER_LOGIN=admin@example.com \
+UMBRACO_USER_PASSWORD=yourpassword \
+UMBRACO_DATA_PATH=/path/to/App_Data \
+npm run test:e2e                # 16 tests
+```
+
+Key files:
+- `tests/playwright.e2e.config.ts` - Config with `globalSetup` for data reset
+- `tests/global-setup.ts` - Resets data to seed state before tests
+- `tests/test-seed-data.json` - Known test data (notes, folders)
+- `tests/notes-wiki-e2e.spec.ts` - CRUD and navigation tests
+
+**What it demonstrates:**
+- Testing a custom section using `goToSection('notes')`
+- Resetting file-based data before each test run
+- Testing tree navigation, folders, and workspaces
+- Entity actions via "View actions" button (more reliable than right-click)
+- Dashboard and workspace view testing
+
+---
+
+## Testing Extensions with Persistent Data
+
+When your extension persists data (JSON files, database, etc.), tests need **predictable starting state**.
+
+### Global Setup Pattern
+
+Add `globalSetup` to reset data before tests:
+
+**playwright.e2e.config.ts:**
+```typescript
+export default defineConfig({
+  // ... other config
+  globalSetup: './global-setup.ts',
+});
+```
+
+**global-setup.ts:**
+```typescript
+import { FullConfig } from '@playwright/test';
+import * as fs from 'fs';
+import * as path from 'path';
+
+async function globalSetup(config: FullConfig) {
+  const dataPath = process.env.UMBRACO_DATA_PATH;
+  if (!dataPath) {
+    console.warn('⚠️  UMBRACO_DATA_PATH not set. Skipping data reset.');
+    return;
+  }
+
+  const targetFile = path.join(dataPath, 'MyExtension/data.json');
+  const seedFile = path.join(__dirname, 'test-seed-data.json');
+
+  // Ensure directory exists
+  fs.mkdirSync(path.dirname(targetFile), { recursive: true });
+
+  // Copy seed data to target
+  fs.copyFileSync(seedFile, targetFile);
+  console.log('🌱 Reset data to seed state');
+}
+
+export default globalSetup;
+```
+
+**test-seed-data.json:**
+```json
+{
+  "items": [
+    { "id": "test-1", "name": "Test Item 1" },
+    { "id": "test-2", "name": "Test Item 2" }
+  ]
+}
+```
+
+### Environment Variable
+
+Add `UMBRACO_DATA_PATH` to locate your Umbraco's App_Data folder:
+
+```bash
+UMBRACO_DATA_PATH=/path/to/Umbraco.Web.UI/App_Data npm run test:e2e
+```
+
+---
+
+## Testing Custom Sections
+
+Custom sections work with testhelpers' `goToSection()` method - pass the section pathname:
+
+```typescript
+// Section pathname - matches what you defined in section/constants.ts
+const MY_SECTION = 'my-section';
+
+// Helper to navigate to custom section using testhelpers
+async function goToMySection(umbracoUi: any) {
+  await umbracoUi.goToBackOffice();
+  await umbracoUi.content.goToSection(MY_SECTION);
+  await umbracoUi.page.waitForTimeout(500);
+}
+
+test('should navigate to custom section', async ({ umbracoUi }) => {
+  await goToMySection(umbracoUi);
+
+  // Assert - your dashboard or tree should be visible
+  await expect(umbracoUi.page.getByText('Welcome')).toBeVisible({ timeout: 15000 });
+});
+
+// To verify the section exists in the section bar:
+test('should display my section', async ({ umbracoUi }) => {
+  await umbracoUi.goToBackOffice();
+  await expect(umbracoUi.page.getByRole('tab', { name: 'My Section' })).toBeVisible({ timeout: 15000 });
+});
+```
+
+---
+
+## Context Menu (Entity Actions) Testing
+
+Testing entity actions on tree items. Uses `umbracoUi.page` since testhelpers don't cover custom entity actions.
+
+**Important:** Entity actions in Umbraco are rendered as **buttons** inside the dropdown menu, not as `menuitem` roles directly. The most reliable approach is to use the "View actions" button rather than right-click:
+
+```typescript
+test('should show delete action via actions button', async ({ umbracoUi }) => {
+  await goToMySection(umbracoUi);
+
+  // Wait for tree item
+  const itemLink = umbracoUi.page.getByRole('link', { name: 'My Item' });
+  await itemLink.waitFor({ timeout: 15000 });
+
+  // Hover to reveal action buttons
+  await itemLink.hover();
+
+  // Click the "View actions" button to open dropdown
+  const actionsButton = umbracoUi.page.getByRole('button', { name: "View actions for 'My Item'" });
+  await actionsButton.click();
+
+  // Wait for dropdown and check for actions (actions are BUTTONS, not menuitems!)
+  await umbracoUi.page.waitForTimeout(500);
+  const deleteButton = umbracoUi.page.getByRole('button', { name: 'Delete' });
+  const renameButton = umbracoUi.page.getByRole('button', { name: 'Rename' });
+
+  // Assert - at least one action should be visible
+  await expect(deleteButton.or(renameButton)).toBeVisible({ timeout: 5000 });
+});
+
+test('should delete item via actions menu', async ({ umbracoUi }) => {
+  await goToMySection(umbracoUi);
+
+  const itemLink = umbracoUi.page.getByRole('link', { name: 'Item to Delete' });
+  await itemLink.waitFor({ timeout: 15000 });
+
+  // Hover and open actions menu
+  await itemLink.hover();
+  await umbracoUi.page.getByRole('button', { name: "View actions for 'Item to Delete'" }).click();
+
+  // Click delete button
+  await umbracoUi.page.getByRole('button', { name: 'Delete' }).click();
+
+  // Confirm deletion (if modal appears)
+  const confirmButton = umbracoUi.page.getByRole('button', { name: /Confirm|Delete/i });
+  if (await confirmButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await confirmButton.click();
+  }
+
+  // Assert - item should be gone
+  await expect(itemLink).not.toBeVisible({ timeout: 15000 });
+});
+```
+
+### Alternative: Right-Click Context Menu
+
+Right-click also works but the actions button approach is more reliable:
+
+```typescript
+// Right-click approach (less reliable than actions button)
+await itemLink.click({ button: 'right' });
+await umbracoUi.page.waitForTimeout(500);
+await umbracoUi.page.getByRole('button', { name: 'Delete' }).click();
+```
+
+---
+
+## CRUD Testing Patterns
+
+For custom extensions, use `umbracoUi.page` for UI interactions. For core Umbraco content, prefer `umbracoApi` helpers for setup/teardown.
+
+### Create via Actions Menu (Custom Extension)
+
+```typescript
+test('should create new item', async ({ umbracoUi }) => {
+  await goToMySection(umbracoUi);
+
+  // Hover over parent folder and use Create button
+  const folderLink = umbracoUi.page.getByRole('link', { name: 'Parent Folder' });
+  await folderLink.hover();
+
+  // Scope to specific menu to avoid ambiguity with multiple items
+  const folderMenu = umbracoUi.page.getByRole('menu').filter({ hasText: 'Parent Folder' });
+  const createButton = folderMenu.getByRole('button', { name: 'Create Note' });
+  await createButton.click();
+
+  // Assert - workspace should open with "New" indicator
+  await expect(umbracoUi.page.locator('my-workspace-editor')).toBeVisible({ timeout: 15000 });
+});
+```
+
+### Scoping to Specific Tree Items
+
+When multiple tree items exist with similar elements, scope selectors to avoid ambiguity:
+
+```typescript
+// WRONG - ambiguous when multiple folders have "Create" buttons
+const createButton = page.getByRole('button', { name: 'Create' });
+
+// CORRECT - scoped to specific folder's menu
+const folderMenu = page.getByRole('menu').filter({ hasText: 'My Folder' });
+const createButton = folderMenu.getByRole('button', { name: 'Create' });
+```
+
+### Update and Save
+
+```typescript
+test('should update item', async ({ umbracoUi }) => {
+  await goToMySection(umbracoUi);
+
+  // Navigate to item
+  await umbracoUi.page.getByRole('link', { name: 'Test Item' }).click();
+  await umbracoUi.page.locator('my-workspace-editor').waitFor({ timeout: 15000 });
+
+  // Update field
+  const titleInput = umbracoUi.page.locator('uui-input#title');
+  await titleInput.clear();
+  await titleInput.fill('Updated Title');
+
+  // Save
+  await umbracoUi.page.getByRole('button', { name: /Save/i }).click();
+
+  // Wait for save to complete
+  await umbracoUi.page.waitForTimeout(2000);
+
+  // Assert - header should reflect change
+  await expect(umbracoUi.page.getByText('Updated Title')).toBeVisible();
+});
+```
 
 ---
 
