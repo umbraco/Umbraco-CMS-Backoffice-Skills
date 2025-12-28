@@ -2,12 +2,12 @@
  * MSW Worker Setup
  *
  * Demonstrates:
- * - MSW v1 setup pattern
+ * - MSW v2 setup pattern
  * - Browser worker initialization
  * - Handler registration
  */
 
-// MSW v1 is loaded as IIFE and exposed globally
+// MSW v2 is loaded as IIFE and exposed globally
 const { setupWorker } = window.MockServiceWorker;
 
 import { handlers } from './handlers.js';
@@ -45,12 +45,14 @@ export function resetHandlers(): void {
 	worker.resetHandlers();
 }
 
-// Type declaration for global MSW
+// Type declaration for global MSW (v2)
 declare global {
 	interface Window {
 		MockServiceWorker: {
-			setupWorker: typeof import('msw').setupWorker;
-			rest: typeof import('msw').rest;
+			setupWorker: typeof import('msw/browser').setupWorker;
+			http: typeof import('msw').http;
+			HttpResponse: typeof import('msw').HttpResponse;
+			delay: typeof import('msw').delay;
 		};
 	}
 }

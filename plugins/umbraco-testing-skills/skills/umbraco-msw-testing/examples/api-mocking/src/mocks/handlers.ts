@@ -2,14 +2,14 @@
  * MSW Handlers for Items API
  *
  * Demonstrates:
- * - MSW v1 syntax with rest API
+ * - MSW v2 syntax with http API
  * - CRUD handlers
  * - Error simulation
  * - Delay simulation
  */
 
-// MSW v1 is loaded as IIFE and exposed globally
-const { rest } = window.MockServiceWorker;
+// MSW v2 is loaded as IIFE and exposed globally
+const { http, HttpResponse, delay } = window.MockServiceWorker;
 
 import { itemsDb, type Item } from './items.db.js';
 
@@ -18,79 +18,76 @@ const apiPath = (path: string) => `/umbraco/management/api/v1${path}`;
 
 export const itemsHandlers = [
 	// GET all items
-	rest.get(apiPath('/items'), (req, res, ctx) => {
+	http.get(apiPath('/items'), () => {
 		const items = itemsDb.getAll();
 
-		return res(
-			ctx.status(200),
-			ctx.json({
-				total: items.length,
-				items: items,
-			})
-		);
+		return HttpResponse.json({
+			total: items.length,
+			items: items,
+		});
 	}),
 
 	// GET single item by ID
-	rest.get(apiPath('/items/:id'), (req, res, ctx) => {
-		const id = req.params.id as string;
+	http.get(apiPath('/items/:id'), ({ params }) => {
+		const id = params.id as string;
 
 		// Simulate forbidden access for testing
 		if (id === 'forbidden') {
-			return res(ctx.status(403));
+			return new HttpResponse(null, { status: 403 });
 		}
 
 		// Simulate server error for testing
 		if (id === 'error') {
-			return res(
-				ctx.status(500),
-				ctx.json({
+			return HttpResponse.json(
+				{
 					type: 'error',
 					status: 500,
 					detail: 'Internal server error',
-				})
+				},
+				{ status: 500 }
 			);
 		}
 
 		const item = itemsDb.getById(id);
 
 		if (!item) {
-			return res(ctx.status(404));
+			return new HttpResponse(null, { status: 404 });
 		}
 
-		return res(ctx.status(200), ctx.json(item));
+		return HttpResponse.json(item);
 	}),
 
 	// POST create new item
-	rest.post(apiPath('/items'), async (req, res, ctx) => {
-		const body = await req.json();
+	http.post(apiPath('/items'), async ({ request }) => {
+		const body = (await request.json()) as Partial<Item>;
 
 		// Validate required fields
 		if (!body.name) {
-			return res(
-				ctx.status(400),
-				ctx.json({
+			return HttpResponse.json(
+				{
 					type: 'validation',
 					status: 400,
 					detail: 'Validation failed',
 					errors: {
 						name: ['Name is required'],
 					},
-				})
+				},
+				{ status: 400 }
 			);
 		}
 
 		// Check for duplicate name
 		if (itemsDb.getByName(body.name)) {
-			return res(
-				ctx.status(400),
-				ctx.json({
+			return HttpResponse.json(
+				{
 					type: 'validation',
 					status: 400,
 					detail: 'Item already exists',
 					errors: {
 						name: ['An item with this name already exists'],
 					},
-				})
+				},
+				{ status: 400 }
 			);
 		}
 
@@ -99,48 +96,48 @@ export const itemsHandlers = [
 			description: body.description || '',
 		});
 
-		return res(
-			ctx.status(201),
-			ctx.set({
+		return HttpResponse.json(newItem, {
+			status: 201,
+			headers: {
 				Location: `${apiPath('/items')}/${newItem.id}`,
 				'Umb-Generated-Resource': newItem.id,
-			}),
-			ctx.json(newItem)
-		);
+			},
+		});
 	}),
 
 	// PUT update item
-	rest.put(apiPath('/items/:id'), async (req, res, ctx) => {
-		const id = req.params.id as string;
-		const body = await req.json();
+	http.put(apiPath('/items/:id'), async ({ params, request }) => {
+		const id = params.id as string;
+		const body = (await request.json()) as Partial<Item>;
 
 		if (!itemsDb.exists(id)) {
-			return res(ctx.status(404));
+			return new HttpResponse(null, { status: 404 });
 		}
 
 		const updated = itemsDb.update(id, body);
 
-		return res(ctx.status(200), ctx.json(updated));
+		return HttpResponse.json(updated);
 	}),
 
 	// DELETE item
-	rest.delete(apiPath('/items/:id'), (req, res, ctx) => {
-		const id = req.params.id as string;
+	http.delete(apiPath('/items/:id'), ({ params }) => {
+		const id = params.id as string;
 
 		if (!itemsDb.exists(id)) {
-			return res(ctx.status(404));
+			return new HttpResponse(null, { status: 404 });
 		}
 
 		itemsDb.delete(id);
 
-		return res(ctx.status(200));
+		return new HttpResponse(null, { status: 200 });
 	}),
 ];
 
 // Slow endpoint for testing loading states
 export const slowHandlers = [
-	rest.get(apiPath('/slow'), (req, res, ctx) => {
-		return res(ctx.delay(2000), ctx.status(200), ctx.json({ message: 'Finally loaded!' }));
+	http.get(apiPath('/slow'), async () => {
+		await delay(2000);
+		return HttpResponse.json({ message: 'Finally loaded!' });
 	}),
 ];
 

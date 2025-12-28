@@ -1,7 +1,7 @@
 ---
 name: umbraco-msw-testing
 description: MSW (Mock Service Worker) patterns for testing Umbraco backoffice extensions with mocked APIs
-version: 1.0.0
+version: 2.0.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -46,7 +46,7 @@ Add to `package.json`:
     "@web/dev-server-import-maps": "^0.2.0",
     "@web/test-runner": "^0.18.0",
     "@web/test-runner-playwright": "^0.11.0",
-    "msw": "^1.3.5"
+    "msw": "^2.7.0"
   },
   "scripts": {
     "postinstall": "npx msw init . --save",
@@ -115,7 +115,7 @@ export default {
     `<html lang="en-us">
       <head>
         <meta charset="UTF-8" />
-        <!-- Load MSW as IIFE to get window.MockServiceWorker -->
+        <!-- Load MSW v2 as IIFE to get window.MockServiceWorker -->
         <script src="/node_modules/msw/lib/iife/index.js"></script>
       </head>
       <body>
@@ -147,20 +147,24 @@ my-extension/
 
 ## Patterns
 
-### MSW v1 Syntax (Important)
+### MSW v2 Syntax
 
-Umbraco uses **MSW v1.3.5**. Key differences from v2:
+Umbraco uses **MSW v2**. Key API patterns:
 
-| MSW v1 (Umbraco) | MSW v2 |
-|-----------------|--------|
-| `rest.get()` | `http.get()` |
-| `res(ctx.json())` | `HttpResponse.json()` |
-| `window.MockServiceWorker` | `import { http }` |
+| Concept | MSW v2 Syntax |
+|---------|---------------|
+| HTTP methods | `http.get()`, `http.post()`, `http.put()`, `http.delete()` |
+| JSON response | `HttpResponse.json(data)` |
+| Status codes | `HttpResponse.json(data, { status: 201 })` |
+| Empty response | `new HttpResponse(null, { status: 204 })` |
+| Request params | `({ params }) => { ... }` |
+| Request body | `({ request }) => { const body = await request.json(); }` |
+| Delay | `await delay(2000)` |
 
 ### Global MSW Access
 
 ```typescript
-const { rest } = window.MockServiceWorker;
+const { http, HttpResponse, delay } = window.MockServiceWorker;
 ```
 
 ### umbracoPath Helper
@@ -176,64 +180,64 @@ umbracoPath('/document/:id')
 
 **GET Handler:**
 ```typescript
-const { rest } = window.MockServiceWorker;
+const { http, HttpResponse } = window.MockServiceWorker;
 import { umbracoPath } from '@umbraco-cms/backoffice/utils';
 
 export const handlers = [
-  rest.get(umbracoPath('/document/:id'), (req, res, ctx) => {
-    const id = req.params.id as string;
-    return res(
-      ctx.status(200),
-      ctx.json({
-        id,
-        name: 'Test Document',
-        documentType: { alias: 'testType' },
-      })
-    );
+  http.get(umbracoPath('/document/:id'), ({ params }) => {
+    const id = params.id as string;
+    return HttpResponse.json({
+      id,
+      name: 'Test Document',
+      documentType: { alias: 'testType' },
+    });
   }),
 ];
 ```
 
 **POST Handler:**
 ```typescript
-rest.post(umbracoPath('/document'), async (req, res, ctx) => {
-  const body = await req.json();
+http.post(umbracoPath('/document'), async ({ request }) => {
+  const body = await request.json();
 
   if (!body.name) {
-    return res(
-      ctx.status(400),
-      ctx.json({
+    return HttpResponse.json(
+      {
         type: 'validation',
         status: 400,
         errors: { name: ['Name is required'] },
-      })
+      },
+      { status: 400 }
     );
   }
 
   const newId = crypto.randomUUID();
-  return res(
-    ctx.status(201),
-    ctx.set({ 'Umb-Generated-Resource': newId })
+  return HttpResponse.json(
+    { id: newId },
+    {
+      status: 201,
+      headers: { 'Umb-Generated-Resource': newId },
+    }
   );
 }),
 ```
 
 **PUT Handler:**
 ```typescript
-rest.put(umbracoPath('/document/:id'), async (req, res, ctx) => {
-  const id = req.params.id as string;
-  const body = await req.json();
+http.put(umbracoPath('/document/:id'), async ({ params, request }) => {
+  const id = params.id as string;
+  const body = await request.json();
   mockDb.update(id, body);
-  return res(ctx.status(200));
+  return new HttpResponse(null, { status: 200 });
 }),
 ```
 
 **DELETE Handler:**
 ```typescript
-rest.delete(umbracoPath('/document/:id'), (req, res, ctx) => {
-  const id = req.params.id as string;
+http.delete(umbracoPath('/document/:id'), ({ params }) => {
+  const id = params.id as string;
   mockDb.delete(id);
-  return res(ctx.status(200));
+  return new HttpResponse(null, { status: 200 });
 }),
 ```
 
@@ -242,49 +246,46 @@ rest.delete(umbracoPath('/document/:id'), (req, res, ctx) => {
 **Error Responses:**
 ```typescript
 // 404 Not Found
-rest.get(umbracoPath('/document/:id'), (req, res, ctx) => {
-  const doc = mockDb.read(req.params.id as string);
-  if (!doc) return res(ctx.status(404));
-  return res(ctx.status(200), ctx.json(doc));
+http.get(umbracoPath('/document/:id'), ({ params }) => {
+  const doc = mockDb.read(params.id as string);
+  if (!doc) return new HttpResponse(null, { status: 404 });
+  return HttpResponse.json(doc);
 }),
 
 // 500 Server Error
-rest.get(umbracoPath('/document/:id'), (req, res, ctx) => {
-  return res(
-    ctx.status(500),
-    ctx.json({ type: 'error', detail: 'Internal server error' })
+http.get(umbracoPath('/document/:id'), () => {
+  return HttpResponse.json(
+    { type: 'error', detail: 'Internal server error' },
+    { status: 500 }
   );
 }),
 ```
 
 **Validation Errors:**
 ```typescript
-rest.post(umbracoPath('/document'), async (req, res, ctx) => {
-  const body = await req.json();
+http.post(umbracoPath('/document'), async ({ request }) => {
+  const body = await request.json();
   if (!body.name) {
-    return res(
-      ctx.status(400),
-      ctx.json({
+    return HttpResponse.json(
+      {
         type: 'validation',
         errors: {
           name: ['Name is required'],
           title: ['Title must be at least 3 characters'],
         },
-      })
+      },
+      { status: 400 }
     );
   }
-  return res(ctx.status(201));
+  return new HttpResponse(null, { status: 201 });
 }),
 ```
 
 **Delayed Responses (Loading States):**
 ```typescript
-rest.get(umbracoPath('/slow-endpoint'), (req, res, ctx) => {
-  return res(
-    ctx.delay(2000),
-    ctx.status(200),
-    ctx.json({ data: 'loaded' })
-  );
+http.get(umbracoPath('/slow-endpoint'), async () => {
+  await delay(2000);
+  return HttpResponse.json({ data: 'loaded' });
 }),
 ```
 
@@ -381,57 +382,57 @@ describe('MyElement with API', () => {
 
 ```typescript
 // src/mocks/handlers.ts
-const { rest } = window.MockServiceWorker;
+const { http, HttpResponse } = window.MockServiceWorker;
 import { umbracoPath } from '@umbraco-cms/backoffice/utils';
 import { itemsDb } from './data/items.db.js';
 
 export const handlers = [
   // List items
-  rest.get(umbracoPath('/my-extension/items'), (req, res, ctx) => {
+  http.get(umbracoPath('/my-extension/items'), () => {
     const items = itemsDb.readAll();
-    return res(
-      ctx.status(200),
-      ctx.json({ total: items.length, items })
-    );
+    return HttpResponse.json({ total: items.length, items });
   }),
 
   // Get single item
-  rest.get(umbracoPath('/my-extension/items/:id'), (req, res, ctx) => {
-    const item = itemsDb.read(req.params.id as string);
-    if (!item) return res(ctx.status(404));
-    return res(ctx.status(200), ctx.json(item));
+  http.get(umbracoPath('/my-extension/items/:id'), ({ params }) => {
+    const item = itemsDb.read(params.id as string);
+    if (!item) return new HttpResponse(null, { status: 404 });
+    return HttpResponse.json(item);
   }),
 
   // Create item
-  rest.post(umbracoPath('/my-extension/items'), async (req, res, ctx) => {
-    const body = await req.json();
+  http.post(umbracoPath('/my-extension/items'), async ({ request }) => {
+    const body = await request.json();
     if (!body.name) {
-      return res(
-        ctx.status(400),
-        ctx.json({ type: 'validation', errors: { name: ['Required'] } })
+      return HttpResponse.json(
+        { type: 'validation', errors: { name: ['Required'] } },
+        { status: 400 }
       );
     }
     const id = itemsDb.create(body);
-    return res(
-      ctx.status(201),
-      ctx.set({ 'Umb-Generated-Resource': id })
+    return HttpResponse.json(
+      { id },
+      {
+        status: 201,
+        headers: { 'Umb-Generated-Resource': id },
+      }
     );
   }),
 
   // Update item
-  rest.put(umbracoPath('/my-extension/items/:id'), async (req, res, ctx) => {
-    const id = req.params.id as string;
-    if (!itemsDb.read(id)) return res(ctx.status(404));
-    itemsDb.update(id, await req.json());
-    return res(ctx.status(200));
+  http.put(umbracoPath('/my-extension/items/:id'), async ({ params, request }) => {
+    const id = params.id as string;
+    if (!itemsDb.read(id)) return new HttpResponse(null, { status: 404 });
+    itemsDb.update(id, await request.json());
+    return new HttpResponse(null, { status: 200 });
   }),
 
   // Delete item
-  rest.delete(umbracoPath('/my-extension/items/:id'), (req, res, ctx) => {
-    const id = req.params.id as string;
-    if (!itemsDb.read(id)) return res(ctx.status(404));
+  http.delete(umbracoPath('/my-extension/items/:id'), ({ params }) => {
+    const id = params.id as string;
+    if (!itemsDb.read(id)) return new HttpResponse(null, { status: 404 });
     itemsDb.delete(id);
-    return res(ctx.status(200));
+    return new HttpResponse(null, { status: 200 });
   }),
 ];
 ```
@@ -489,9 +490,9 @@ npx web-test-runner src/my-element.test.ts
 2. Verify MSW script is loaded in test HTML: `<script src="/node_modules/msw/lib/iife/index.js"></script>`
 3. Ensure worker is started before tests run
 
-### "rest is not defined"
+### "http is not defined"
 
-Use global access: `const { rest } = window.MockServiceWorker;`
+Use global access: `const { http, HttpResponse } = window.MockServiceWorker;`
 
 ### Handler not matching
 
@@ -500,3 +501,19 @@ Check path matches exactly. Use `umbracoPath()` for Umbraco API paths.
 ### Requests still hitting real server
 
 Ensure `onUnhandledRequest: 'warn'` is set to see unhandled requests in console.
+
+---
+
+## Migration from MSW v1
+
+If upgrading from MSW v1, here are the key changes:
+
+| MSW v1 | MSW v2 |
+|--------|--------|
+| `rest.get()` | `http.get()` |
+| `rest.post()` | `http.post()` |
+| `(req, res, ctx) => res(ctx.json(data))` | `() => HttpResponse.json(data)` |
+| `res(ctx.status(404))` | `new HttpResponse(null, { status: 404 })` |
+| `res(ctx.delay(2000), ctx.json(data))` | `await delay(2000); return HttpResponse.json(data)` |
+| `req.params.id` | `({ params }) => params.id` |
+| `await req.json()` | `({ request }) => await request.json()` |

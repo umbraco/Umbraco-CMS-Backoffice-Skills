@@ -15,7 +15,7 @@ This example demonstrates:
 
 | File | Description |
 |------|-------------|
-| `mocks/handlers.ts` | API handlers using MSW v1 syntax |
+| `mocks/handlers.ts` | API handlers using MSW v2 syntax |
 | `mocks/items.db.ts` | Mock database for items |
 | `mocks/setup.ts` | MSW worker setup |
 | `items-list.element.ts` | Element that fetches from API |
@@ -39,21 +39,18 @@ api-mocking/
 
 ## Key Patterns
 
-### 1. MSW Handler (v1 Syntax)
+### 1. MSW Handler (v2 Syntax)
 
 ```typescript
-const { rest } = window.MockServiceWorker;
+const { http, HttpResponse } = window.MockServiceWorker;
 import { umbracoPath } from '@umbraco-cms/backoffice/utils';
 
 export const handlers = [
-  rest.get(umbracoPath('/items'), (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        total: items.length,
-        items: items,
-      })
-    );
+  http.get(umbracoPath('/items'), () => {
+    return HttpResponse.json({
+      total: items.length,
+      items: items,
+    });
   }),
 ];
 ```
@@ -74,33 +71,30 @@ class ItemsMockDb {
 ### 3. Error Simulation
 
 ```typescript
-rest.get(umbracoPath('/items/:id'), (req, res, ctx) => {
-  const id = req.params.id as string;
+http.get(umbracoPath('/items/:id'), ({ params }) => {
+  const id = params.id as string;
 
   // Simulate forbidden access
   if (id === 'forbidden') {
-    return res(ctx.status(403));
+    return new HttpResponse(null, { status: 403 });
   }
 
   // Simulate not found
   const item = db.getById(id);
   if (!item) {
-    return res(ctx.status(404));
+    return new HttpResponse(null, { status: 404 });
   }
 
-  return res(ctx.status(200), ctx.json(item));
+  return HttpResponse.json(item);
 }),
 ```
 
 ### 4. Delay Simulation (Loading States)
 
 ```typescript
-rest.get(umbracoPath('/slow-endpoint'), (req, res, ctx) => {
-  return res(
-    ctx.delay(2000), // 2 second delay
-    ctx.status(200),
-    ctx.json({ data: 'loaded' })
-  );
+http.get(umbracoPath('/slow-endpoint'), async () => {
+  await delay(2000); // 2 second delay
+  return HttpResponse.json({ data: 'loaded' });
 }),
 ```
 

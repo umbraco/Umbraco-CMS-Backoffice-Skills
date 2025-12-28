@@ -21,7 +21,7 @@ Intercepts HTTP requests at the network level using Mock Service Worker. Product
 ```bash
 cd /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
 
-VITE_EXTERNAL_EXTENSION=/path/to/tree-example/Client/src \
+VITE_EXTERNAL_EXTENSION=/path/to/tree-example/Client \
 VITE_EXTERNAL_MOCKS=/path/to/tree-example/Client/mocks \
 npm run dev:external
 ```

@@ -11,8 +11,8 @@
 import { expect, fixture, waitUntil } from '@open-wc/testing';
 import { html } from 'lit';
 
-// MSW v1 is loaded as IIFE
-const { rest } = window.MockServiceWorker;
+// MSW v2 is loaded as IIFE and exposed globally
+const { http, HttpResponse, delay } = window.MockServiceWorker;
 
 import { worker, resetHandlers } from './mocks/setup.js';
 import { itemsDb } from './mocks/items.db.js';
@@ -68,14 +68,11 @@ describe('ItemsListElement', () => {
 		it('shows empty state when no items', async () => {
 			// Override handler to return empty list
 			worker.use(
-				rest.get(apiPath('/items'), (req, res, ctx) => {
-					return res(
-						ctx.status(200),
-						ctx.json({
-							total: 0,
-							items: [],
-						})
-					);
+				http.get(apiPath('/items'), () => {
+					return HttpResponse.json({
+						total: 0,
+						items: [],
+					});
 				})
 			);
 
@@ -94,14 +91,14 @@ describe('ItemsListElement', () => {
 		it('shows error message on API failure', async () => {
 			// Override handler to return error
 			worker.use(
-				rest.get(apiPath('/items'), (req, res, ctx) => {
-					return res(
-						ctx.status(500),
-						ctx.json({
+				http.get(apiPath('/items'), () => {
+					return HttpResponse.json(
+						{
 							type: 'error',
 							status: 500,
 							detail: 'Database connection failed',
-						})
+						},
+						{ status: 500 }
 					);
 				})
 			);
@@ -117,8 +114,8 @@ describe('ItemsListElement', () => {
 		it('handles network errors gracefully', async () => {
 			// Override handler to simulate network error
 			worker.use(
-				rest.get(apiPath('/items'), (req, res, ctx) => {
-					return res.networkError('Failed to connect');
+				http.get(apiPath('/items'), () => {
+					return HttpResponse.error();
 				})
 			);
 
@@ -165,15 +162,12 @@ describe('ItemsListElement', () => {
 		it('maintains loading state during slow response', async () => {
 			// Override with slow response
 			worker.use(
-				rest.get(apiPath('/items'), (req, res, ctx) => {
-					return res(
-						ctx.delay(500),
-						ctx.status(200),
-						ctx.json({
-							total: 1,
-							items: [{ id: 'slow-1', name: 'Slow Item', description: '', createdAt: new Date().toISOString() }],
-						})
-					);
+				http.get(apiPath('/items'), async () => {
+					await delay(500);
+					return HttpResponse.json({
+						total: 1,
+						items: [{ id: 'slow-1', name: 'Slow Item', description: '', createdAt: new Date().toISOString() }],
+					});
 				})
 			);
 
@@ -192,12 +186,14 @@ describe('ItemsListElement', () => {
 	});
 });
 
-// Type declaration for global MSW
+// Type declaration for global MSW (v2)
 declare global {
 	interface Window {
 		MockServiceWorker: {
-			setupWorker: typeof import('msw').setupWorker;
-			rest: typeof import('msw').rest;
+			setupWorker: typeof import('msw/browser').setupWorker;
+			http: typeof import('msw').http;
+			HttpResponse: typeof import('msw').HttpResponse;
+			delay: typeof import('msw').delay;
 		};
 	}
 }

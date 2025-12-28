@@ -35,7 +35,7 @@ export default {
 		`<html lang="en-us">
       <head>
         <meta charset="UTF-8" />
-        <!-- Load MSW v1 as IIFE (global) -->
+        <!-- Load MSW v2 as IIFE (global) - exposes http, HttpResponse, delay, setupWorker -->
         <script src="/node_modules/msw/lib/iife/index.js"></script>
       </head>
       <body>

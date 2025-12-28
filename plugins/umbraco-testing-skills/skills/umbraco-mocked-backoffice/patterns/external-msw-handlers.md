@@ -90,10 +90,10 @@ export const onInit: UmbEntryPointOnInit = (_host) => {
 Create `mocks/handlers.ts`:
 
 ```typescript
-// Get rest from window.MockServiceWorker (set by mocked backoffice)
-const rest = (window as any).MockServiceWorker?.rest;
+// Get http and HttpResponse from window.MockServiceWorker (MSW v2, set by mocked backoffice)
+const { http, HttpResponse } = (window as any).MockServiceWorker || {};
 
-if (!rest) {
+if (!http) {
   console.error('MSW not available');
 }
 
@@ -106,17 +106,14 @@ const items = [
 // Use relative paths (same-origin)
 const API_PATH = '/umbraco/myextension/api/v1';
 
-export const handlers = rest ? [
-  rest.get(`${API_PATH}/items`, (_req: any, res: any, ctx: any) => {
-    return res(
-      ctx.status(200),
-      ctx.json({ total: items.length, items })
-    );
+export const handlers = http ? [
+  http.get(`${API_PATH}/items`, () => {
+    return HttpResponse.json({ total: items.length, items });
   }),
 
-  rest.post(`${API_PATH}/items`, async (req: any, res: any, ctx: any) => {
-    const body = await req.json();
-    return res(ctx.status(201), ctx.json({ id: 'new-id', ...body }));
+  http.post(`${API_PATH}/items`, async ({ request }: { request: Request }) => {
+    const body = await request.json();
+    return HttpResponse.json({ id: 'new-id', ...body }, { status: 201 });
   }),
 ] : [];
 ```
