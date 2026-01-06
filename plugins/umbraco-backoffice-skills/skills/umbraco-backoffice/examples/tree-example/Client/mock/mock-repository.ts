@@ -3,7 +3,6 @@ import type { UmbApi } from '@umbraco-cms/backoffice/extension-api';
 import { UmbTreeRepositoryBase } from '@umbraco-cms/backoffice/tree';
 
 // Import from original src files
-import { OUR_TREE_STORE_CONTEXT } from '../src/settingsTree/ourtree.store.js';
 import {
   OUR_TREE_ROOT_ENTITY_TYPE,
   OUR_TREE_ITEM_ENTITY_TYPE,
@@ -63,7 +62,7 @@ export class MockTreeRepository
   implements UmbApi
 {
   constructor(host: UmbControllerHost) {
-    super(host, MockTreeDataSource, OUR_TREE_STORE_CONTEXT);
+    super(host, MockTreeDataSource);
   }
 
   async requestTreeRoot() {

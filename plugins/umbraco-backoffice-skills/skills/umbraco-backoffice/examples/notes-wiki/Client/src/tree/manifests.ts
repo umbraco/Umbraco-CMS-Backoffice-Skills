@@ -2,8 +2,7 @@
  * Notes Tree Manifests
  *
  * Registers all tree-related extensions:
- * - Repository: Data operations
- * - Store: Caching
+ * - Repository: Data operations (with inline data source)
  * - Tree: The tree structure itself
  * - TreeItem: Custom rendering for tree nodes
  *
@@ -18,7 +17,6 @@
 import {
   NOTES_TREE_ALIAS,
   NOTES_TREE_REPOSITORY_ALIAS,
-  NOTES_TREE_STORE_ALIAS,
   NOTES_TREE_ITEM_ALIAS,
   NOTES_ROOT_ENTITY_TYPE,
   NOTES_FOLDER_ENTITY_TYPE,
@@ -27,24 +25,13 @@ import {
 
 /**
  * Repository manifest
- * The repository handles data operations for the tree.
+ * The repository handles data operations for the tree with an inline data source.
  */
 const repositoryManifest: UmbExtensionManifest = {
   type: "repository",
   alias: NOTES_TREE_REPOSITORY_ALIAS,
   name: "Notes Tree Repository",
   api: () => import("./notes-tree.repository.js"),
-};
-
-/**
- * Store manifest
- * The store caches tree items to avoid repeated API calls.
- */
-const storeManifest: UmbExtensionManifest = {
-  type: "treeStore",
-  alias: NOTES_TREE_STORE_ALIAS,
-  name: "Notes Tree Store",
-  api: () => import("./notes-tree.store.js"),
 };
 
 /**
@@ -106,7 +93,6 @@ const reloadTreeItemChildrenManifest: UmbExtensionManifest = {
 
 export const manifests: Array<UmbExtensionManifest> = [
   repositoryManifest,
-  storeManifest,
   treeManifest,
   treeItemManifest,
   reloadTreeItemChildrenManifest,

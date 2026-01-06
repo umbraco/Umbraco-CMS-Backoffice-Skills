@@ -4,6 +4,7 @@ import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { glob } from 'glob';
 import { dirname, resolve, join } from 'path';
 import { fileURLToPath } from 'url';
+import { retry, handleAll, ExponentialBackoff } from 'cockatiel';
 
 // Get project root (script is at .claude/skills/umbraco-skill-validator/scripts/)
 const __filename = fileURLToPath(import.meta.url);
@@ -50,6 +51,12 @@ const IMPORT_PATH_PATTERN = /@umbraco-cms\/backoffice\/[a-z-]+/g;
 const URL_TIMEOUT = 5000;
 const URL_BATCH_DELAY = 100;
 const GITHUB_API_BASE = 'https://api.github.com/repos/umbraco/Umbraco-CMS/contents';
+
+// Retry policy with exponential backoff
+const urlRetryPolicy = retry(handleAll, {
+  maxAttempts: 5,
+  backoff: new ExponentialBackoff()
+});
 
 // URLs to skip (localhost, example domains, etc.)
 const SKIP_URL_PATTERNS = [
@@ -121,32 +128,39 @@ function extractLinks(content: string): {
   return { urls, skillRefs, internalLinks, importPaths };
 }
 
-// Check URL accessibility
+// Check URL accessibility with retries
 async function checkUrl(url: string): Promise<{ status: number; redirect?: string }> {
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), URL_TIMEOUT);
+    return await urlRetryPolicy.execute(async () => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), URL_TIMEOUT);
 
-    const response = await fetch(url, {
-      method: 'HEAD',
-      signal: controller.signal,
-      redirect: 'manual'
+      const response = await fetch(url, {
+        method: 'HEAD',
+        signal: controller.signal,
+        redirect: 'manual'
+      });
+
+      clearTimeout(timeout);
+
+      // Handle redirects
+      if (response.status >= 300 && response.status < 400) {
+        const redirect = response.headers.get('location');
+        return { status: response.status, redirect: redirect || undefined };
+      }
+
+      // Server error (5xx) - throw to trigger retry
+      if (response.status >= 500) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      return { status: response.status };
     });
-
-    clearTimeout(timeout);
-
-    // Handle redirects
-    if (response.status >= 300 && response.status < 400) {
-      const redirect = response.headers.get('location');
-      return { status: response.status, redirect: redirect || undefined };
-    }
-
-    return { status: response.status };
   } catch (error) {
     if ((error as Error).name === 'AbortError') {
       return { status: 408 }; // Timeout
     }
-    return { status: 0 }; // Network error
+    return { status: 0 }; // Network error after all retries
   }
 }
 

@@ -4,14 +4,9 @@
  * Defines aliases for the Notes tree navigation system.
  * The tree provides hierarchical navigation for notes and folders.
  *
- * The tree system consists of three components:
+ * The tree system consists of two components:
  * 1. **Tree** - The visual tree structure in the sidebar
- * 2. **Repository** - Coordinates data access between UI and API
- * 3. **Store** - Caches tree data for performance
- *
- * Note: The NOTES_TREE_STORE_CONTEXT token is defined in
- * `notes-tree.store.ts` alongside the store class to avoid
- * circular dependencies.
+ * 2. **Repository** - Coordinates data access with inline data source
  *
  * Skills demonstrated: umbraco-tree, umbraco-repository-pattern
  */
@@ -30,21 +25,11 @@ export const NOTES_TREE_ALIAS = "Notes.Tree";
  * Alias for the Notes tree repository.
  *
  * The repository is the interface between the tree UI and the API.
- * It handles data fetching, caching, and tree structure operations.
+ * It handles data fetching and tree structure operations with an inline data source.
  *
  * @constant {string}
  */
 export const NOTES_TREE_REPOSITORY_ALIAS = "Notes.Tree.Repository";
-
-/**
- * Alias for the Notes tree store.
- *
- * The store caches tree item data to improve performance
- * and enable reactive updates across the UI.
- *
- * @constant {string}
- */
-export const NOTES_TREE_STORE_ALIAS = "Notes.Tree.Store";
 
 /**
  * Alias for the Notes tree item extension.

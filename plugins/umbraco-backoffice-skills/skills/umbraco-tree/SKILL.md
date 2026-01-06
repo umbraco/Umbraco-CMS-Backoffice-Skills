@@ -1,7 +1,7 @@
 ---
 name: umbraco-tree
 description: Implement trees in Umbraco backoffice using official docs
-version: 1.1.0
+version: 1.2.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -29,18 +29,17 @@ Always fetch the latest docs before implementing:
 
 3. **Entity types link trees to workspaces** - The `entityType` in your tree item data must match the `entityType` in your workspace manifest
 
-### Required Components for Clickable Trees
-```
-Tree Item (entityType: 'my-entity')
-    └── navigates to →
-Workspace (meta.entityType: 'my-entity', kind: 'routable')
-    └── renders →
-Workspace Views (conditioned to workspace alias)
-```
+When implementing trees with clickable items, also reference the `umbraco-workspace` skill.
 
-### Reference the workspace skill
-When implementing trees with clickable items, you MUST also implement workspaces:
-- Reference skill: `umbraco-workspace`
+## File Structure
+
+Modern trees use 2-3 files:
+```
+my-tree/
+├── manifest.ts          # Registers repository and tree
+├── tree.repository.ts   # Repository + inline data source
+└── types.ts             # Type definitions (optional)
+```
 
 ## Reference Example
 
@@ -67,7 +66,10 @@ If you need to explain these foundational concepts when implementing trees, refe
 
 1. **Fetch docs** - Use WebFetch on the URLs above
 2. **Ask questions** - What data will the tree display? What repository will provide the data? Where will it appear? **Will tree items be clickable?**
-3. **Generate files** - Create manifest + repository + data source based on latest docs
+3. **Generate files** - Create minimal files based on latest docs
+   - ✅ Create: `manifest.ts`, `tree.repository.ts` (with inline data source)
+   - ❌ Don't create: `tree.store.ts` (deprecated), separate `tree.data-source.ts` (can inline)
+   - **Use the inline data source pattern** shown in examples below
 4. **If clickable** - Also create routable workspaces for each entity type (reference `umbraco-workspace` skill)
 5. **Explain** - Show what was created and how to test
 
@@ -142,37 +144,79 @@ export const manifests: UmbExtensionManifest[] = [
 ];
 ```
 
-### Data Source (tree-data-source.ts)
-```typescript
-import type { UmbTreeDataSource } from '@umbraco-cms/backoffice/tree';
+### Repository with Inline Data Source (tree.repository.ts)
 
-export class MyTreeDataSource implements UmbTreeDataSource {
-  async getRootItems() {
-    // Return items with: unique, entityType, name, hasChildren, icon
-    return {
-      data: {
-        items: [
+**Modern simplified pattern - everything in one file:**
+
+```typescript
+import { UmbTreeRepositoryBase, UmbTreeServerDataSourceBase } from '@umbraco-cms/backoffice/tree';
+import type { UmbControllerHost } from '@umbraco-cms/backoffice/controller-api';
+import type { UmbApi } from '@umbraco-cms/backoffice/extension-api';
+import type { MyTreeItemModel, MyTreeRootModel } from './types.js';
+import { MY_ROOT_ENTITY_TYPE, MY_ENTITY_TYPE } from './entity.js';
+
+// Data source as simple class using helper base
+class MyTreeDataSource extends UmbTreeServerDataSourceBase<any, MyTreeItemModel> {
+  constructor(host: UmbControllerHost) {
+    super(host, {
+      getRootItems: async (args) => {
+        // Fetch from API or return mock data
+        const items: MyTreeItemModel[] = [
           {
             unique: 'item-1',
-            entityType: 'my-entity',  // Must match workspace entityType!
+            parent: { unique: null, entityType: MY_ROOT_ENTITY_TYPE },
+            entityType: MY_ENTITY_TYPE,
             name: 'Item 1',
             hasChildren: false,
-            icon: 'icon-folder',
+            isFolder: false,
+            icon: 'icon-document',
           },
-        ],
-        total: 1,
+        ];
+        return { data: { items, total: items.length } };
       },
-    };
-  }
-
-  async getChildrenOf(args) {
-    // Return child items
-  }
-
-  async getAncestorsOf(args) {
-    // Return ancestor path
+      getChildrenOf: async (args) => {
+        // Return children for parent
+        return { data: { items: [], total: 0 } };
+      },
+      getAncestorsOf: async (args) => {
+        // Return ancestor path
+        return { data: [] };
+      },
+      mapper: (item: any) => item, // Identity mapper for this example
+    });
   }
 }
+
+// Repository
+export class MyTreeRepository
+  extends UmbTreeRepositoryBase<MyTreeItemModel, MyTreeRootModel>
+  implements UmbApi
+{
+  constructor(host: UmbControllerHost) {
+    super(host, MyTreeDataSource);
+  }
+
+  async requestTreeRoot() {
+    const data: MyTreeRootModel = {
+      unique: null,
+      entityType: MY_ROOT_ENTITY_TYPE,
+      name: 'My Tree',
+      hasChildren: true,
+      isFolder: true,
+    };
+    return { data };
+  }
+}
+
+export { MyTreeRepository as api };
 ```
+
+**Why this is simpler:**
+- ✅ One file instead of two
+- ✅ Uses `UmbTreeServerDataSourceBase` helper (pass functions, not methods)
+- ✅ Data fetching logic inline (easier to understand)
+- ✅ No separate data source file to maintain
+
+**For complex trees with API calls**, you can still separate into different files, but it's not required.
 
 That's it! Always fetch fresh docs, keep examples minimal, generate complete working code.
