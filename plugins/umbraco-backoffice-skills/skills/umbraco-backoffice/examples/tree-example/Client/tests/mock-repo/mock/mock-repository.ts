@@ -8,7 +8,7 @@ import {
   OUR_TREE_ITEM_ENTITY_TYPE,
   type OurTreeItemModel,
   type OurTreeRootModel,
-} from '../src/settingsTree/types.js';
+} from '../../../src/settingsTree/types.js';
 
 // Import mock data
 import { rootItems, childrenByParent, type MockTreeItem } from './mock-data.js';

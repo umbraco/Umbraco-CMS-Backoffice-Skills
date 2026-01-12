@@ -21,18 +21,18 @@ interface TreeItem {
 }
 
 const rootItems: TreeItem[] = [
-	{ id: 'settings-a', name: 'Settings Group A', icon: 'icon-folder', hasChildren: true, parent: null },
-	{ id: 'settings-b', name: 'Settings Group B', icon: 'icon-folder', hasChildren: true, parent: null },
-	{ id: 'config', name: 'Configuration', icon: 'icon-settings', hasChildren: false, parent: null },
+	{ id: 'msw-a', name: '[MSW] Group A', icon: 'icon-folder', hasChildren: true, parent: null },
+	{ id: 'msw-b', name: '[MSW] Group B', icon: 'icon-folder', hasChildren: true, parent: null },
+	{ id: 'msw-config', name: '[MSW] Config', icon: 'icon-settings', hasChildren: false, parent: null },
 ];
 
 const childrenByParent: Record<string, TreeItem[]> = {
-	'settings-a': [
-		{ id: 'settings-a-1', name: 'Setting A1', icon: 'icon-document', hasChildren: false, parent: { id: 'settings-a' } },
-		{ id: 'settings-a-2', name: 'Setting A2', icon: 'icon-document', hasChildren: false, parent: { id: 'settings-a' } },
+	'msw-a': [
+		{ id: 'msw-a-1', name: '[MSW] Item A1', icon: 'icon-document', hasChildren: false, parent: { id: 'msw-a' } },
+		{ id: 'msw-a-2', name: '[MSW] Item A2', icon: 'icon-document', hasChildren: false, parent: { id: 'msw-a' } },
 	],
-	'settings-b': [
-		{ id: 'settings-b-1', name: 'Setting B1', icon: 'icon-document', hasChildren: false, parent: { id: 'settings-b' } },
+	'msw-b': [
+		{ id: 'msw-b-1', name: '[MSW] Item B1', icon: 'icon-document', hasChildren: false, parent: { id: 'msw-b' } },
 	],
 };
 
@@ -41,10 +41,6 @@ const API_PATH = '/umbraco/umbtreeclient/api/v1';
 
 // Get http and HttpResponse from window.MockServiceWorker (MSW v2)
 const { http, HttpResponse } = (window as any).MockServiceWorker || {};
-
-if (!http) {
-	console.error('MSW not available - window.MockServiceWorker.http is undefined');
-}
 
 export const handlers = http ? [
 	// Handle CORS preflight requests

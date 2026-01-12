@@ -9,14 +9,15 @@
     "generate-client": "node scripts/generate-openapi.js https://localhost:44348/umbraco/swagger/umbtreeclient/swagger.json",
     "test": "web-test-runner",
     "test:watch": "web-test-runner --watch",
-    "test:mocked": "playwright test --config=tests/playwright.config.ts",
-    "test:mocked:msw": "playwright test --config=tests/playwright.config.ts tests/tree-msw.spec.ts",
-    "test:mocked:repo": "playwright test --config=tests/playwright.config.ts tests/tree-mock-repo.spec.ts",
-    "test:mocked:headed": "playwright test --config=tests/playwright.config.ts --headed",
-    "test:mocked:ui": "playwright test --config=tests/playwright.config.ts --ui",
-    "test:e2e": "playwright test --config=tests/playwright.e2e.config.ts",
-    "test:e2e:headed": "playwright test --config=tests/playwright.e2e.config.ts --headed",
-    "test:e2e:ui": "playwright test --config=tests/playwright.e2e.config.ts --ui"
+    "test:mock-repo": "playwright test --config=tests/mock-repo/playwright.config.ts",
+    "test:mock-repo:headed": "playwright test --config=tests/mock-repo/playwright.config.ts --headed",
+    "test:mock-repo:ui": "playwright test --config=tests/mock-repo/playwright.config.ts --ui",
+    "test:msw": "playwright test --config=tests/msw/playwright.config.ts",
+    "test:msw:headed": "playwright test --config=tests/msw/playwright.config.ts --headed",
+    "test:msw:ui": "playwright test --config=tests/msw/playwright.config.ts --ui",
+    "test:e2e": "playwright test --config=tests/e2e/playwright.config.ts",
+    "test:e2e:headed": "playwright test --config=tests/e2e/playwright.config.ts --headed",
+    "test:e2e:ui": "playwright test --config=tests/e2e/playwright.config.ts --ui"
   },
   "devDependencies": {
     "@hey-api/client-fetch": "^0.10.0",
