@@ -17,10 +17,8 @@ import { rootItems, childrenByParent, type MockTreeItem } from './mock-data.js';
  * Mock data source that returns mock data directly without API calls.
  */
 class MockTreeDataSource {
-  #host: UmbControllerHost;
-
-  constructor(host: UmbControllerHost) {
-    this.#host = host;
+  constructor(_host: UmbControllerHost) {
+    // Host not needed for mock data source
   }
 
   async getRootItems(args: { skip: number; take: number }) {

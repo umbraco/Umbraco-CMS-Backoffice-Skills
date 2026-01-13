@@ -45,9 +45,9 @@ export default defineConfig({
   reporter: [['html', { outputFolder: './playwright-report' }], ['list']],
   outputDir: './test-results',
 
-  // Start dev server with mock repository enabled
+  // Start dev server with mock repository enabled (MSW needed for core Umbraco APIs)
   webServer: {
-    command: `VITE_EXTERNAL_EXTENSION=${EXTENSION_PATH} VITE_USE_MOCK_REPO=true npm run dev:external -- --port ${DEV_SERVER_PORT}`,
+    command: `VITE_EXAMPLE_PATH=${EXTENSION_PATH} VITE_USE_MOCK_REPO=on VITE_UMBRACO_USE_MSW=on npm run dev -- --port ${DEV_SERVER_PORT}`,
     cwd: UMBRACO_CLIENT_PATH,
     port: DEV_SERVER_PORT,
     reuseExistingServer: !process.env.CI,

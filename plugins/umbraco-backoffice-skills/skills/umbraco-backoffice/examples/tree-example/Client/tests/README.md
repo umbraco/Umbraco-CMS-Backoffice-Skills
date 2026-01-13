@@ -86,6 +86,10 @@ Then open http://localhost:5173/umbraco in your browser.
 ## Directory Structure
 
 ```
+src/
+├── msw/
+│   └── handlers.ts      # MSW handlers (registered via addMockHandlers)
+
 tests/
 ├── mock-repo/           # In-memory mock repository tests
 │   ├── mock/            # Mock repository & data
@@ -93,7 +97,7 @@ tests/
 │   ├── tree.spec.ts
 │   └── README.md
 ├── msw/                 # MSW network interception tests
-│   ├── mocks/           # MSW handlers
+│   ├── mocks/           # Re-exports handlers from src/msw
 │   ├── playwright.config.ts
 │   ├── tree.spec.ts
 │   └── README.md

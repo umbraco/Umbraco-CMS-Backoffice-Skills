@@ -40,7 +40,9 @@ npx playwright test --config=tests/msw/playwright.config.ts
 ## MSW Handlers Location
 
 The MSW handlers are defined in:
-- `Client/mocks/handlers.ts` - HTTP request handlers
+- `src/msw/handlers.ts` - HTTP request handlers (registered via `addMockHandlers()`)
+
+The extension's `index.ts` registers these handlers when `VITE_UMBRACO_USE_MSW=on` is set.
 
 ## Key Differences from Mock Repository
 

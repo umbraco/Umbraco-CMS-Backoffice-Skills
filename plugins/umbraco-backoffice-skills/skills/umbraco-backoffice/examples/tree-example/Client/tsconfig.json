@@ -22,5 +22,6 @@
 
     "types": [ "@umbraco-cms/backoffice/extension-types", "vite/client" ]
   },
-  "include": [ "src", "index.ts" ]
+  "include": [ "src", "index.ts" ],
+  "exclude": [ "**/*.test.ts", "**/__mocks__/**", "tests/**" ]
 }

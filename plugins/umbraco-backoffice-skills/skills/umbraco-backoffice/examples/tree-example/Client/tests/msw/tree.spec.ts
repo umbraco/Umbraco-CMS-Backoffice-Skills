@@ -5,7 +5,8 @@
  * The extension uses the real repository that makes actual API calls,
  * but MSW intercepts those calls and returns mock responses.
  *
- * The mock handlers are defined in: Client/mocks/handlers.ts
+ * The mock handlers are defined in: src/msw/handlers.ts
+ * They are registered by index.ts via addMockHandlers() when VITE_UMBRACO_USE_MSW=on
  *
  * Run with: npm run test:msw
  */
@@ -33,7 +34,7 @@ test.describe('Our Tree Extension (MSW Handlers)', () => {
   });
 
   test('should display root tree items from MSW mock data', async ({ page }) => {
-    // These names come from tests/msw/mocks/handlers.ts mock data
+    // These names come from src/msw/handlers.ts mock data
     await expect(page.getByText('[MSW] Group A')).toBeVisible({ timeout: 15000 });
     await expect(page.getByText('[MSW] Group B')).toBeVisible({ timeout: 15000 });
     await expect(page.getByText('[MSW] Config')).toBeVisible({ timeout: 15000 });

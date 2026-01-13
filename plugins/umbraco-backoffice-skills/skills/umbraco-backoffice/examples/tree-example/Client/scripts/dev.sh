@@ -36,22 +36,22 @@ case "$MODE" in
   mock-repo)
     echo "Mode: Mock Repository (in-memory data, no API calls)"
     cd "$UMBRACO_CLIENT_PATH"
-    VITE_EXTERNAL_EXTENSION="$CLIENT_DIR" \
+    VITE_EXAMPLE_PATH="$CLIENT_DIR" \
     VITE_USE_MOCK_REPO=true \
-    npm run dev:external
+    npm run dev
     ;;
   msw)
     echo "Mode: MSW (network interception)"
     cd "$UMBRACO_CLIENT_PATH"
-    VITE_EXTERNAL_EXTENSION="$CLIENT_DIR" \
-    VITE_EXTERNAL_MOCKS="$CLIENT_DIR/tests/msw/mocks" \
-    npm run dev:external
+    VITE_EXAMPLE_PATH="$CLIENT_DIR" \
+    VITE_UMBRACO_USE_MSW=on \
+    npm run dev
     ;;
   real)
     echo "Mode: Real (extension only, connect to real Umbraco)"
     cd "$UMBRACO_CLIENT_PATH"
-    VITE_EXTERNAL_EXTENSION="$CLIENT_DIR" \
-    npm run dev:external
+    VITE_EXAMPLE_PATH="$CLIENT_DIR" \
+    npm run dev
     ;;
   *)
     echo "Unknown mode: $MODE"

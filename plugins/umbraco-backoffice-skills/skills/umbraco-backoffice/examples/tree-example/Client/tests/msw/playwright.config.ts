@@ -8,13 +8,10 @@ const __dirname = dirname(__filename);
 // Path to the extension (Client directory)
 const EXTENSION_PATH = resolve(__dirname, '../..');
 
-// Path to MSW handlers
-const MOCKS_PATH = resolve(__dirname, './mocks');
-
 // Path to Umbraco.Web.UI.Client - set via UMBRACO_CLIENT_PATH env var or .env file
 const UMBRACO_CLIENT_PATH = process.env.UMBRACO_CLIENT_PATH;
 if (!UMBRACO_CLIENT_PATH) {
-  throw new Error('UMBRACO_CLIENT_PATH environment variable is required. See .env.example');
+	throw new Error('UMBRACO_CLIENT_PATH environment variable is required. See .env.example');
 }
 
 // Use port 5176 to avoid conflict with other dev servers
@@ -26,6 +23,9 @@ const DEV_SERVER_PORT = 5176;
  * This approach uses MSW to intercept HTTP requests at the network level.
  * The extension uses the real repository that makes actual API calls,
  * but MSW intercepts those calls and returns mock responses.
+ *
+ * The extension's index.ts registers MSW handlers via addMockHandlers()
+ * when VITE_UMBRACO_USE_MSW=on is set.
  *
  * Pros:
  * - Tests the full HTTP request/response cycle
@@ -40,23 +40,23 @@ const DEV_SERVER_PORT = 5176;
  *   npm run test:msw
  */
 export default defineConfig({
-  testDir: '.',
-  testMatch: ['*.spec.ts'],
-  timeout: 60000,
-  expect: { timeout: 15000 },
-  fullyParallel: false,
-  workers: 1,
-  reporter: [['html', { outputFolder: './playwright-report' }], ['list']],
-  outputDir: './test-results',
+	testDir: '.',
+	testMatch: ['*.spec.ts'],
+	timeout: 60000,
+	expect: { timeout: 15000 },
+	fullyParallel: false,
+	workers: 1,
+	reporter: [['html', { outputFolder: './playwright-report' }], ['list']],
+	outputDir: './test-results',
 
-  // Start dev server with real repository and MSW handlers
-  webServer: {
-    command: `VITE_EXTERNAL_EXTENSION=${EXTENSION_PATH} VITE_EXTERNAL_MOCKS=${MOCKS_PATH} npm run dev:external -- --port ${DEV_SERVER_PORT}`,
-    cwd: UMBRACO_CLIENT_PATH,
-    port: DEV_SERVER_PORT,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-  },
+	// Start dev server with extension and MSW enabled
+	webServer: {
+		command: `VITE_EXAMPLE_PATH=${EXTENSION_PATH} VITE_UMBRACO_USE_MSW=on npm run dev -- --port ${DEV_SERVER_PORT}`,
+		cwd: UMBRACO_CLIENT_PATH,
+		port: DEV_SERVER_PORT,
+		reuseExistingServer: !process.env.CI,
+		timeout: 120000,
+	},
 
   use: {
     baseURL: `http://localhost:${DEV_SERVER_PORT}`,
