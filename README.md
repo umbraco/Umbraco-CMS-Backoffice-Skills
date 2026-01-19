@@ -1,5 +1,7 @@
 # Umbraco Skills Marketplace
 
+> **Note:** This project is purely an exploration to see what the possibilities of Skills are with Umbraco. It's experimental and evolving as we learn what works best.
+
 A Claude Code plugin marketplace with 65 skills for Umbraco backoffice customization and testing.
 
 ## Quick Start

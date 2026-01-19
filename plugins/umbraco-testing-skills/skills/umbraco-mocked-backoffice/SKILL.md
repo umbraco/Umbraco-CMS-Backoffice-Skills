@@ -8,6 +8,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 # Umbraco Mocked Backoffice
 
+> **Status:** This skill is currently awaiting an update from Umbraco to allow external extensions to use the mocked backoffice. The patterns documented here work when running from within the Umbraco-CMS source repository.
+
 Run the full Umbraco backoffice UI with all API calls mocked - **no .NET backend required**.
 
 ## When to Use
