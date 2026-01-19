@@ -21,6 +21,14 @@ Always fetch the latest docs before implementing:
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/section-sidebar-menu-expansion/`
+
+This example demonstrates section sidebar menu expansion patterns. Study this for sidebar customization.
+
 ## Related Foundation Skills
 
 If you need to explain these foundational concepts when implementing sections, reference these skills:

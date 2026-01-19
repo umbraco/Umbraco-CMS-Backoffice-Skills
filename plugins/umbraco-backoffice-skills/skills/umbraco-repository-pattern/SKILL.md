@@ -20,9 +20,9 @@ Repositories are the Backoffice's entry point for data requests and update notif
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/working-with-data/repositories
-- **Working with Data**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/working-with-data
-- **Store**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/working-with-data/store
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/repositories
+- **Working with Data**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Store**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 
 ## Workflow

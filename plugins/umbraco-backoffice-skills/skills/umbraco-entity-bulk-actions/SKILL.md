@@ -15,7 +15,7 @@ Entity Bulk Actions perform an action on a selection of multiple items at once. 
 Always fetch the latest docs before implementing:
 
 - **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/entity-bulk-actions
-- **Collections**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/collection
+- **Collections**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/collections
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 

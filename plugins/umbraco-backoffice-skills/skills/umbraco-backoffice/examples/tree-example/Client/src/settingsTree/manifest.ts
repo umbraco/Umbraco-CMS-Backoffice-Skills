@@ -10,13 +10,6 @@ const repositoryManifest: UmbExtensionManifest = {
   api: () => import("./ourtree.repository.js"),
 };
 
-const storeManifest: UmbExtensionManifest = {
-  type: "treeStore",
-  alias: "OurTree.Store",
-  name: "OurTree Store",
-  api: () => import("./ourtree.store.js"),
-};
-
 const treeManifest: UmbExtensionManifest = {
   type: "tree",
   kind: "default",
@@ -81,7 +74,6 @@ const sidebarManifest: UmbExtensionManifest = {
 export const manifests: Array<UmbExtensionManifest> = [
   repositoryManifest,
   treeManifest,
-  storeManifest,
   treeItemManifest,
   menuManifest,
   menuItemManifest,

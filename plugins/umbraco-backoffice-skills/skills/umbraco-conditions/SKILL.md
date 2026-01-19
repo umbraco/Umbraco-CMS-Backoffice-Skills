@@ -18,6 +18,14 @@ Always fetch the latest docs before implementing:
 - **Extension Types**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/entity-content-type-condition/`
+
+This example demonstrates a custom condition that checks entity content type. Study this for patterns on creating custom conditions.
+
 ## Workflow
 
 1. **Fetch docs** - Use WebFetch on the URLs above

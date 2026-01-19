@@ -16,7 +16,15 @@ Always fetch the latest docs before implementing:
 
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **User Permissions**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/user-permissions
+- **User Permissions**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
+
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/user-permission/`
+
+This example demonstrates granular user permission implementation. Study this for production patterns.
 
 ## Related Foundation Skills
 

@@ -1,6 +1,8 @@
 # Umbraco Skills Marketplace
 
-A Claude Code plugin marketplace with 57 skills for Umbraco backoffice customization.
+> **Note:** This project is purely an exploration to see what the possibilities of Skills are with Umbraco. It's experimental and evolving as we learn what works best.
+
+A Claude Code plugin marketplace with 65 skills for Umbraco backoffice customization and testing.
 
 ## Quick Start
 
@@ -9,9 +11,13 @@ Add the marketplace:
 /plugin marketplace add hifi-phil/Umbraco_CC_Backoffice_Skills
 ```
 
-Install the skills plugin:
+Install the plugins:
 ```bash
+# Backoffice extension skills (57 skills)
 /plugin install umbraco-backoffice-skills@umbraco-skills-marketplace
+
+# Testing skills (8 skills) - optional but recommended
+/plugin install umbraco-testing-skills@umbraco-skills-marketplace
 ```
 
 ## Create an Umbraco Instance
@@ -228,6 +234,39 @@ Authentication and API integration:
 | `umbraco-mfa-login-provider` | Two-factor authentication |
 | `umbraco-granular-user-permissions` | Fine-grained access |
 
+### Testing (8 skills)
+Complete testing pyramid for Umbraco extensions:
+
+| Skill | Description |
+|-------|-------------|
+| `umbraco-testing` | **Router skill** - Choose the right testing approach |
+| `umbraco-unit-testing` | Unit tests with @open-wc/testing |
+| `umbraco-mocked-backoffice` | Test in mocked backoffice (no .NET required) |
+| `umbraco-e2e-testing` | E2E tests against real Umbraco |
+| `umbraco-playwright-testhelpers` | Full testhelpers API reference |
+| `umbraco-test-builders` | JsonModels.Builders for test data |
+| `umbraco-msw-testing` | MSW handlers for API mocking |
+| `umbraco-example-generator` | Generate testable extensions |
+
+**Testing Pyramid:**
+```
+                ┌─────────────┐
+                │   E2E Tests │  ← Real Umbraco, complete workflows
+                └─────────────┘
+          ┌─────────────────────────┐
+          │   Mocked Backoffice     │  ← No backend, realistic UI
+          └─────────────────────────┘
+    ┌─────────────────────────────────────┐
+    │           Unit Tests                │  ← Fast, isolated
+    └─────────────────────────────────────┘
+```
+
+**Critical:** E2E tests must use `@umbraco/playwright-testhelpers` and `@umbraco/json-models-builders`. Never write raw Playwright tests for Umbraco.
+
+```
+Invoke: "Use the umbraco-testing skill to understand which testing approach to use"
+```
+
 ---
 
 ## Examples
@@ -236,8 +275,9 @@ Complete working examples in the `examples/` folder:
 
 - **Blueprint** - Section + Menu + Dashboard + Workspace
 - **TimeDashboard** - 13 extension types working together
-- **tree-example** - Settings tree with workspace
+- **tree-example** - Settings tree with workspace + **complete testing pyramid** (32 tests across unit, mocked, and E2E)
 - **notes-wiki** - Full-stack with C# backend (27 skills)
+- **document-type-crud** - E2E testing example with testhelpers
 
 ## Usage
 
@@ -258,13 +298,18 @@ Claude will automatically use the relevant skills (`umbraco-tree`, `umbraco-cond
 UmbracoCMS_Skills/
 ├── .claude-plugin/marketplace.json     # Marketplace manifest
 ├── plugins/
-│   └── umbraco-backoffice-skills/      # Plugin with all 57 skills
-│       ├── .claude-plugin/plugin.json  # Plugin manifest
-│       └── skills/                     # Flat skill directory
-│           ├── umbraco-dashboard/SKILL.md
-│           ├── umbraco-tree/SKILL.md
-│           ├── umbraco-workspace/SKILL.md
-│           └── ... (57 skills total)
+│   ├── umbraco-backoffice-skills/      # Plugin with 57 extension skills
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/
+│   │       ├── umbraco-dashboard/SKILL.md
+│   │       ├── umbraco-tree/SKILL.md
+│   │       └── ... (57 skills)
+│   └── umbraco-testing-skills/         # Plugin with 8 testing skills
+│       ├── .claude-plugin/plugin.json
+│       └── skills/
+│           ├── umbraco-testing/SKILL.md
+│           ├── umbraco-e2e-testing/SKILL.md
+│           └── ... (8 skills + examples)
 ├── examples/                           # Working code examples
 ├── Umbraco-CMS.Skills/                 # .NET test project
 └── .claude/

@@ -18,6 +18,18 @@ Always fetch the latest docs before implementing:
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 
+## Reference Examples
+
+The Umbraco source includes working examples:
+
+**Permission Manipulation**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/manipulate-document-property-value-permissions/`
+
+This example demonstrates entity actions that manipulate document property permissions.
+
+**User Permissions**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/user-permission/`
+
+This example shows entity actions integrated with user permission controls.
+
 ## Related Foundation Skills
 
 - **Repository Pattern**: When implementing actions that need data operations

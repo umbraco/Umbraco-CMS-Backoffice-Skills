@@ -18,10 +18,22 @@ Always fetch the latest docs before implementing:
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 
+## When to Use Custom Tree Item Contexts
+
+Most tree items use `kind: 'default'` and **don't need a custom context**. Only create a custom context for:
+
+- **Custom icon logic** - Dynamic icons based on item state
+- **Custom labels or badges** - Additional visual information
+- **Special rendering** - Unique behavior for specific entity types
+- **Additional item behaviors** - Click handlers, drag-and-drop, etc.
+
+If you just need standard tree items, use `kind: 'default'` without a custom context.
+
 ## Related Foundation Skills
 
 - **Tree**: Tree items work within tree structures
   - Reference skill: `umbraco-tree`
+  - **IMPORTANT**: Tree stores are deprecated in Umbraco 14+, see that skill for details
 
 - **Repository Pattern**: When loading tree data
   - Reference skill: `umbraco-repository-pattern`
@@ -71,11 +83,14 @@ export const manifests: Array<UmbExtensionManifest> = [
 ```typescript
 import { UmbDefaultTreeItemContext } from '@umbraco-cms/backoffice/tree';
 import type { UmbControllerHost } from '@umbraco-cms/backoffice/controller-api';
-import type { UmbTreeItemModel, ManifestTreeItem } from '@umbraco-cms/backoffice/tree';
+import type { UmbTreeItemModel, UmbTreeRootModel } from '@umbraco-cms/backoffice/tree';
 
-export class MyTreeItemContext extends UmbDefaultTreeItemContext<UmbTreeItemModel> {
-  constructor(host: UmbControllerHost, manifest: ManifestTreeItem) {
-    super(host, manifest);
+export class MyTreeItemContext extends UmbDefaultTreeItemContext<
+  UmbTreeItemModel,
+  UmbTreeRootModel
+> {
+  constructor(host: UmbControllerHost) {
+    super(host);
   }
 
   // Override to customize icon

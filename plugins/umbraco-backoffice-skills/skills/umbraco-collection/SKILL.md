@@ -43,6 +43,14 @@ collection/
     └── my-action.element.ts           # Collection action
 ```
 
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/collection/`
+
+This example demonstrates a complete custom collection with repository, views, and context. Study this for production patterns.
+
 ## Related Foundation Skills
 
 - **Repository Pattern**: Collections require a repository for data access

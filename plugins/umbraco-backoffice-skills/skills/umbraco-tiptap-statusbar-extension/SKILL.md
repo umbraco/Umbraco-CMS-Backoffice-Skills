@@ -15,8 +15,8 @@ A Tiptap Statusbar Extension adds components to the status bar at the bottom of 
 Always fetch the latest docs before implementing:
 
 - **Extension Types**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
-- **Rich Text Editor**: https://docs.umbraco.com/umbraco-cms/reference/rich-text-editor
-- **Tiptap Docs**: https://tiptap.dev/docs/editor/extensions
+- **Rich Text Editor**: https://docs.umbraco.com/umbraco-cms/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/rich-text-editor
+- **Tiptap Docs**: https://tiptap.dev/docs/editor/extensions/overview
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 
 ## Related Skills

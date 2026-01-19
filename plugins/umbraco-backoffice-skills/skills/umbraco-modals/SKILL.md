@@ -20,6 +20,18 @@ Always fetch the latest docs before implementing:
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 
+## Reference Examples
+
+The Umbraco source includes working examples:
+
+**Custom Modal Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/custom-modal/`
+
+This example demonstrates a basic custom modal with token, element, and manifest.
+
+**Routed Modal Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/modal-routed/`
+
+This example demonstrates modals that can be opened via URL routing for deep-linking support.
+
 ## Related Foundation Skills
 
 If you need to explain these foundational concepts when implementing modals, reference these skills:

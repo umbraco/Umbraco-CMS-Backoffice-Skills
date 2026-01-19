@@ -135,6 +135,22 @@ override connectedCallback() {
 }
 ```
 
+## Reference Examples
+
+The Umbraco source includes working examples:
+
+**Workspace Context Counter**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/workspace-context-counter/`
+
+This example demonstrates a workspace with context, views, and footer apps. Includes unit tests.
+
+**Workspace Context Initial Name**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/workspace-context-initial-name/`
+
+This example shows workspace context initialization patterns.
+
+**Workspace View Hint**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/workspace-view-hint/`
+
+This example demonstrates workspace view hints and metadata.
+
 ## Related Foundation Skills
 
 If you need to explain these foundational concepts when implementing workspaces, reference these skills:

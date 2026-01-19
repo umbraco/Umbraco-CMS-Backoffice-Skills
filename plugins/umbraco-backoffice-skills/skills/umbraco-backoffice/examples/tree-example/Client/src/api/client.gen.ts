@@ -14,6 +14,8 @@ import { type Config, type ClientOptions as DefaultClientOptions, createClient, 
 export type CreateClientConfig<T extends DefaultClientOptions = ClientOptions> = (override?: Config<DefaultClientOptions & T>) => Config<Required<DefaultClientOptions> & T>;
 
 export const client = createClient(createConfig<ClientOptions>({
-    baseUrl: 'https://localhost:44348',
+    // Use empty baseUrl for relative paths - allows MSW to intercept in mock mode.
+    // The entrypoint will set the correct baseUrl from auth context when running against a real server.
+    baseUrl: '',
     throwOnError: true
 }));

@@ -2,23 +2,21 @@
  * @fileoverview Notes Tree Repository
  *
  * The repository is the main interface for tree data operations in the
- * Umbraco backoffice. It implements the Repository Pattern to coordinate
- * between the data source (API) and the store (cache).
+ * Umbraco backoffice. It implements the Repository Pattern with an
+ * inline data source for simplicity.
  *
  * **Architecture Overview:**
  *
  * ```
- * Tree UI ─────> Repository ─────> Data Source ─────> API
- *                    │
- *                    └──────────> Store (Cache)
+ * Tree UI ─────> Repository (with inline data source) ─────> API
  * ```
  *
  * **Repository Pattern Benefits:**
  *
  * 1. **Abstraction**: Tree UI doesn't know about API details
- * 2. **Caching**: Store provides transparent caching
- * 3. **Testability**: Easy to mock for unit tests
- * 4. **Consistency**: Standard Umbraco tree operations
+ * 2. **Testability**: Easy to mock for unit tests
+ * 3. **Consistency**: Standard Umbraco tree operations
+ * 4. **Simplicity**: Everything in one file
  *
  * **Registration:**
  *
@@ -46,13 +44,108 @@
 
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import type { UmbApi } from "@umbraco-cms/backoffice/extension-api";
-import { UmbTreeRepositoryBase } from "@umbraco-cms/backoffice/tree";
-import { NotesTreeServerDataSource } from "./notes-tree.server.data-source.js";
-import { NOTES_TREE_STORE_CONTEXT } from "./notes-tree.store.js";
+import {
+  UmbTreeRepositoryBase,
+  UmbTreeServerDataSourceBase,
+  type UmbTreeAncestorsOfRequestArgs,
+  type UmbTreeChildrenOfRequestArgs,
+  type UmbTreeRootItemsRequestArgs,
+} from "@umbraco-cms/backoffice/tree";
 import {
   NOTES_ROOT_ENTITY_TYPE,
+  NOTES_FOLDER_ENTITY_TYPE,
+  NOTES_NOTE_ENTITY_TYPE,
 } from "../constants.js";
 import type { NotesTreeItemModel, NotesTreeRootModel } from "./types.js";
+import type { TreeItemModel } from "../api/index.js";
+import { NoteswikiService } from "../api/index.js";
+
+/**
+ * Data source for the Notes tree - inlined in repository file for simplicity.
+ * Uses UmbTreeServerDataSourceBase with function parameters.
+ *
+ * Handles fetching tree data from the C# backend API using the generated
+ * OpenAPI client (hey-api) for type-safe API calls.
+ */
+class NotesTreeDataSource extends UmbTreeServerDataSourceBase<
+  TreeItemModel,
+  NotesTreeItemModel
+> {
+  constructor(host: UmbControllerHost) {
+    super(host, {
+      getRootItems: async (args: UmbTreeRootItemsRequestArgs) => {
+        const response = await NoteswikiService.getRoot({
+          query: { skip: args.skip, take: args.take },
+        });
+
+        return {
+          data: {
+            items: response.data.items,
+            total: response.data.total,
+          },
+        };
+      },
+      getChildrenOf: async (args: UmbTreeChildrenOfRequestArgs) => {
+        // If parent is null, we're requesting root items
+        if (args.parent?.unique === null) {
+          const response = await NoteswikiService.getRoot({
+            query: { skip: args.skip, take: args.take },
+          });
+          return {
+            data: {
+              items: response.data.items,
+              total: response.data.total,
+            },
+          };
+        }
+
+        const response = await NoteswikiService.getChildren({
+          path: { parentId: args.parent.unique },
+          query: { skip: args.skip, take: args.take },
+        });
+
+        return {
+          data: {
+            items: response.data.items,
+            total: response.data.total,
+          },
+        };
+      },
+      getAncestorsOf: async (args: UmbTreeAncestorsOfRequestArgs) => {
+        const response = await NoteswikiService.getAncestors({
+          path: { id: args.treeItem.unique },
+        });
+
+        return { data: response.data };
+      },
+      mapper: (item: TreeItemModel): NotesTreeItemModel => {
+        // Determine entity type based on API response
+        // This is CRITICAL - it controls which workspace opens on click
+        let entityType: typeof NOTES_FOLDER_ENTITY_TYPE | typeof NOTES_NOTE_ENTITY_TYPE;
+
+        if (item.isFolder || item.entityType === "notes-folder") {
+          entityType = NOTES_FOLDER_ENTITY_TYPE;
+        } else {
+          entityType = NOTES_NOTE_ENTITY_TYPE;
+        }
+
+        return {
+          unique: item.id,
+          parent: {
+            unique: item.parentId || null,
+            // Infer parent entity type: if no parentId, parent is root
+            entityType: item.parentId ? NOTES_FOLDER_ENTITY_TYPE : NOTES_ROOT_ENTITY_TYPE,
+          },
+          name: item.name,
+          entityType: entityType,
+          hasChildren: item.hasChildren,
+          isFolder: item.isFolder,
+          icon: item.icon || (item.isFolder ? "icon-folder" : "icon-notepad"),
+        };
+      },
+    });
+  }
+}
 
 /**
  * Repository for Notes tree operations.
@@ -65,10 +158,6 @@ import type { NotesTreeItemModel, NotesTreeRootModel } from "./types.js";
  * **Type Parameters:**
  * - `NotesTreeItemModel` - The shape of tree items (notes and folders)
  * - `NotesTreeRootModel` - The shape of the tree root
- *
- * **Constructor Parameters:**
- * - Data source class: Handles API communication
- * - Store context: Provides caching via dependency injection
  *
  * @implements {UmbApi} - Required for Umbraco extension registration
  *
@@ -83,13 +172,12 @@ export class NotesTreeRepository
   implements UmbApi
 {
   /**
-   * Creates a new Notes tree repository.
+   * Creates a new Notes tree repository with inline data source.
    *
    * @param {UmbControllerHost} host - The controller host for context consumption.
-   *   This is typically the component or context that creates the repository.
    */
   constructor(host: UmbControllerHost) {
-    super(host, NotesTreeServerDataSource, NOTES_TREE_STORE_CONTEXT);
+    super(host, NotesTreeDataSource);
   }
 
   /**

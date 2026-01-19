@@ -15,7 +15,7 @@ Controllers are separate classes that contain or reuse logic across elements whi
 Always fetch the latest docs before implementing:
 
 - **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/umbraco-controller
-- **Write Custom Controller**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/umbraco-element/controllers/write-your-own-controller
+- **Write Custom Controller**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/umbraco-controller/write-your-own-controller
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 
 ## Workflow

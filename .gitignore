@@ -115,6 +115,9 @@ out/
 # Testing
 coverage/
 .nyc_output/
+playwright-report/
+test-results/
+.auth/
 
 # Misc
 .DS_Store
@@ -163,3 +166,11 @@ lerna-debug.log*
 # Temporary files
 *.tmp
 *.temp
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Skill validation
+validation-report.json
+code-analysis-report.json
+test-report.json

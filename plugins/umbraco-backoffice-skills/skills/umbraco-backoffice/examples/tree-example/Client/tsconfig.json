@@ -20,7 +20,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "types": [ "@umbraco-cms/backoffice/extension-types" ]
+    "types": [ "@umbraco-cms/backoffice/extension-types", "vite/client" ]
   },
-  "include": [ "src" ]
+  "include": [ "src", "index.ts" ],
+  "exclude": [ "**/*.test.ts", "**/__mocks__/**", "tests/**" ]
 }

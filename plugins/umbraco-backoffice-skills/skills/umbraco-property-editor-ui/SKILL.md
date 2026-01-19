@@ -20,6 +20,14 @@ Always fetch the latest docs before implementing:
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/property-editor/`
+
+This example demonstrates a complete property editor UI implementation with configuration. Study this for production patterns.
+
 ## Related Foundation Skills
 
 - **Umbraco Element**: When implementing the UI element with UmbElementMixin

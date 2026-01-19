@@ -18,6 +18,14 @@ Always fetch the latest docs before implementing:
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/icons/`
+
+This example demonstrates how to register and use custom SVG icons. Study this for production patterns.
+
 ## Workflow
 
 1. **Fetch docs** - Use WebFetch on the URLs above

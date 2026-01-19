@@ -16,7 +16,15 @@ Always fetch the latest docs before implementing:
 
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **UFM**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/ufm-component
+- **UFM**: https://docs.umbraco.com/umbraco-cms/reference/umbraco-flavored-markdown
+
+## Reference Example
+
+The Umbraco source includes a working example:
+
+**Location**: `/Umbraco-CMS/src/Umbraco.Web.UI.Client/examples/ufm-custom-component/`
+
+This example demonstrates a custom UFM component with marker syntax. Study this for production patterns.
 
 ## Related Foundation Skills
 
