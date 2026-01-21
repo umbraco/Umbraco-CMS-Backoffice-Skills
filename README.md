@@ -8,7 +8,7 @@ A Claude Code plugin marketplace with 65 skills for Umbraco backoffice customiza
 
 Add the marketplace:
 ```bash
-/plugin marketplace add hifi-phil/Umbraco_CC_Backoffice_Skills
+/plugin marketplace add umbraco/Umbraco_CC_Backoffice_Skills
 ```
 
 Install the plugins:
@@ -326,3 +326,4 @@ MIT
 Built by Phil W ([@hifi-phil](https://github.com/hifi-phil))
 
 Skills based on [Umbraco CMS](https://umbraco.com/) backoffice documentation.
+
