@@ -1,7 +1,7 @@
 {
   "name": "umbraco-backoffice-marketplace",
   "owner": {
-    "name": "Phil W",
+    "name": "Phil Whittaker",
     "email": "pjw@umbraco.com"
   },
   "metadata": {
@@ -13,13 +13,13 @@
     {
       "name": "umbraco-cms-backoffice-skills",
       "source": "./plugins/umbraco-backoffice-skills",
-      "description": "57 skills for Umbraco backoffice customization covering Foundation, Extension Types, Property Editors, Rich Text, Backend, and Setup",
+      "description": "Umbraco backoffice skills covering Foundation, Extension Types, Property Editors, Rich Text, Backend, and Setup",
       "version": "1.0.1",
       "category": "development",
       "author": {
-        "name": "Phil W",
+        "name": "Phil Whittaker",
         "email": "pjw@umbraco.com",
-        "url": "https://github.com/hifi-phil"
+        "url": "https://github.com/umbraco"
       },
       "keywords": [
         "umbraco",
@@ -31,9 +31,34 @@
         "web-components"
       ],
       "skills": "./skills/"
+    },
+    {
+      "name": "umbraco-cms-backoffice-testing-skills",
+      "source": "./plugins/umbraco-testing-skills",
+      "description": "Umbraco backoffice testing skills covering unit, MSW, mocked repo, Mocked backoffice and e2e testing using playwright",
+      "version": "1.0.1",
+      "category": "development",
+      "author": {
+        "name": "Phil Whittaker",
+        "email": "pjw@umbraco.com",
+        "url": "https://github.com/umbraco"
+      },
+      "keywords": [
+        "umbraco",
+        "backoffice",
+        "cms",
+        "dotnet",
+        "typescript",
+        "lit",
+        "web-components",
+        "testing",
+        "playwright"
+      ],
+      "skills": "./skills/"
     }
   ]
 }
+
 
 
 
