@@ -1,5 +1,5 @@
 {
-  "name": "umbraco-backoffice-skills-marketplace",
+  "name": "umbraco-backoffice-marketplace",
   "owner": {
     "name": "Phil W",
     "email": "pjw@umbraco.com"
@@ -34,6 +34,7 @@
     }
   ]
 }
+
 
 
 
