@@ -14,10 +14,10 @@ Add the marketplace:
 Install the plugins:
 ```bash
 # Backoffice extension skills (57 skills)
-/plugin install umbraco-backoffice-skills@umbraco-skills-marketplace
+/plugin install umbraco-cms-backoffice-skills@umbraco-backoffice-marketplace
 
 # Testing skills (8 skills) - optional but recommended
-/plugin install umbraco-testing-skills@umbraco-skills-marketplace
+/plugin install umbraco-cms-backoffice-testing-skills@umbraco-backoffice-marketplace
 ```
 
 ## Create an Umbraco Instance
@@ -326,5 +326,6 @@ MIT
 Built by Phil W ([@hifi-phil](https://github.com/hifi-phil))
 
 Skills based on [Umbraco CMS](https://umbraco.com/) backoffice documentation.
+
 
 
