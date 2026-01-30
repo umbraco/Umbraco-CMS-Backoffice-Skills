@@ -82,8 +82,13 @@ These three skills are your entry points for Umbraco backoffice development. Sta
 | tree-example | Settings tree with workspace | 7 skills |
 | notes-wiki | Full-stack with C# backend | 27 skills |
 
+```bash
+/umbraco-backoffice
 ```
-Invoke: "Use the umbraco-backoffice skill to understand the extension map"
+
+Or ask Claude directly:
+```
+"Help me understand the Umbraco backoffice extension map"
 ```
 
 ---
