@@ -1,7 +1,7 @@
 ---
 name: umbraco-quickstart
 description: Quick setup for Umbraco extension development - creates instance, extension, and registers it
-argument-hint: "[UmbracoProjectName] [ExtensionName] [AdminEmail] [AdminPassword]"
+argument-hint: "[UmbracoProjectName] [ExtensionName] [--email admin@example.com] [--password Admin123456]"
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 user_invocable: true
 ---
@@ -13,8 +13,8 @@ Sets up everything needed for Umbraco extension development in one command.
 ## Usage
 
 ```bash
-# Full setup with all options
-/umbraco-quickstart MyUmbracoSite MyExtension me@example.com MyPassword1234
+# Full setup with custom credentials
+/umbraco-quickstart MyUmbracoSite MyExtension --email a@a.co.uk --password Admin123456
 
 # With default credentials (admin@test.com / SecurePass1234)
 /umbraco-quickstart MyUmbracoSite MyExtension
@@ -32,8 +32,8 @@ Sets up everything needed for Umbraco extension development in one command.
 
 - **First argument**: Umbraco project name (e.g., "MyUmbracoSite")
 - **Second argument**: Extension name (e.g., "MyExtension")
-- **Third argument** (optional): Admin email (default: `admin@test.com`)
-- **Fourth argument** (optional): Admin password (default: `SecurePass1234`)
+- **`--email`** (optional): Admin email (default: `admin@test.com`)
+- **`--password`** (optional): Admin password (default: `SecurePass1234`)
 
 If arguments not provided, check what exists and prompt for missing names.
 

@@ -32,7 +32,7 @@ These skills are your entry points for Umbraco backoffice extension development.
 
 ```bash
 # Full setup with custom credentials
-/umbraco-quickstart MyUmbracoSite MyExtension me@example.com MyPassword1234
+/umbraco-quickstart MyUmbracoSite MyExtension --email a@a.co.uk --password Admin123456
 
 # With default credentials (admin@test.com / SecurePass1234)
 /umbraco-quickstart MyUmbracoSite MyExtension
