@@ -1,18 +1,16 @@
 ---
 name: umbraco-quickstart
-description: Getting started router - detects your environment and guides you to the right skill
+description: Getting started router - detects your environment and sets up what's needed
 user_invocable: true
 ---
 
 # Umbraco Quickstart
 
-Detects your current environment and guides you to the appropriate next step.
+Detects your environment and sets up what's needed to create a working extension.
 
 ## Workflow
 
-### 1. Detect what's available
-
-Run these checks and report findings to the user:
+### 1. Check what exists
 
 **Check for Umbraco instance:**
 ```bash
@@ -24,63 +22,66 @@ find . -name "*.csproj" -exec grep -l "Umbraco.Cms" {} \; 2>/dev/null | head -5
 find . -name "umbraco-package.json" 2>/dev/null | head -10
 ```
 
-**Check for Umbraco CMS source (for better code generation):**
-- Look in current working directories for `Umbraco.Web.UI.Client/src`
-- This may be added via `/add-dir` - check the conversation context for additional directories
-- If not found, warn the user
+**Check for Umbraco CMS source in extended workspace:**
+- Look for `Umbraco.Web.UI.Client/src` in current and extended workspace directories
+- Extended workspace includes directories added via `/add-dir`
 
-**Check for UUI library source (for UI components):**
-- Look for `@umbraco-ui/uui` source in working directories
-- If not found, warn the user
+**Check for UUI library source in extended workspace:**
+- Look for `@umbraco-ui/uui` packages in extended workspace directories
 
 **Check if testing skills are installed:**
 - Check if `umbraco-testing` skill is available
 
-### 2. Report findings
+### 2. Take action based on findings
 
-Present a summary of what was detected:
-
+**If no Umbraco instance → Create one:**
 ```
-Environment check:
-
-✓ Umbraco instance: ./src/MyUmbracoSite/MyUmbracoSite.csproj
-✓ Extensions: ./src/MyExtension/Client/umbraco-package.json
-⚠ Umbraco CMS source not found - add for better code generation
-⚠ UUI library source not found - add for UI component reference
-⚠ Testing skills not installed
+No Umbraco project found. Creating one with /package-script-writer...
 ```
+Then use `/package-script-writer` to create it.
 
-### 3. Provide guidance based on findings
-
-**If no Umbraco instance:**
-→ Suggest `/package-script-writer` to create one
-
-**If no extensions:**
-→ Suggest `/umbraco-extension-template` to create one
-→ Or `/umbraco-backoffice` to understand the extension map first
-
-**If extensions exist:**
-→ Remind about `/umbraco-add-extension-reference` to register them
-
-**If CMS source missing:**
+**If no extensions → Create one:**
 ```
-For better code generation, add the Umbraco CMS source:
+No extensions found. Creating one with /umbraco-extension-template...
+```
+Then use `/umbraco-extension-template` to create it.
+
+**If extension not registered → Register it:**
+```
+Extension found but not registered. Registering with /umbraco-add-extension-reference...
+```
+Then use `/umbraco-add-extension-reference` to register it.
+
+### 3. Warn about missing resources
+
+Only warn (don't block) if these are missing:
+
+**If CMS source not in extended workspace:**
+```
+⚠ Umbraco CMS source not found in extended workspace.
+  For better code generation, add it:
   git clone https://github.com/umbraco/Umbraco-CMS.git
   /add-dir /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
 ```
 
-**If UUI source missing:**
+**If UUI source not in extended workspace:**
 ```
-For UI component reference, add the UUI library:
+⚠ UUI library source not found in extended workspace.
+  For UI component reference, add it:
   git clone https://github.com/umbraco/Umbraco.UI.git
   /add-dir /path/to/Umbraco.UI/packages/uui
 ```
 
 **If testing skills not installed:**
 ```
-To add testing capabilities:
+⚠ Testing skills not installed.
+  To add testing capabilities:
   /plugin install umbraco-cms-backoffice-testing-skills@umbraco-backoffice-marketplace
 ```
+
+## Goal
+
+The aim is to get the user to a working extension as quickly as possible. Don't just report - take action.
 
 ## Available skills
 
