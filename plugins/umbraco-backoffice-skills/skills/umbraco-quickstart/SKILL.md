@@ -2,6 +2,7 @@
 name: umbraco-quickstart
 description: Quick setup for Umbraco extension development - creates instance, extension, and registers it
 argument-hint: "[UmbracoProjectName] [ExtensionName]"
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 user_invocable: true
 ---
 
