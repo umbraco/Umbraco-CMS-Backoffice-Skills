@@ -32,7 +32,7 @@ Generate and run Umbraco CMS installation scripts using the `psw` CLI tool.
 
 ```bash
 export PATH="$PATH:$HOME/.dotnet/tools"
-psw -d -n ProjectName -s ProjectName -u --database-type SQLite --admin-email admin@test.com --admin-password "SecurePass123!" --auto-run
+psw -d -n ProjectName -s ProjectName -u --database-type SQLite --admin-email admin@test.com --admin-password SecurePass1234 --auto-run
 ```
 
 Run this with `run_in_background: true` since Umbraco is a long-running web server.
@@ -43,7 +43,7 @@ Run this with `run_in_background: true` since Umbraco is a long-running web serv
 - `--auto-run` - execute the script immediately
 - Never combine `-o` with `--auto-run` (truncates the script)
 
-**Default credentials:** `admin@test.com` / `SecurePass123!`
+**Default credentials:** `admin@test.com` / `SecurePass1234`
 
 ## With Packages
 

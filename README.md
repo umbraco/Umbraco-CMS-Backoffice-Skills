@@ -26,19 +26,30 @@ Install the plugins:
 
 These skills are your entry points for Umbraco backoffice extension development. Start here.
 
-### `umbraco-quickstart` - Smart Environment Check
+### `umbraco-quickstart` - Quick Setup
 
-**Start here if you're new.** This skill checks your environment and sets up what's needed automatically.
-
-It detects:
-- Whether you have an Umbraco instance
-- Any existing extensions
-- If testing skills are installed
-- If Umbraco CMS source is available (for better code generation)
+**Start here if you're new.** Sets up everything in one command:
 
 ```bash
+# Full setup with custom credentials
+/umbraco-quickstart MyUmbracoSite MyExtension --email a@a.co.uk --password Admin123456
+
+# With default credentials (admin@test.com / SecurePass1234)
+/umbraco-quickstart MyUmbracoSite MyExtension
+
+# Just instance name - will prompt for extension name
+/umbraco-quickstart MyUmbracoSite
+
+# No arguments - detects existing or prompts for names
 /umbraco-quickstart
 ```
+
+This skill will:
+1. Create an Umbraco instance (if needed)
+2. Create an extension
+3. Register the extension with the Umbraco project
+4. Warn about missing CMS/UUI source
+5. Enter plan mode to help design your extension
 
 ---
 
