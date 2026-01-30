@@ -255,7 +255,7 @@ After creating or modifying an extension, trigger the following agents to ensure
 Extension Built/Loaded
         ↓
 ┌───────────────────────────────────────┐
-│  skill-quality-reviewer               │
+│  AGENT: skill-quality-reviewer        │
 │  - Review code patterns               │
 │  - Fix outdated imports/types         │
 │  - Apply documentation-based fixes    │
@@ -266,7 +266,7 @@ Load Skills for Validation
 Run validate-skills
         ↓
 ┌───────────────────────────────────────┐
-│  skill-content-fixer                  │
+│  AGENT: skill-content-fixer           │
 │  - Fix broken URLs                    │
 │  - Correct skill references           │
 │  - Update invalid paths               │
