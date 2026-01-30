@@ -85,27 +85,32 @@ Check extended workspace (including `/add-dir` directories) and warn if missing:
 
 ### 5. Plan what to build
 
-Once setup is complete, ask the user what they want to build:
+Once setup is complete, **enter plan mode** to help the user design their extension:
+
+1. Tell the user setup is complete and show the login credentials
+2. Ask them to describe what they want to build
+3. **Use `/plan` to enter planning mode** before creating the implementation plan
 
 ```
 ✅ Setup complete! Your extension is ready.
 
-What would you like to build? For example:
-- A custom dashboard
-- A property editor
-- A tree view in Settings
-- A content action
-- Something else?
+Login: admin@test.com / SecurePass1234
 
-I can help you plan the implementation. Just describe what you want to create.
+What would you like to build? Describe your idea and I'll help you plan the implementation.
+
+Examples:
+- "A dashboard that shows recent content changes"
+- "A property editor for picking colours"
+- "A tree in Settings for managing custom data"
 ```
 
-If the user describes what they want:
-1. Use `/umbraco-backoffice` to identify which extension types are needed
-2. Create a plan with the specific skills required
-3. Ask if they want to proceed with the implementation
+When the user describes what they want:
+1. Enter plan mode with `/plan`
+2. Use `/umbraco-backoffice` to identify which extension types are needed
+3. Create a detailed plan with the specific skills required
+4. Exit plan mode and ask if they want to proceed with implementation
 
-This turns quickstart into a complete onboarding experience - from zero to building.
+This turns quickstart into a complete onboarding experience - from zero to planning to building.
 
 ## Goal
 
