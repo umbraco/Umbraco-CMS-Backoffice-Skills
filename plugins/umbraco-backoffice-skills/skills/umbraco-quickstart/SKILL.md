@@ -6,13 +6,13 @@ user_invocable: true
 
 # Umbraco Quickstart
 
-A smart getting started skill that detects your current environment and guides you to the appropriate next step.
+Detects your current environment and guides you to the appropriate next step.
 
 ## Workflow
 
-### 1. Check the environment
+### 1. Detect what's available
 
-Run these checks to understand the current project state:
+Run these checks and report findings to the user:
 
 **Check for Umbraco instance:**
 ```bash
@@ -24,76 +24,70 @@ find . -name "*.csproj" -exec grep -l "Umbraco.Cms" {} \; 2>/dev/null | head -5
 find . -name "umbraco-package.json" 2>/dev/null | head -10
 ```
 
-**Check if testing skills are available:**
-Look for the `umbraco-testing` skill. If not found, testing skills are not installed.
+**Check for Umbraco CMS source (for better code generation):**
+- Look in current working directories for `Umbraco.Web.UI.Client/src`
+- This may be added via `/add-dir` - check the conversation context for additional directories
+- If not found, warn the user
 
-**Check for Umbraco CMS source:**
-```bash
-# Look for the backoffice client source in working directories
-find . -path "*/Umbraco.Web.UI.Client/src" -type d 2>/dev/null | head -1
-```
+**Check for UUI library source (for UI components):**
+- Look for `@umbraco-ui/uui` source in working directories
+- If not found, warn the user
 
-### 2. Present options based on findings
+**Check if testing skills are installed:**
+- Check if `umbraco-testing` skill is available
 
-Based on the checks, present relevant options to the user:
+### 2. Report findings
 
-#### If no Umbraco instance found:
-> "I don't see an Umbraco project in this workspace. Would you like me to create one?"
->
-> Use `/package-script-writer` to create a new Umbraco instance.
-
-#### If Umbraco exists but no extensions:
-> "You have an Umbraco instance but no extensions yet. Would you like to:"
-> 1. Create a new extension → `/umbraco-extension-template`
-> 2. Understand the backoffice extension map → `/umbraco-backoffice`
-
-#### If extensions exist but may not be registered:
-> "I found extension(s). Make sure they're registered with your Umbraco project."
->
-> Use `/umbraco-add-extension-reference` to register them.
-
-#### If CMS source not found:
-> "**Tip:** For best results, add the Umbraco CMS source code to your workspace:"
-> ```bash
-> git clone https://github.com/umbraco/Umbraco-CMS.git
-> /add-dir /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
-> ```
-> This helps me generate more accurate, idiomatic code.
-
-#### If testing skills not available:
-> "**Note:** Testing skills are not installed. To add them:"
-> ```bash
-> /plugin install umbraco-cms-backoffice-testing-skills@umbraco-backoffice-marketplace
-> ```
-
-### 3. Available skills summary
-
-Always show what's available:
-
-| Need | Skill |
-|------|-------|
-| Create Umbraco instance | `/package-script-writer` |
-| Understand backoffice | `/umbraco-backoffice` |
-| Create extension | `/umbraco-extension-template` |
-| Register extension | `/umbraco-add-extension-reference` |
-| Testing (if installed) | `/umbraco-testing` |
-
-## Example output
+Present a summary of what was detected:
 
 ```
-🔍 Checking your environment...
+Environment check:
 
-✓ Umbraco instance found: ./src/MyUmbracoSite/MyUmbracoSite.csproj
-✓ Extension found: ./src/MyExtension/Client/umbraco-package.json
-✗ Umbraco CMS source not found
-✗ Testing skills not installed
-
-What would you like to do?
-1. Understand the backoffice extension map → /umbraco-backoffice
-2. Create another extension → /umbraco-extension-template
-3. Register an extension → /umbraco-add-extension-reference
-
-💡 Tip: Add Umbraco CMS source for better code generation:
-   git clone https://github.com/umbraco/Umbraco-CMS.git
-   /add-dir /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
+✓ Umbraco instance: ./src/MyUmbracoSite/MyUmbracoSite.csproj
+✓ Extensions: ./src/MyExtension/Client/umbraco-package.json
+⚠ Umbraco CMS source not found - add for better code generation
+⚠ UUI library source not found - add for UI component reference
+⚠ Testing skills not installed
 ```
+
+### 3. Provide guidance based on findings
+
+**If no Umbraco instance:**
+→ Suggest `/package-script-writer` to create one
+
+**If no extensions:**
+→ Suggest `/umbraco-extension-template` to create one
+→ Or `/umbraco-backoffice` to understand the extension map first
+
+**If extensions exist:**
+→ Remind about `/umbraco-add-extension-reference` to register them
+
+**If CMS source missing:**
+```
+For better code generation, add the Umbraco CMS source:
+  git clone https://github.com/umbraco/Umbraco-CMS.git
+  /add-dir /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
+```
+
+**If UUI source missing:**
+```
+For UI component reference, add the UUI library:
+  git clone https://github.com/umbraco/Umbraco.UI.git
+  /add-dir /path/to/Umbraco.UI/packages/uui
+```
+
+**If testing skills not installed:**
+```
+To add testing capabilities:
+  /plugin install umbraco-cms-backoffice-testing-skills@umbraco-backoffice-marketplace
+```
+
+## Available skills
+
+| Skill | Purpose |
+|-------|---------|
+| `/package-script-writer` | Create Umbraco instance |
+| `/umbraco-backoffice` | Understand extension map |
+| `/umbraco-extension-template` | Create new extension |
+| `/umbraco-add-extension-reference` | Register extension |
+| `/umbraco-testing` | Testing guidance (if installed) |

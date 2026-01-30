@@ -20,6 +20,10 @@ Install the plugins:
 /plugin install umbraco-cms-backoffice-testing-skills@umbraco-backoffice-marketplace
 ```
 
+Then run `/umbraco-quickstart` to check your environment and get guidance on next steps.
+
+---
+
 ## Create an Umbraco Instance
 
 To test and view your extensions, you need an Umbraco instance in your project. The `umbraco-add-extension-reference` skill will automatically find this instance and register your extensions as project references.
@@ -102,11 +106,6 @@ It detects:
 /umbraco-backoffice
 ```
 
-Or ask Claude directly:
-```
-"Help me understand the Umbraco backoffice extension map"
-```
-
 ---
 
 ### `umbraco-extension-template` - Create New Extensions
@@ -136,15 +135,9 @@ cd MyExtension/Client && npm install && npm run watch
 **Use this skill when:**
 - Creating a brand new backoffice extension
 - Need a properly configured TypeScript/Vite project
-- Starting from scratch (not copying from blueprints)
 
 ```bash
 /umbraco-extension-template MyFeature
-```
-
-Or ask Claude directly:
-```
-"Create a new Umbraco extension called MyFeature"
 ```
 
 ---
@@ -167,16 +160,10 @@ This skill:
 
 **Use this skill when:**
 - After creating a new extension with the template
-- After copying a blueprint to your project
 - Extension exists but doesn't appear in the backoffice
 
 ```bash
 /umbraco-add-extension-reference MyExtension
-```
-
-Or ask Claude directly:
-```
-"Register MyExtension with my Umbraco project"
 ```
 
 ---
@@ -302,11 +289,6 @@ Complete testing pyramid for Umbraco extensions:
 
 ```bash
 /umbraco-testing
-```
-
-Or ask Claude directly:
-```
-"Which testing approach should I use for my Umbraco extension?"
 ```
 
 ---
