@@ -28,9 +28,15 @@ To test and view your extensions, you need an Umbraco instance in your project. 
 
 Use the `package-script-writer` skill to automatically create an Umbraco instance using the [PSW CLI](https://github.com/prjseal/Package-Script-Writer-CLI). This skill generates a complete .NET solution with Umbraco pre-configured and ready to run.
 
+```bash
+# As a command
+/create-umbraco-instance MyProject
+
+# Or invoke the skill directly
+"Use the package-script-writer skill to create an Umbraco instance called MyProject"
 ```
-Invoke: "Use the package-script-writer skill to create an Umbraco instance"
-```
+
+**Note:** Requires the PSW CLI to be installed: `dotnet tool install -g psw`
 
 Thanks to Paul Seal ([@prjseal](https://github.com/prjseal)) for his hard work on the PSW CLI.
 
