@@ -83,6 +83,30 @@ Check extended workspace (including `/add-dir` directories) and warn if missing:
   /plugin install umbraco-cms-backoffice-testing-skills@umbraco-backoffice-marketplace
 ```
 
+### 5. Plan what to build
+
+Once setup is complete, ask the user what they want to build:
+
+```
+✅ Setup complete! Your extension is ready.
+
+What would you like to build? For example:
+- A custom dashboard
+- A property editor
+- A tree view in Settings
+- A content action
+- Something else?
+
+I can help you plan the implementation. Just describe what you want to create.
+```
+
+If the user describes what they want:
+1. Use `/umbraco-backoffice` to identify which extension types are needed
+2. Create a plan with the specific skills required
+3. Ask if they want to proceed with the implementation
+
+This turns quickstart into a complete onboarding experience - from zero to building.
+
 ## Goal
 
 Get the user to a working extension as quickly as possible. Don't just report - take action.
