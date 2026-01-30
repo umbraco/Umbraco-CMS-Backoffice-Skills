@@ -2,7 +2,7 @@
 
 > **Experimental Beta:** This project is an exploration of what's possible with Skills for Umbraco. It's evolving as we learn what works best.
 
-A Claude Code plugin marketplace with over 70 skills for Umbraco backoffice customization and testing.
+A Claude Code plugin marketplace with 65 skills for Umbraco backoffice customization and testing.
 
 ## Quick Start
 
@@ -295,7 +295,7 @@ Claude will automatically use the relevant skills (`umbraco-tree`, `umbraco-cond
 ## Project Structure
 
 ```
-UmbracoCMS_Skills/
+Umbraco-CMS-Backoffice-Skills/
 ├── .claude-plugin/marketplace.json     # Marketplace manifest
 ├── plugins/
 │   ├── umbraco-backoffice-skills/      # Plugin with 57 extension skills
@@ -326,7 +326,3 @@ MIT
 Built by Phil W ([@hifi-phil](https://github.com/hifi-phil))
 
 Skills based on [Umbraco CMS](https://umbraco.com/) backoffice documentation.
-
-
-
-
