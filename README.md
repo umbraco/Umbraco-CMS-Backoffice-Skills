@@ -28,7 +28,7 @@ These skills are your entry points for Umbraco backoffice extension development.
 
 ### `umbraco-quickstart` - Smart Environment Check
 
-**Start here if you're new.** This skill checks your environment and guides you to the right next step.
+**Start here if you're new.** This skill checks your environment and sets up what's needed automatically.
 
 It detects:
 - Whether you have an Umbraco instance
@@ -39,6 +39,47 @@ It detects:
 ```bash
 /umbraco-quickstart
 ```
+
+---
+
+### Manual Setup
+
+If you prefer to set things up step by step:
+
+#### 1. Create an Umbraco Instance
+
+Use the `package-script-writer` skill to create an Umbraco instance using the [PSW CLI](https://github.com/prjseal/Package-Script-Writer-CLI).
+
+```bash
+/package-script-writer MyProject
+```
+
+Thanks to Paul Seal ([@prjseal](https://github.com/prjseal)) for his hard work on the PSW CLI.
+
+#### 2. Create an Extension
+
+Use `umbraco-extension-template` to create a new extension project:
+
+```bash
+/umbraco-extension-template MyFeature
+```
+
+Or manually:
+```bash
+dotnet new install Umbraco.Templates
+dotnet new umbraco-extension -n MyExtension -ex
+cd MyExtension/Client && npm install && npm run watch
+```
+
+#### 3. Register the Extension
+
+Use `umbraco-add-extension-reference` to register your extension with the Umbraco project:
+
+```bash
+/umbraco-add-extension-reference MyExtension
+```
+
+This adds a `<ProjectReference>` to your Umbraco `.csproj` file so the extension loads.
 
 ---
 
@@ -68,80 +109,6 @@ It detects:
 ```
 
 ---
-
-### `umbraco-extension-template` - Create New Extensions
-
-**The official starting point for any extension.** Creates a fully configured project with:
-
-- .NET project structure with proper SDK configuration
-- TypeScript/Vite tooling with hot reload
-- npm scripts for development and production builds
-- Folder structure ready for extension code
-
-**Commands:**
-```bash
-# Install template (one-time)
-dotnet new install Umbraco.Templates
-
-# Create basic extension
-dotnet new umbraco-extension -n MyExtension
-
-# Create with examples (recommended)
-dotnet new umbraco-extension -n MyExtension -ex
-
-# Install dependencies and start development
-cd MyExtension/Client && npm install && npm run watch
-```
-
-**Use this skill when:**
-- Creating a brand new backoffice extension
-- Need a properly configured TypeScript/Vite project
-
-```bash
-/umbraco-extension-template MyFeature
-```
-
----
-
-### `umbraco-add-extension-reference` - Register Extensions
-
-**Required after creating any extension.** Without this step, your extension won't load.
-
-This skill:
-1. Finds your main Umbraco project (the one with `Umbraco.Cms` package)
-2. Calculates the relative path to your new extension
-3. Adds a `<ProjectReference>` entry to the `.csproj` file
-
-**Example result:**
-```xml
-<ItemGroup>
-  <ProjectReference Include="../MyExtension/MyExtension.csproj" />
-</ItemGroup>
-```
-
-**Use this skill when:**
-- After creating a new extension with the template
-- Extension exists but doesn't appear in the backoffice
-
-```bash
-/umbraco-add-extension-reference MyExtension
-```
-
----
-
-## Create an Umbraco Instance
-
-To test and view your extensions, you need an Umbraco instance in your project. The `umbraco-add-extension-reference` skill will automatically find this instance and register your extensions as project references.
-
-**Automatic setup with the `package-script-writer` skill:**
-
-Use the `package-script-writer` skill to automatically create an Umbraco instance using the [PSW CLI](https://github.com/prjseal/Package-Script-Writer-CLI). This skill generates a complete .NET solution with Umbraco pre-configured and ready to run.
-
-```bash
-/package-script-writer MyProject
-```
-
-Thanks to Paul Seal ([@prjseal](https://github.com/prjseal)) for his hard work on the PSW CLI.
 
 ## Best Practice: Add Umbraco CMS Source Code
 
