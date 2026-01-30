@@ -1,7 +1,8 @@
 ---
+name: validate-skills
 description: Validate links, code examples, and references in all SKILL.md files
+version: 1.0.0
 allowed-tools: Bash, Read, Glob, Task, AskUserQuestion, Edit
-arg-hints: --skip-tests
 ---
 
 # Validate Skills
@@ -10,39 +11,6 @@ Run validation on all SKILL.md files to check:
 1. **Links** - Broken URLs, missing skill refs, invalid paths
 2. **Code** - Import paths, extension types, deprecated patterns
 3. **Tests** - Run unit, mocked, and E2E tests from skill examples
-
-## Pre-Validation: Agent References
-
-Before running validation, the following agents should be loaded and available for use:
-
-| Agent | Role | Trigger Condition |
-|-------|------|-------------------|
-| `skill-quality-reviewer` | Reviews and fixes code examples | After extension build/load completes |
-| `skill-content-fixer` | Fixes broken links and references | After link validation finds issues |
-
-### Agent Triggering Flow
-
-```
-Extension Built/Loaded
-        ↓
-┌───────────────────────────────────────┐
-│  skill-quality-reviewer               │
-│  - Review code patterns               │
-│  - Fix outdated imports/types         │
-│  - Apply documentation-based fixes    │
-└───────────────────────────────────────┘
-        ↓
-Load Skills for Validation
-        ↓
-Run Validation Phases
-        ↓
-┌───────────────────────────────────────┐
-│  skill-content-fixer                  │
-│  - Fix broken URLs                    │
-│  - Correct skill references           │
-│  - Update invalid paths               │
-└───────────────────────────────────────┘
-```
 
 ## Workflow
 
@@ -182,55 +150,6 @@ If issues found, use AskUserQuestion:
 
 Only execute fixes the user explicitly approves.
 
-## Agents
-
-### Agent Lifecycle
-
-The reviewing and validation agents are designed to be triggered at specific points in the workflow:
-
-#### 1. `skill-quality-reviewer` - Post-Build/Load Review
-
-**Trigger:** After extension is built or loaded, BEFORE validation begins
-
-**Purpose:**
-- Review code patterns against current Umbraco documentation
-- Fix outdated imports, extension types, and deprecated patterns
-- Ensure code examples compile and follow best practices
-
-**How to spawn (use Task tool):**
-```
-Task: {
-  subagent_type: "skill-quality-reviewer",
-  prompt: "Review and fix code examples in SKILL.md files. Read code-analysis-report.json for issues found.",
-  description: "Review extension code quality"
-}
-```
-
-#### 2. `skill-content-fixer` - Post-Validation Fix
-
-**Trigger:** After link validation finds issues
-
-**Purpose:**
-- Find correct URLs for broken links
-- Suggest correct skill names for invalid references
-- Update paths to current file locations
-
-**How to spawn (use Task tool):**
-```
-Task: {
-  subagent_type: "skill-content-fixer",
-  prompt: "Analyze validation-report.json and suggest fixes for broken URLs and missing skill references.",
-  description: "Fix validation issues"
-}
-```
-
-### Agent Summary Table
-
-| Agent | Purpose | Trigger Point |
-|-------|---------|---------------|
-| `skill-quality-reviewer` | Fix code patterns, imports, types | After build/load, before validation |
-| `skill-content-fixer` | Fix URLs, skill refs, paths | After validation finds link issues |
-
 ## Environment Variables
 
 | Variable | Default | Description |
@@ -254,8 +173,6 @@ All validators save JSON reports to the project root:
 
 **You MUST execute all phases in order (unless user specifies otherwise):**
 
-### Standard Flow
-
 1. **Phase 0**: Load skills (discover all SKILL.md files for validation)
 2. **Phase 1 + 2**: Run Link Validation and Code Analysis in parallel
 3. **Phase 3**: Run Tests - unless user passes `--skip-tests`
@@ -263,38 +180,9 @@ All validators save JSON reports to the project root:
 5. **Phase 5**: Present the combined report to the user
 6. **Phase 6-7**: If issues found, ask user about fixes and execute
 
-### Post-Build/Load Flow (When extension work completes)
-
-When an agent has just completed creating or modifying an extension:
-
-1. **Trigger `skill-quality-reviewer`** to review and fix code issues
-2. Wait for reviewer to complete fixes
-3. **Load skills** for validation (Phase 0)
-4. **Run validation** (Phases 1-5)
-5. If link issues found, **trigger `skill-content-fixer`**
-6. Present final report
-
-### Integration with Extension Creation
-
-When used after `/create-umbraco-skills` or similar commands:
-
-```
-/create-umbraco-skills dashboard
-        ↓
-[Extension created]
-        ↓
-Spawn skill-quality-reviewer
-        ↓
-[Review and fix code patterns]
-        ↓
-/validate-skills
-        ↓
-[Full validation with fixes]
-```
-
 **Options:**
-- `/validate-skills` - Run all phases including tests
-- `/validate-skills --skip-tests` - Skip Phase 3 (tests), only run link and code validation
+- `validate-skills` - Run all phases including tests
+- `validate-skills --skip-tests` - Skip Phase 3 (tests), only run link and code validation
 
 **For Phase 3 (Tests)**, use these environment variables:
 ```bash

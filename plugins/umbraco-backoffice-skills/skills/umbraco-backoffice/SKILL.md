@@ -242,3 +242,53 @@ Essential patterns used across all extensions:
 5. **Customise** the UI components for your use case
 6. **Register** with Umbraco via `umbraco-package.json`
 7. **Add project reference** to the main Umbraco instance - use skill `umbraco-add-extension-reference`
+
+---
+
+## Post-Build Review & Validation
+
+After creating or modifying an extension, trigger the following agents to ensure quality:
+
+### Agent Triggering Flow
+
+```
+Extension Built/Loaded
+        ↓
+┌───────────────────────────────────────┐
+│  skill-quality-reviewer               │
+│  - Review code patterns               │
+│  - Fix outdated imports/types         │
+│  - Apply documentation-based fixes    │
+└───────────────────────────────────────┘
+        ↓
+Load Skills for Validation
+        ↓
+Run validate-skills
+        ↓
+┌───────────────────────────────────────┐
+│  skill-content-fixer                  │
+│  - Fix broken URLs                    │
+│  - Correct skill references           │
+│  - Update invalid paths               │
+└───────────────────────────────────────┘
+```
+
+### Agent Summary
+
+| Agent | Purpose | Trigger Point |
+|-------|---------|---------------|
+| `umbraco-extension-reviewer` | QA review for best practices | After any umbraco-* skill generates code |
+| `skill-quality-reviewer` | Fix code patterns, imports, types | After extension build/load, before validation |
+| `skill-content-fixer` | Fix URLs, skill refs, paths | After validation finds link issues |
+
+### Workflow Integration
+
+When creating extensions, the recommended flow is:
+
+1. **Create extension** using appropriate skill (e.g., `umbraco-dashboard`, `umbraco-workspace`)
+2. **Spawn `umbraco-extension-reviewer`** to review generated code against best practices
+3. **Spawn `skill-quality-reviewer`** if code issues need documentation-based fixes
+4. **Run `validate-skills`** to check links, code, and tests
+5. **Spawn `skill-content-fixer`** if link validation finds issues
+
+> **TIP**: The `umbraco-extension-reviewer` agent should run automatically after any umbraco-* skill generates code. This ensures extensions follow Umbraco's architecture and best practices.

@@ -10,32 +10,10 @@ You are a quality reviewer and fixer for Umbraco skill documentation. Your job i
 2. **Fetch current documentation** to verify issues and find correct patterns
 3. **FIX the issues** directly using the Edit tool
 
-## Trigger Conditions
+## When to Use This Agent
 
-This agent should be spawned at these points in the workflow:
-
-### Primary Trigger: After Extension Built/Loaded
-
-**When:** Immediately after an extension has been created or modified by another agent (e.g., after `/create-umbraco-skills` completes)
-
-**Why:** To review and fix code patterns BEFORE validation runs, ensuring clean code from the start
-
-**Flow:**
-```
-Extension Created/Modified
-        ↓
-[Trigger skill-quality-reviewer]
-        ↓
-Review code against current docs
-        ↓
-Apply fixes automatically
-        ↓
-[Then proceed to validation]
-```
-
-### Secondary Triggers
-
-1. After `umbraco-skill-code-analyzer` finds issues during validation
+This agent should be spawned:
+1. After `umbraco-skill-code-analyzer` finds issues
 2. When user requests deep quality review
 3. When updating skills to match new Umbraco versions
 

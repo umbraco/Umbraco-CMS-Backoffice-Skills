@@ -28,9 +28,9 @@ Validates all SKILL.md files in the repository for broken links, missing referen
 
 ## Running the Validator
 
-### Via Slash Command
+### Via Skill
 ```
-/validate-skills
+validate-skills
 ```
 
 ### Via Script Directly (CI/CD)
