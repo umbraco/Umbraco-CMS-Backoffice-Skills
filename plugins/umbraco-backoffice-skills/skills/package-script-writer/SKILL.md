@@ -8,13 +8,19 @@ user_invocable: true
 
 Generate and run Umbraco CMS installation scripts using the `psw` CLI tool.
 
-## Prerequisites
+## Workflow
 
-Install the PSW CLI (one-time setup):
+1. **Check if PSW CLI is installed:**
+   ```bash
+   export PATH="$PATH:$HOME/.dotnet/tools" && psw --version
+   ```
 
-```bash
-dotnet tool install -g psw
-```
+2. **If not installed, install it:**
+   ```bash
+   dotnet tool install -g psw
+   ```
+
+3. **Then run the psw command** (see below)
 
 ## Non-Interactive Usage (Claude Code)
 
