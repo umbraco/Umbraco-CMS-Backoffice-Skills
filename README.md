@@ -1,8 +1,8 @@
-# Umbraco Skills Marketplace
+# Umbraco Backoffice Skills Marketplace
 
-> **Note:** This project is purely an exploration to see what the possibilities of Skills are with Umbraco. It's experimental and evolving as we learn what works best.
+> **Experimental Beta:** This project is an exploration of what's possible with Skills for Umbraco. It's evolving as we learn what works best.
 
-A Claude Code plugin marketplace with over 70 skills for Umbraco backoffice customization and testing.
+A Claude Code plugin marketplace with 66 skills for Umbraco backoffice customization and testing.
 
 ## Quick Start
 
@@ -13,47 +13,75 @@ Add the marketplace:
 
 Install the plugins:
 ```bash
-# Backoffice extension skills (57 skills)
+# Backoffice extension skills (58 skills)
 /plugin install umbraco-cms-backoffice-skills@umbraco-backoffice-marketplace
 
 # Testing skills (8 skills) - optional but recommended
 /plugin install umbraco-cms-backoffice-testing-skills@umbraco-backoffice-marketplace
 ```
 
-## Create an Umbraco Instance
-
-To test and view your extensions, you need an Umbraco instance in your project. The `umbraco-add-extension-reference` skill will automatically find this instance and register your extensions as project references.
-
-**Quick setup with PSW CodeShare:**
-
-Use [PSW CodeShare](https://psw.codeshare.co.uk/) to generate a ready-to-run Umbraco project with your preferred configuration. This tool creates a complete .NET solution with Umbraco pre-configured—just download and run.
-
-## Best Practice: Add Umbraco CMS Source Code
-
-These skills work best when Claude has access to the Umbraco CMS source code. This allows Claude to:
-- Reference actual Umbraco implementations and patterns
-- Understand types, interfaces, and base classes
-- Follow existing code conventions accurately
-
-**Recommended setup:**
-
-1. Clone the Umbraco CMS repository alongside your project:
-   ```bash
-   git clone https://github.com/umbraco/Umbraco-CMS.git
-   ```
-
-2. Add the backoffice client source as a working directory in Claude Code:
-   ```bash
-   /add-dir /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
-   ```
-
-This gives Claude direct access to the backoffice TypeScript source code, making it much more effective at generating accurate, idiomatic Umbraco extensions.
-
 ---
 
 ## Getting Started Skills
 
-These three skills are your entry points for Umbraco backoffice development. Start here.
+These skills are your entry points for Umbraco backoffice extension development. Start here.
+
+### `umbraco-quickstart` - Smart Environment Check
+
+**Start here if you're new.** This skill checks your environment and sets up what's needed automatically.
+
+It detects:
+- Whether you have an Umbraco instance
+- Any existing extensions
+- If testing skills are installed
+- If Umbraco CMS source is available (for better code generation)
+
+```bash
+/umbraco-quickstart
+```
+
+---
+
+### Manual Setup
+
+If you prefer to set things up step by step:
+
+#### 1. Create an Umbraco Instance
+
+Use the `package-script-writer` skill to create an Umbraco instance using the [PSW CLI](https://github.com/prjseal/Package-Script-Writer-CLI).
+
+```bash
+/package-script-writer MyProject
+```
+
+Thanks to Paul Seal ([@prjseal](https://github.com/prjseal)) for his hard work on the PSW CLI.
+
+#### 2. Create an Extension
+
+Use `umbraco-extension-template` to create a new extension project:
+
+```bash
+/umbraco-extension-template MyFeature
+```
+
+Or manually:
+```bash
+dotnet new install Umbraco.Templates
+dotnet new umbraco-extension -n MyExtension -ex
+cd MyExtension/Client && npm install && npm run watch
+```
+
+#### 3. Register the Extension
+
+Use `umbraco-add-extension-reference` to register your extension with the Umbraco project:
+
+```bash
+/umbraco-add-extension-reference MyExtension
+```
+
+This adds a `<ProjectReference>` to your Umbraco `.csproj` file so the extension loads.
+
+---
 
 ### `umbraco-backoffice` - The Backbone Skill
 
@@ -76,71 +104,36 @@ These three skills are your entry points for Umbraco backoffice development. Sta
 | tree-example | Settings tree with workspace | 7 skills |
 | notes-wiki | Full-stack with C# backend | 27 skills |
 
-```
-Invoke: "Use the umbraco-backoffice skill to understand the extension map"
-```
-
----
-
-### `umbraco-extension-template` - Create New Extensions
-
-**The official starting point for any extension.** Creates a fully configured project with:
-
-- .NET project structure with proper SDK configuration
-- TypeScript/Vite tooling with hot reload
-- npm scripts for development and production builds
-- Folder structure ready for extension code
-
-**Commands:**
 ```bash
-# Install template (one-time)
-dotnet new install Umbraco.Templates
-
-# Create basic extension
-dotnet new umbraco-extension -n MyExtension
-
-# Create with examples (recommended)
-dotnet new umbraco-extension -n MyExtension -ex
-
-# Install dependencies and start development
-cd MyExtension/Client && npm install && npm run watch
-```
-
-**Use this skill when:**
-- Creating a brand new backoffice extension
-- Need a properly configured TypeScript/Vite project
-- Starting from scratch (not copying from blueprints)
-
-```
-Invoke: "Use the umbraco-extension-template skill to create a new extension called MyFeature"
+/umbraco-backoffice
 ```
 
 ---
 
-### `umbraco-add-extension-reference` - Register Extensions
+## Best Practice: Add Source Code References
 
-**Required after creating any extension.** Without this step, your extension won't load.
+These skills work best when Claude has access to the Umbraco source code. This allows Claude to:
+- Reference actual Umbraco implementations and patterns
+- Understand types, interfaces, and base classes
+- Follow existing code conventions accurately
 
-This skill:
-1. Finds your main Umbraco project (the one with `Umbraco.Cms` package)
-2. Calculates the relative path to your new extension
-3. Adds a `<ProjectReference>` entry to the `.csproj` file
+**Recommended setup:**
 
-**Example result:**
-```xml
-<ItemGroup>
-  <ProjectReference Include="../MyExtension/MyExtension.csproj" />
-</ItemGroup>
-```
+1. Clone the repositories alongside your project:
+   ```bash
+   git clone https://github.com/umbraco/Umbraco-CMS.git
+   git clone https://github.com/umbraco/Umbraco.UI.git
+   ```
 
-**Use this skill when:**
-- After creating a new extension with the template
-- After copying a blueprint to your project
-- Extension exists but doesn't appear in the backoffice
+2. Add them as working directories in Claude Code:
+   ```bash
+   /add-dir /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
+   /add-dir /path/to/Umbraco.UI/packages/uui
+   ```
 
-```
-Invoke: "Use the umbraco-add-extension-reference skill to register MyExtension"
-```
+This gives Claude direct access to:
+- **Umbraco.Web.UI.Client** - Backoffice TypeScript source code
+- **UUI** - Umbraco UI component library
 
 ---
 
@@ -263,8 +256,8 @@ Complete testing pyramid for Umbraco extensions:
 
 **Critical:** E2E tests must use `@umbraco/playwright-testhelpers` and `@umbraco/json-models-builders`. Never write raw Playwright tests for Umbraco.
 
-```
-Invoke: "Use the umbraco-testing skill to understand which testing approach to use"
+```bash
+/umbraco-testing
 ```
 
 ---
@@ -295,10 +288,10 @@ Claude will automatically use the relevant skills (`umbraco-tree`, `umbraco-cond
 ## Project Structure
 
 ```
-UmbracoCMS_Skills/
+Umbraco-CMS-Backoffice-Skills/
 ├── .claude-plugin/marketplace.json     # Marketplace manifest
 ├── plugins/
-│   ├── umbraco-backoffice-skills/      # Plugin with 57 extension skills
+│   ├── umbraco-backoffice-skills/      # Plugin with 58 extension skills
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── skills/
 │   │       ├── umbraco-dashboard/SKILL.md
@@ -326,7 +319,3 @@ MIT
 Built by Phil W ([@hifi-phil](https://github.com/hifi-phil))
 
 Skills based on [Umbraco CMS](https://umbraco.com/) backoffice documentation.
-
-
-
-
