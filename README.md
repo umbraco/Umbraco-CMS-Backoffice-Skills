@@ -24,9 +24,15 @@ Install the plugins:
 
 To test and view your extensions, you need an Umbraco instance in your project. The `umbraco-add-extension-reference` skill will automatically find this instance and register your extensions as project references.
 
-**Quick setup with PSW CodeShare:**
+**Automatic setup with the `package-script-writer` skill:**
 
-Use [PSW CodeShare](https://psw.codeshare.co.uk/) to generate a ready-to-run Umbraco project with your preferred configuration. This tool creates a complete .NET solution with Umbraco pre-configured—just download and run.
+Use the `package-script-writer` skill to automatically create an Umbraco instance using the [PSW CLI](https://github.com/prjseal/Package-Script-Writer-CLI). This skill generates a complete .NET solution with Umbraco pre-configured and ready to run.
+
+```
+Invoke: "Use the package-script-writer skill to create an Umbraco instance"
+```
+
+Thanks to Paul Seal ([@prjseal](https://github.com/prjseal)) for his hard work on the PSW CLI.
 
 ## Best Practice: Add Umbraco CMS Source Code
 
