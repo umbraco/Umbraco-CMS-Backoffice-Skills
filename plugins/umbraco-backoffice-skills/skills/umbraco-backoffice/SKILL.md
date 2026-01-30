@@ -264,13 +264,6 @@ Extension Built/Loaded
 Load Skills for Validation
         ↓
 Run validate-skills
-        ↓
-┌───────────────────────────────────────┐
-│  AGENT: skill-content-fixer           │
-│  - Fix broken URLs                    │
-│  - Correct skill references           │
-│  - Update invalid paths               │
-└───────────────────────────────────────┘
 ```
 
 ### Agent Summary
@@ -279,7 +272,6 @@ Run validate-skills
 |-------|---------|---------------|
 | `umbraco-extension-reviewer` | QA review for best practices | After any umbraco-* skill generates code |
 | `skill-quality-reviewer` | Fix code patterns, imports, types | After extension build/load, before validation |
-| `skill-content-fixer` | Fix URLs, skill refs, paths | After validation finds link issues |
 
 ### Workflow Integration
 
@@ -289,6 +281,5 @@ When creating extensions, the recommended flow is:
 2. **Spawn `umbraco-extension-reviewer`** to review generated code against best practices
 3. **Spawn `skill-quality-reviewer`** if code issues need documentation-based fixes
 4. **Run `validate-skills`** to check links, code, and tests
-5. **Spawn `skill-content-fixer`** if link validation finds issues
 
 > **TIP**: The `umbraco-extension-reviewer` agent should run automatically after any umbraco-* skill generates code. This ensures extensions follow Umbraco's architecture and best practices.
