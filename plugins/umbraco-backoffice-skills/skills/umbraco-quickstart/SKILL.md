@@ -138,8 +138,8 @@ These are safe for local development and don't contain special characters that c
 ```
 
 This will:
-1. Create Umbraco instance "MyUmbracoSite" (if not exists)
-2. Create extension "MyDashboard"
+1. Create Umbraco instance (e.g. "MyUmbracoSite") if not exists
+2. Create extension (e.g. "MyDashboard")
 3. Register the extension with the Umbraco project
 4. Warn about missing CMS/UUI source if applicable
 
