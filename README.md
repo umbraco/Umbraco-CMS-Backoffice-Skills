@@ -31,7 +31,10 @@ These skills are your entry points for Umbraco backoffice extension development.
 **Start here if you're new.** Sets up everything in one command:
 
 ```bash
-# Full setup - creates Umbraco instance and extension
+# Full setup with custom credentials
+/umbraco-quickstart MyUmbracoSite MyExtension me@example.com MyPassword1234
+
+# With default credentials (admin@test.com / SecurePass1234)
 /umbraco-quickstart MyUmbracoSite MyExtension
 
 # Just instance name - will prompt for extension name
@@ -46,6 +49,7 @@ This skill will:
 2. Create an extension
 3. Register the extension with the Umbraco project
 4. Warn about missing CMS/UUI source
+5. Enter plan mode to help design your extension
 
 ---
 
