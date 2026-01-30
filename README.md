@@ -2,7 +2,7 @@
 
 > **Experimental Beta:** This project is an exploration of what's possible with Skills for Umbraco. It's evolving as we learn what works best.
 
-A Claude Code plugin marketplace with 65 skills for Umbraco backoffice customization and testing.
+A Claude Code plugin marketplace with 66 skills for Umbraco backoffice customization and testing.
 
 ## Quick Start
 
@@ -13,7 +13,7 @@ Add the marketplace:
 
 Install the plugins:
 ```bash
-# Backoffice extension skills (57 skills)
+# Backoffice extension skills (58 skills)
 /plugin install umbraco-cms-backoffice-skills@umbraco-backoffice-marketplace
 
 # Testing skills (8 skills) - optional but recommended
@@ -59,7 +59,23 @@ This gives Claude direct access to the backoffice TypeScript source code, making
 
 ## Getting Started Skills
 
-These three skills are your entry points for Umbraco backoffice development. Start here.
+These skills are your entry points for Umbraco backoffice development. Start here.
+
+### `umbraco-quickstart` - Smart Environment Check
+
+**Start here if you're new.** This skill checks your environment and guides you to the right next step.
+
+It detects:
+- Whether you have an Umbraco instance
+- Any existing extensions
+- If testing skills are installed
+- If Umbraco CMS source is available (for better code generation)
+
+```bash
+/umbraco-quickstart
+```
+
+---
 
 ### `umbraco-backoffice` - The Backbone Skill
 
@@ -324,7 +340,7 @@ Claude will automatically use the relevant skills (`umbraco-tree`, `umbraco-cond
 Umbraco-CMS-Backoffice-Skills/
 ├── .claude-plugin/marketplace.json     # Marketplace manifest
 ├── plugins/
-│   ├── umbraco-backoffice-skills/      # Plugin with 57 extension skills
+│   ├── umbraco-backoffice-skills/      # Plugin with 58 extension skills
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── skills/
 │   │       ├── umbraco-dashboard/SKILL.md
