@@ -63,7 +63,7 @@ This gives Claude direct access to the backoffice TypeScript source code, making
 
 ## Getting Started Skills
 
-These skills are your entry points for Umbraco backoffice development. Start here.
+These skills are your entry points for Umbraco backoffice extension development. Start here.
 
 ### `umbraco-quickstart` - Smart Environment Check
 
