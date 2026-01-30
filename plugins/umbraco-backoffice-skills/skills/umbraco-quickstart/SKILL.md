@@ -87,6 +87,15 @@ Check extended workspace (including `/add-dir` directories) and warn if missing:
 
 Get the user to a working extension as quickly as possible. Don't just report - take action.
 
+## Default Credentials
+
+When creating an Umbraco instance, these defaults are used:
+
+- **Email:** `admin@test.com`
+- **Password:** `SecurePass1234`
+
+These are safe for local development and don't contain special characters that cause escaping issues.
+
 ## Example
 
 ```bash
@@ -98,3 +107,5 @@ This will:
 2. Create extension "MyDashboard"
 3. Register the extension with the Umbraco project
 4. Warn about missing CMS/UUI source if applicable
+
+**Login with:** `admin@test.com` / `SecurePass1234`
