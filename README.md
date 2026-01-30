@@ -122,8 +122,13 @@ cd MyExtension/Client && npm install && npm run watch
 - Need a properly configured TypeScript/Vite project
 - Starting from scratch (not copying from blueprints)
 
+```bash
+/umbraco-extension-template MyFeature
 ```
-Invoke: "Use the umbraco-extension-template skill to create a new extension called MyFeature"
+
+Or ask Claude directly:
+```
+"Create a new Umbraco extension called MyFeature"
 ```
 
 ---
@@ -149,8 +154,13 @@ This skill:
 - After copying a blueprint to your project
 - Extension exists but doesn't appear in the backoffice
 
+```bash
+/umbraco-add-extension-reference MyExtension
 ```
-Invoke: "Use the umbraco-add-extension-reference skill to register MyExtension"
+
+Or ask Claude directly:
+```
+"Register MyExtension with my Umbraco project"
 ```
 
 ---
@@ -274,8 +284,13 @@ Complete testing pyramid for Umbraco extensions:
 
 **Critical:** E2E tests must use `@umbraco/playwright-testhelpers` and `@umbraco/json-models-builders`. Never write raw Playwright tests for Umbraco.
 
+```bash
+/umbraco-testing
 ```
-Invoke: "Use the umbraco-testing skill to understand which testing approach to use"
+
+Or ask Claude directly:
+```
+"Which testing approach should I use for my Umbraco extension?"
 ```
 
 ---
