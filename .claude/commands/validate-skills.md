@@ -1,8 +1,7 @@
 ---
-name: validate-skills
 description: Validate links, code examples, and references in all SKILL.md files
-version: 1.0.0
 allowed-tools: Bash, Read, Glob, Task, AskUserQuestion, Edit
+arg-hints: --skip-tests
 ---
 
 # Validate Skills
@@ -13,23 +12,6 @@ Run validation on all SKILL.md files to check:
 3. **Tests** - Run unit, mocked, and E2E tests from skill examples
 
 ## Workflow
-
-### Phase 0: Load Skills (Pre-Validation)
-
-**Load all available skills before validation begins:**
-
-```bash
-# Discover all SKILL.md files
-find plugins -name "SKILL.md" -type f | wc -l
-
-# List skill names for validation
-find plugins -name "SKILL.md" -exec dirname {} \; | xargs -I {} basename {}
-```
-
-This step ensures all skills are indexed and available for:
-- Cross-reference validation (skill refs like `umbraco-dashboard`)
-- Import path validation against known modules
-- Extension type validation against known types
 
 ### Phase 1: Link Validation (Fast)
 
@@ -150,6 +132,13 @@ If issues found, use AskUserQuestion:
 
 Only execute fixes the user explicitly approves.
 
+## Agents
+
+| Agent | Purpose | When to Spawn |
+|-------|---------|---------------|
+| `skill-content-fixer` | Suggests fixes for broken links | After link validation finds issues |
+| `skill-quality-reviewer` | Deep code review against docs | After code analysis or on user request |
+
 ## Environment Variables
 
 | Variable | Default | Description |
@@ -173,16 +162,15 @@ All validators save JSON reports to the project root:
 
 **You MUST execute all phases in order (unless user specifies otherwise):**
 
-1. **Phase 0**: Load skills (discover all SKILL.md files for validation)
-2. **Phase 1 + 2**: Run Link Validation and Code Analysis in parallel
-3. **Phase 3**: Run Tests - unless user passes `--skip-tests`
-4. **Phase 4**: Read all JSON reports
-5. **Phase 5**: Present the combined report to the user
-6. **Phase 6-7**: If issues found, ask user about fixes and execute
+1. Run Phase 1 (Link Validation) and Phase 2 (Code Analysis) in parallel
+2. Run Phase 3 (Tests) - unless user passes `--skip-tests`
+3. Read all JSON reports (2 or 3 depending on whether tests ran)
+4. Present the combined report to the user
+5. If issues found, ask user about fixes
 
 **Options:**
-- `validate-skills` - Run all phases including tests
-- `validate-skills --skip-tests` - Skip Phase 3 (tests), only run link and code validation
+- `/validate-skills` - Run all phases including tests
+- `/validate-skills --skip-tests` - Skip Phase 3 (tests), only run link and code validation
 
 **For Phase 3 (Tests)**, use these environment variables:
 ```bash
