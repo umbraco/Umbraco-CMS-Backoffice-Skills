@@ -110,26 +110,30 @@ This adds a `<ProjectReference>` to your Umbraco `.csproj` file so the extension
 
 ---
 
-## Best Practice: Add Umbraco CMS Source Code
+## Best Practice: Add Source Code References
 
-These skills work best when Claude has access to the Umbraco CMS source code. This allows Claude to:
+These skills work best when Claude has access to the Umbraco source code. This allows Claude to:
 - Reference actual Umbraco implementations and patterns
 - Understand types, interfaces, and base classes
 - Follow existing code conventions accurately
 
 **Recommended setup:**
 
-1. Clone the Umbraco CMS repository alongside your project:
+1. Clone the repositories alongside your project:
    ```bash
    git clone https://github.com/umbraco/Umbraco-CMS.git
+   git clone https://github.com/umbraco/Umbraco.UI.git
    ```
 
-2. Add the backoffice client source as a working directory in Claude Code:
+2. Add them as working directories in Claude Code:
    ```bash
    /add-dir /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
+   /add-dir /path/to/Umbraco.UI/packages/uui
    ```
 
-This gives Claude direct access to the backoffice TypeScript source code, making it much more effective at generating accurate, idiomatic Umbraco extensions.
+This gives Claude direct access to:
+- **Umbraco.Web.UI.Client** - Backoffice TypeScript source code
+- **UUI** - Umbraco UI component library
 
 ---
 
