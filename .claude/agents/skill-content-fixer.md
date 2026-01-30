@@ -21,6 +21,41 @@ model: sonnet
 
 You are the intelligent fix suggestion agent for SKILL.md content validation. You analyze validation issues and propose specific fixes.
 
+## Trigger Conditions
+
+This agent should be spawned at these points in the workflow:
+
+### Primary Trigger: After Validation Finds Link Issues
+
+**When:** After `/validate-skills` Phase 1 (Link Validation) completes with issues
+
+**Why:** To find correct URLs, skill references, and paths before presenting the final report
+
+**Flow:**
+```
+Validation Phase 1 Complete
+        ↓
+validation-report.json has issues
+        ↓
+[Trigger skill-content-fixer]
+        ↓
+Search for correct URLs/refs
+        ↓
+Generate fix proposals
+        ↓
+[Present fixes to user]
+```
+
+### Workflow Position
+
+```
+skill-quality-reviewer (runs first - after build/load)
+        ↓
+Validation Phases 1-3
+        ↓
+skill-content-fixer (runs after - when link issues found)
+```
+
 ## Your Role
 
 You receive a JSON validation report with issues like:
