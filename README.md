@@ -20,45 +20,6 @@ Install the plugins:
 /plugin install umbraco-cms-backoffice-testing-skills@umbraco-backoffice-marketplace
 ```
 
-Then run `/umbraco-quickstart` to check your environment and get guidance on next steps.
-
----
-
-## Create an Umbraco Instance
-
-To test and view your extensions, you need an Umbraco instance in your project. The `umbraco-add-extension-reference` skill will automatically find this instance and register your extensions as project references.
-
-**Automatic setup with the `package-script-writer` skill:**
-
-Use the `package-script-writer` skill to automatically create an Umbraco instance using the [PSW CLI](https://github.com/prjseal/Package-Script-Writer-CLI). This skill generates a complete .NET solution with Umbraco pre-configured and ready to run.
-
-```bash
-/package-script-writer MyProject
-```
-
-Thanks to Paul Seal ([@prjseal](https://github.com/prjseal)) for his hard work on the PSW CLI.
-
-## Best Practice: Add Umbraco CMS Source Code
-
-These skills work best when Claude has access to the Umbraco CMS source code. This allows Claude to:
-- Reference actual Umbraco implementations and patterns
-- Understand types, interfaces, and base classes
-- Follow existing code conventions accurately
-
-**Recommended setup:**
-
-1. Clone the Umbraco CMS repository alongside your project:
-   ```bash
-   git clone https://github.com/umbraco/Umbraco-CMS.git
-   ```
-
-2. Add the backoffice client source as a working directory in Claude Code:
-   ```bash
-   /add-dir /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
-   ```
-
-This gives Claude direct access to the backoffice TypeScript source code, making it much more effective at generating accurate, idiomatic Umbraco extensions.
-
 ---
 
 ## Getting Started Skills
@@ -165,6 +126,43 @@ This skill:
 ```bash
 /umbraco-add-extension-reference MyExtension
 ```
+
+---
+
+## Create an Umbraco Instance
+
+To test and view your extensions, you need an Umbraco instance in your project. The `umbraco-add-extension-reference` skill will automatically find this instance and register your extensions as project references.
+
+**Automatic setup with the `package-script-writer` skill:**
+
+Use the `package-script-writer` skill to automatically create an Umbraco instance using the [PSW CLI](https://github.com/prjseal/Package-Script-Writer-CLI). This skill generates a complete .NET solution with Umbraco pre-configured and ready to run.
+
+```bash
+/package-script-writer MyProject
+```
+
+Thanks to Paul Seal ([@prjseal](https://github.com/prjseal)) for his hard work on the PSW CLI.
+
+## Best Practice: Add Umbraco CMS Source Code
+
+These skills work best when Claude has access to the Umbraco CMS source code. This allows Claude to:
+- Reference actual Umbraco implementations and patterns
+- Understand types, interfaces, and base classes
+- Follow existing code conventions accurately
+
+**Recommended setup:**
+
+1. Clone the Umbraco CMS repository alongside your project:
+   ```bash
+   git clone https://github.com/umbraco/Umbraco-CMS.git
+   ```
+
+2. Add the backoffice client source as a working directory in Claude Code:
+   ```bash
+   /add-dir /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
+   ```
+
+This gives Claude direct access to the backoffice TypeScript source code, making it much more effective at generating accurate, idiomatic Umbraco extensions.
 
 ---
 
