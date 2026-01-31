@@ -18,6 +18,7 @@ Reference skill containing validation checks for manual browser testing of Umbra
 | Navigation | `navigation-checks.md` | VN-1 to VN-3 |
 | API Debugging | `api-debugging-checks.md` | VA-1 to VA-3 |
 | Form Controls | `form-control-checks.md` | VF-1 to VF-2 |
+| Workspace | `workspace-checks.md` | VW-1 to VW-3 |
 
 ## Quick Reference
 
@@ -37,6 +38,10 @@ Reference skill containing validation checks for manual browser testing of Umbra
 | **Form Controls** |||
 | VF-1 | Select/Combobox Behavior | Select not populating and causing 400 errors |
 | VF-2 | Input Binding Issues | Values not updating or saving |
+| **Workspace** |||
+| VW-1 | Missing Save Button | Editable workspace has no Save button |
+| VW-2 | Data Not Loading | Workspace opens but shows empty values |
+| VW-3 | Submit Not Working | Save clicked but nothing happens |
 
 ## Usage
 
@@ -50,6 +55,8 @@ Read all check files when validating a new extension, or focus on specific categ
 | "API not working" | api-debugging-checks |
 | "Form doesn't work" | form-control-checks |
 | "Tree issues" | navigation-checks |
+| "Workspace issues" | workspace-checks |
+| "No Save button" | workspace-checks |
 
 ## Validation Workflow
 
