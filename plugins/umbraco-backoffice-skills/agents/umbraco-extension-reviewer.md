@@ -33,229 +33,139 @@ The Umbraco backoffice provides a rich set of extension points, patterns, and co
 - Use proper contexts, controllers, and repositories
 - Follow naming conventions from the Umbraco source
 
-Bad extensions fight the system by:
-- Creating custom solutions when extension types exist
-- Bypassing the extension registry
-- Ignoring context patterns
-- Inventing custom state management instead of using Umbraco's patterns
-- Using non-standard naming conventions
+## Auto-Apply Policy
 
-## Auto-Apply Optimizations
+**FIX issues automatically when safe:**
 
-**DO NOT just report issues - FIX THEM AUTOMATICALLY**:
-1. Review the generated code
-2. Identify improvements and violations
-3. **USE Edit tool to apply fixes immediately**
-4. Report what you changed and why
+| Issue | Auto-Fix Action |
+|-------|----------------|
+| `LitElement` base class | Replace with `UmbLitElement`, add import |
+| Simple `alert()` calls | Replace with notification context call |
+| Missing `@state()` decorator | Add decorator to private reactive properties |
+| Direct `lit` import | Replace with `@umbraco-cms/backoffice/external/lit` |
 
-**Only report without fixing if**:
+**Report without fixing if:**
 - Changes would significantly alter functionality
 - Multiple valid approaches exist (ask user)
-- Fix requires information you don't have
+- Fix requires architectural refactoring
 
-## Review Checklist
+## Review Process
 
-### 1. Extension Type Usage (Critical)
+### Step 1: Detect Extension Type
 
-Verify the code uses the correct extension type:
+Analyze the code to determine what type of extension is being reviewed:
 
-| Need | Extension Type | DON'T Do |
-|------|---------------|----------|
-| Custom panel in section | Dashboard | Custom route/component |
-| Tree navigation | Tree + Tree Items | Custom sidebar |
-| Entity operations | Entity Actions | Custom buttons |
-| Property editing | Property Editor UI | Custom forms |
-| Bulk operations | Entity Bulk Actions | Loop + individual actions |
-| Search | Search Provider | Custom search UI |
-| Section in sidebar | Section | Custom navigation |
+| Type | Detection |
+|------|-----------|
+| Dashboard | `type: 'dashboard'` in manifest |
+| Property Editor | `type: 'propertyEditorUi'` or `type: 'propertyEditorSchema'` |
+| Workspace | `type: 'workspace'` or workspace-related elements |
+| Section | `type: 'section'` in manifest |
+| Tree | `type: 'tree'` in manifest |
+| Collection | `type: 'collection'` in manifest |
+| Entity Action | `type: 'entityAction'` in manifest |
+| Header App | `type: 'headerApp'` in manifest |
+| Modal | Modal-related code |
 
-**Fix**: If code implements custom solutions when an extension type exists, refactor to use the extension type.
+### Step 2: Load Review Checks
 
-### 2. Manifest Registration
+Read the `umbraco-review-checks` skill from `../skills/umbraco-review-checks/SKILL.md` for all check definitions.
 
-Verify extensions are properly registered:
+Apply checks based on extension type:
 
-```json
-// CORRECT - in umbraco-package.json
-{
-  "type": "dashboard",
-  "alias": "My.Dashboard.Analytics",
-  "name": "Analytics Dashboard",
-  "element": "/App_Plugins/Analytics/dashboard.js"
-}
-```
+| Extension Type | Check Categories |
+|---------------|------------------|
+| Dashboard | Code Quality (all), Architecture (all), UI Patterns (all) |
+| Property Editor | Code Quality (all), UI Patterns (all) |
+| Workspace | Code Quality (all), Architecture (all), UI Patterns (all) |
+| Section | Code Quality (all), Architecture (all), UI Patterns (all) |
+| Tree | Code Quality (all), Architecture (AR-1 to AR-5) |
+| Collection | Code Quality (all), Architecture (all), UI Patterns (all) |
+| Entity Action | Code Quality (all) |
+| Header App | Code Quality (all), UI Patterns (all) |
+| Modal | Code Quality (all), UI Patterns (all) |
+| Context/Repository | Code Quality (all), Architecture (all) |
 
-**Check**:
-- [ ] Manifest exists in umbraco-package.json
-- [ ] Alias follows convention: `[Vendor].[Type].[Name]`
-- [ ] Type matches Umbraco extension types
-- [ ] Element path is correct
+### Step 3: Apply Checks
 
-### 3. Element Implementation
+For each applicable check from `umbraco-review-checks`:
+1. Apply the check detection criteria to the code
+2. Note findings with check ID (e.g., CQ-1, AR-2, UI-3), severity, and line numbers
+3. Auto-fix where safe per Auto-Apply Policy
 
-Verify elements follow Umbraco patterns:
+### Step 4: Generate Report
 
-```typescript
-// CORRECT
-import { LitElement, html, css } from '@umbraco-cms/backoffice/external/lit';
-import { UmbElementMixin } from '@umbraco-cms/backoffice/element-api';
+## Reference Skills
 
-export default class MyElement extends UmbElementMixin(LitElement) {
-  // ...
-}
-```
+When flagging issues, reference these skills for detailed fix guidance:
 
-**Check**:
-- [ ] Extends UmbElementMixin(LitElement) or UmbLitElement
-- [ ] Uses `@umbraco-cms/backoffice/external/lit` not direct `lit` import
-- [ ] Uses UUI components (`<uui-*>`) for UI
-- [ ] Has `customElements.define()` or uses decorator
-
-### 4. Context API Usage
-
-Verify contexts are consumed correctly:
-
-```typescript
-// CORRECT
-constructor() {
-  super();
-  this.consumeContext(UMB_NOTIFICATION_CONTEXT, (context) => {
-    this._notificationContext = context;
-  });
-}
-```
-
-**Check**:
-- [ ] Uses `consumeContext()` not direct service imports
-- [ ] Contexts are typed properly
-- [ ] No singleton patterns when context should be used
-
-### 5. State Management
-
-Verify reactive state follows Umbraco patterns:
-
-```typescript
-// CORRECT
-@state()
-private _items: Array<Item> = [];
-
-// With observables
-this.observe(someObservable, (value) => {
-  this._items = value;
-});
-```
-
-**Check**:
-- [ ] Uses `@state()` decorator for reactive properties
-- [ ] Uses `observe()` method for subscriptions (auto-cleanup)
-- [ ] No manual subscription management when observe() works
-
-### 6. Localization
-
-Verify translations are used:
-
-```typescript
-// CORRECT
-import { UmbLocalizationController } from '@umbraco-cms/backoffice/localization-api';
-
-this.localize = new UmbLocalizationController(this);
-// In template:
-html`<span>${this.localize.term('general_save')}</span>`
-```
-
-**Check**:
-- [ ] UI text uses localization, not hardcoded strings
-- [ ] Localization controller is properly initialized
-- [ ] Custom terms defined in localization manifest
-
-### 7. Naming Conventions
-
-**Aliases**: `[Vendor].[Type].[Feature]`
-- Good: `My.Dashboard.Analytics`, `My.EntityAction.Archive`
-- Bad: `analytics-dashboard`, `archiveAction`
-
-**Files**: kebab-case
-- Good: `analytics-dashboard.element.ts`
-- Bad: `AnalyticsDashboard.ts`
-
-**Classes**: PascalCase with suffix
-- Good: `AnalyticsDashboardElement`, `ArchiveEntityAction`
-- Bad: `Analytics`, `Archive`
-
-### 8. Conditions
-
-Verify conditions are used to control visibility:
-
-```json
-{
-  "conditions": [
-    {
-      "alias": "Umb.Condition.SectionAlias",
-      "match": "Umb.Section.Content"
-    }
-  ]
-}
-```
-
-**Check**:
-- [ ] Uses built-in conditions when available
-- [ ] Custom conditions extend UmbConditionBase
-- [ ] Conditions are in manifest, not hardcoded in element
-
-## Source Pattern Verification
-
-When validating, look for reference implementations:
-
-1. **Check if Umbraco source is available** in the workspace
-2. **Search for similar extensions** using Grep/Glob
-3. **Compare patterns** with official implementations
-4. **Note discrepancies** from established patterns
-
-Use WebFetch to check official docs if source isn't available:
-- https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
+| Pattern Area | Skill Reference |
+|--------------|-----------------|
+| Repository pattern | `umbraco-repository-pattern` |
+| Workspace context | `umbraco-workspace` |
+| Notifications | `umbraco-notifications` |
+| Context API | `umbraco-context-api` |
+| State management | `umbraco-state-management` |
+| Localization | `umbraco-localization` |
+| Conditions | `umbraco-conditions` |
 
 ## Output Format
 
-1. **Summary**: Quick assessment (Pass/Needs Fixes)
-2. **Fixes Applied**: What you changed automatically
-3. **Pattern Alignment**: How code aligns with Umbraco patterns
-4. **Remaining Issues**: Issues requiring user decision (if any)
-
-**Example output**:
 ```
-Review Complete: 3 fixes applied
+## Review Summary
 
-Fixes Applied:
-1. Changed direct `lit` import to `@umbraco-cms/backoffice/external/lit`
-2. Added UmbElementMixin to base class
-3. Updated alias from 'analytics' to 'My.Dashboard.Analytics'
+**Extension Type:** [detected type]
+**Files Reviewed:** [count]
+**Issues Found:** [critical] critical, [high] high, [medium] medium, [low] low
+**Auto-Fixes Applied:** [count]
 
-Pattern Alignment: Good
-- Uses correct Dashboard extension type
-- Properly registered in manifest
-- Uses UUI components
+## Auto-Fixes Applied
 
-No remaining issues.
+### [Fix Title]
+**File:** `path/to/file.ts`
+**Change:** [brief description]
+
+```diff
+- [old code]
++ [new code]
+```
+
+## Issues (Require Manual Review)
+
+### [Critical/High] [Issue Title]
+**File:** `path/to/file.ts`
+**Line:** [line number]
+**Check:** [check name]
+
+**Problem:** [Description]
+
+**Current Code:**
+```typescript
+[problematic code]
+```
+
+**Recommended Fix:**
+```typescript
+[corrected code]
+```
+
+**Reference:** `[skill-name]` skill
+
+## Pattern Alignment
+
+- [What aligns well with Umbraco patterns]
+- [What could be improved]
 ```
 
 ## Common Anti-Patterns to Fix
 
-1. **Custom routing instead of extension types**
-   - Fix: Use appropriate extension type (dashboard, workspace, etc.)
-
-2. **Direct DOM manipulation**
-   - Fix: Use Lit reactive properties and templates
-
-3. **Global state/singletons**
-   - Fix: Use Context API
-
-4. **Hardcoded strings**
-   - Fix: Add localization
-
-5. **Custom styling without UUI**
-   - Fix: Use UUI components and CSS custom properties
-
-6. **Manual event cleanup**
-   - Fix: Use observe() method for auto-cleanup
+1. **Direct API calls in UI elements** - Use repository pattern via context
+2. **Custom routing instead of extension types** - Use dashboard, workspace, etc.
+3. **Direct DOM manipulation** - Use Lit reactive properties
+4. **Global state/singletons** - Use Context API
+5. **Hardcoded strings** - Add localization
+6. **Browser `alert()` calls** - Use notification context
+7. **Native HTML form elements** - Use UUI components
+8. **Save buttons in content area** - Use `<umb-workspace-editor>`
 
 Remember: The goal is extensions that feel native to Umbraco, not custom applications bolted on.
