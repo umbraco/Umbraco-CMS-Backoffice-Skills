@@ -68,6 +68,31 @@ html`<uui-select .options=${this._options} @change=${this.#onChange}></uui-selec
 <uui-select .options=${this._options}>
 ```
 
+**Anti-pattern: Child elements do NOT work:**
+
+Unlike native HTML `<select>`, the `uui-select` component does **not** support child elements for options. This is a common mistake that results in an empty dropdown and 400 errors when the form submits with null/undefined values.
+
+```typescript
+// WRONG - child elements do NOT work
+html`
+  <uui-select>
+    <uui-option value="draft">Draft</uui-option>
+    <uui-option value="published">Published</uui-option>
+  </uui-select>
+`
+
+// CORRECT - use .options property
+html`
+  <uui-select
+    .options=${[
+      { name: 'Draft', value: 'draft' },
+      { name: 'Published', value: 'published' },
+    ]}
+    @change=${this.#onChange}
+  ></uui-select>
+`
+```
+
 ---
 
 ## VF-2: Input Binding Issues
