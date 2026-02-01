@@ -330,3 +330,12 @@ MIT
 Built by Phil W ([@hifi-phil](https://github.com/hifi-phil))
 
 Skills based on [Umbraco CMS](https://umbraco.com/) backoffice documentation.
+
+### Example Attribution
+
+The **TimeDashboard** and **tree-example** examples are based on work by Kevin Jump ([@KevinJump](https://github.com/KevinJump)):
+- **TimeDashboard:** [KevinJump/TimeDashboard](https://github.com/KevinJump/TimeDashboard)
+- **tree-example:** [KevinJump/Umbraco-Tree-Example](https://github.com/KevinJump/Umbraco-Tree-Example)
+- **Blog Series:** [Early Adopter's Guide to Umbraco v14](https://dev.to/kevinjump/series/26505)
+
+These examples demonstrate sections, trees, workspaces, menus, header apps, modals, and server communication patterns for Umbraco backoffice extensions.
