@@ -129,25 +129,13 @@ When the user describes what they want:
    - [ ] Run `npm run build` - must compile without errors
    - [ ] Spawn `umbraco-extension-reviewer` agent for code review
    - [ ] Fix all High/Medium severity issues
+   - [ ] ALWAYS restart Umbraco instance before testing
    - [ ] Browser test: extension loads, UI renders, interactions work
    ```
 6. Exit plan mode only when wireframe AND validation steps are in the plan
 
 **⚠️ Do NOT generate code until planning is complete and approved by the user.**
 
-### 6. Build the Extension
-
-Use the identified sub-skills to generate code.
-
-### 7. MANDATORY: Post-Build Validation
-
-After ALL code generation is complete:
-
-1. **Run `npm run build`** - must compile without errors
-2. **Spawn `umbraco-extension-reviewer` agent** - MANDATORY code review
-3. Fix any High/Medium severity issues automatically
-4. **ALWAYS** restart Umbraco instance before testing
-5. Guide user through browser testing per POST-BUILD-VALIDATION.md
 
 ## Goal
 
