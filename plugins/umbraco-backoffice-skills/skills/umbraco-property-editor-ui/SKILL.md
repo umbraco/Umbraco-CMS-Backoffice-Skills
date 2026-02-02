@@ -1,7 +1,7 @@
 ---
 name: umbraco-property-editor-ui
 description: Implement property editor UIs in Umbraco backoffice using official docs
-version: 1.1.0
+version: 1.2.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -208,29 +208,11 @@ These built-in schemas are always available:
 
 ## Troubleshooting
 
-### 404 Error When Creating Data Type
+See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for common issues including:
+- 404 errors when creating Data Types
+- Values not persisting with `Umbraco.Plain.Json`
 
-**Symptom:** Data Type fails to save, browser DevTools shows 404 when fetching schema.
-
-**Cause:** The `propertyEditorSchemaAlias` references a schema that doesn't exist on the server.
-
-**Solution:**
-1. **Use a built-in schema** (recommended) - Change to `Umbraco.Plain.String`, `Umbraco.Integer`, etc.
-2. **Create a C# DataEditor** - If you need custom behavior, implement the schema server-side:
-
-```csharp
-[DataEditor(
-    alias: "MyPackage.CustomSchema",
-    ValueType = ValueTypes.Integer)]
-public class MyCustomPropertyEditor : DataEditor
-{
-    public MyCustomPropertyEditor(IDataValueEditorFactory dataValueEditorFactory)
-        : base(dataValueEditorFactory)
-    { }
-}
-```
-
-See skill: `umbraco-property-editor-schema` for full details on creating custom schemas.
+See [UUI-GOTCHAS.md](./UUI-GOTCHAS.md) for UUI component issues (combobox, input, etc.).
 
 ---
 
