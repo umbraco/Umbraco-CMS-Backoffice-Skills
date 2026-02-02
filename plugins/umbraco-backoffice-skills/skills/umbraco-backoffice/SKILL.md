@@ -47,6 +47,19 @@ For details on individual extension types, invoke the referenced sub-skills.
 **If you skip validation**: Bugs WILL reach the user.
 
 This workflow applies whether invoked via `/umbraco-quickstart` or directly.
+=======
+**CRITICAL**: Follow this workflow for ALL extension development:
+
+```
+1. PLAN ──► Read PRE-BUILD-PLANNING.md, draw wireframes, identify extension types
+      ↓
+2. BUILD ──► Use examples and sub-skills to create extension
+      ↓
+3. VALIDATE ──► Read POST-BUILD-VALIDATION.md, run umbraco-extension-reviewer
+```
+
+- **Never skip planning** - Wireframes prevent building the wrong extension type
+- **Never skip validation** - The reviewer catches issues before they reach users
 
 ---
 
