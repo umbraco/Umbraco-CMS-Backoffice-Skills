@@ -146,7 +146,8 @@ After ALL code generation is complete:
 1. **Run `npm run build`** - must compile without errors
 2. **Spawn `umbraco-extension-reviewer` agent** - MANDATORY code review
 3. Fix any High/Medium severity issues automatically
-4. Guide user through browser testing per POST-BUILD-VALIDATION.md
+4. **ALWAYS** restart Umbraco instance before testing
+5. Guide user through browser testing per POST-BUILD-VALIDATION.md
 
 ## Goal
 
