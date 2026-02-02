@@ -1,6 +1,7 @@
 ---
 name: umbraco-quickstart
 description: Quick setup for Umbraco extension development - creates instance, extension, and registers it
+version: 1.1.0
 argument-hint: "[UmbracoProjectName] [ExtensionName] [--email admin@example.com] [--password Admin123456]"
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 user_invocable: true
@@ -119,21 +120,48 @@ When the user describes what they want:
    - Identify UUI components
    - Map data flow (contexts, APIs)
 3. Identify which sub-skills to invoke
-4. **Include a "Pre-Build Validation" section in the plan:**
-    Load `/umbraco-backoffice` skill
-   - This ensures best practice and examples are available during the build phase
-5. **Include a "Post-Build Validation" section in the plan:**
-   ```markdown
-   ## Post-Build Validation (REQUIRED)
+4. **Include these MANDATORY sections in the plan document** (they will be actioned after plan approval):
 
-   After implementation is complete:
-   - [ ] Run `npm run build` - must compile without errors
-   - [ ] Spawn `umbraco-extension-reviewer` agent for code review
-   - [ ] Fix all High/Medium severity issues
-   - [ ] ALWAYS restart Umbraco instance before testing
-   - [ ] Browser test: extension loads, UI renders, interactions work
-   ```
-6. Exit plan mode only when wireframe AND validation steps are in the plan
+```markdown
+## Pre-Build Setup
+- [ ] Load `/umbraco-backoffice` skill for best practices and examples
+
+## Implementation
+[Your implementation steps here - skills to invoke, files to create]
+
+## Post-Build Validation (REQUIRED - DO NOT SKIP)
+
+### Step 1: Initial Build
+- [ ] Run `npm run build` in extension directory
+- [ ] Verify build completes without errors
+
+### Step 2: Code Review
+- [ ] Spawn `umbraco-extension-reviewer` agent
+- [ ] Fix all Critical/High severity issues
+
+### Step 3: Rebuild (if fixes were made)
+- [ ] Run `npm run build` again
+- [ ] Verify build still succeeds
+
+### Step 4: Restart Umbraco
+- [ ] Stop the running Umbraco instance
+- [ ] Run `dotnet run` to restart
+- [ ] Wait for startup to complete
+
+### Step 5: Browser Validation
+Check if browser automation is available (any of: `dev-browser` skill, Playwright MCP, Claude computer use).
+
+If browser automation IS available:
+- [ ] Navigate to backoffice login (http://localhost:5000/umbraco)
+- [ ] Login with credentials
+- [ ] Navigate to extension location
+- [ ] Verify: no console errors, UI renders, interactions work
+- [ ] Take screenshot of working extension
+
+If NO browser automation available, output manual testing steps for user.
+```
+
+5. Exit plan mode only when wireframe AND all validation sections are in the plan
 
 **⚠️ Do NOT generate code until planning is complete and approved by the user.**
 
@@ -162,8 +190,12 @@ This will:
 2. Create extension (e.g. "MyDashboard")
 3. Register the extension with the Umbraco project
 4. Warn about missing CMS/UUI source if applicable
-5. Enter plan mode to design the extension (wireframe, extension types)
+5. Enter plan mode to design the extension (wireframe, extension types, validation steps)
 6. Build using identified sub-skills
-7. Validate with npm build + umbraco-extension-reviewer
+7. Run `npm run build`
+8. Run `umbraco-extension-reviewer` and fix issues
+9. Rebuild if fixes were made
+10. Restart Umbraco
+11. Browser validation (automatic if browser automation available, manual steps otherwise)
 
 **Login with:** `admin@test.com` / `SecurePass1234`
