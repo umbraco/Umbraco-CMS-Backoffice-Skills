@@ -1,6 +1,7 @@
 ---
 name: umbraco-quickstart
 description: Quick setup for Umbraco extension development - creates instance, extension, and registers it
+version: 1.1.0
 argument-hint: "[UmbracoProjectName] [ExtensionName] [--email admin@example.com] [--password Admin123456]"
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 user_invocable: true
