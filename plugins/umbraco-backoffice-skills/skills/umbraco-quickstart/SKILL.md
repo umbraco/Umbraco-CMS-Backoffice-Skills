@@ -119,7 +119,9 @@ When the user describes what they want:
    - Identify UUI components
    - Map data flow (contexts, APIs)
 3. Identify which sub-skills to invoke
-4. **Include a "Post-Build Validation" section in the plan:**
+4. **The first step of the implementation plan MUST be:** Load `/umbraco-backoffice` skill
+   - This ensures blueprints and examples are available during the build phase
+5. **Include a "Post-Build Validation" section in the plan:**
    ```markdown
    ## Post-Build Validation (REQUIRED)
 
@@ -129,7 +131,7 @@ When the user describes what they want:
    - [ ] Fix all High/Medium severity issues
    - [ ] Browser test: extension loads, UI renders, interactions work
    ```
-5. Exit plan mode only when wireframe AND validation steps are in the plan
+6. Exit plan mode only when wireframe AND validation steps are in the plan
 
 **⚠️ Do NOT generate code until planning is complete and approved by the user.**
 
