@@ -119,7 +119,10 @@ When the user describes what they want:
    - Identify UUI components
    - Map data flow (contexts, APIs)
 3. Identify which sub-skills to invoke
-4. **Include a "Post-Build Validation" section in the plan:**
+4. **Include a "Pre-Build Validation" section in the plan:**
+    Load `/umbraco-backoffice` skill
+   - This ensures best practice and examples are available during the build phase
+5. **Include a "Post-Build Validation" section in the plan:**
    ```markdown
    ## Post-Build Validation (REQUIRED)
 
@@ -127,24 +130,13 @@ When the user describes what they want:
    - [ ] Run `npm run build` - must compile without errors
    - [ ] Spawn `umbraco-extension-reviewer` agent for code review
    - [ ] Fix all High/Medium severity issues
+   - [ ] ALWAYS restart Umbraco instance before testing
    - [ ] Browser test: extension loads, UI renders, interactions work
    ```
-5. Exit plan mode only when wireframe AND validation steps are in the plan
+6. Exit plan mode only when wireframe AND validation steps are in the plan
 
 **⚠️ Do NOT generate code until planning is complete and approved by the user.**
 
-### 6. Build the Extension
-
-Use the identified sub-skills to generate code.
-
-### 7. MANDATORY: Post-Build Validation
-
-After ALL code generation is complete:
-
-1. **Run `npm run build`** - must compile without errors
-2. **Spawn `umbraco-extension-reviewer` agent** - MANDATORY code review
-3. Fix any High/Medium severity issues automatically
-4. Guide user through browser testing per POST-BUILD-VALIDATION.md
 
 ## Goal
 
