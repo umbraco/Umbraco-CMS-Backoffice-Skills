@@ -21,7 +21,7 @@ Generate and run Umbraco CMS installation scripts using the `psw` CLI tool.
 
 2. **If not installed, install it:**
    ```bash
-   dotnet tool install -g psw
+   dotnet tool install --global PackageScriptWriter.Cli
    ```
 
 3. **Then run the psw command** (see below)
