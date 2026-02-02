@@ -9,7 +9,7 @@ allowed-tools: Read, Write, Edit, WebFetch
 # Umbraco Property Editor UI
 
 ## What is it?
-A Property Editor UI is the visual component that users interact with in the Umbraco backoffice to input and manage content data. It's one half of a property editor (paired with a Property Editor Schema). The UI renders the editing interface and handles user interaction, while connecting to a schema that defines how data is stored and processed server-side.
+A Property Editor UI is the visual component that users interact with in the Umbraco backoffice to input and manage content data. It's one half of a property editor - the UI (client-side TypeScript) pairs with a Schema (server-side C#) that defines data storage.
 
 ## Documentation
 Always fetch the latest docs before implementing:
@@ -49,6 +49,10 @@ This example demonstrates a complete property editor UI implementation with conf
 ## Minimal Examples
 
 ### Manifest (umbraco-package.json)
+
+> **WARNING:** The `propertyEditorSchemaAlias` below uses `Umbraco.Plain.String`, a built-in schema.
+> If you use a custom alias like `MyPackage.CustomSchema`, you MUST have a corresponding C# `DataEditor` on the server or you'll get a **404 error** when creating a Data Type.
+
 ```json
 {
   "name": "My Property Editor",
@@ -177,12 +181,57 @@ export default class MyEditorElement extends UmbElementMixin(LitElement) impleme
 }
 ```
 
-## Common Schema Aliases
+## Built-in Schema Aliases (Safe Defaults)
 
-- `Umbraco.Plain.String` - Simple string storage
-- `Umbraco.Plain.Integer` - Integer storage
-- `Umbraco.Plain.Json` - JSON object storage
-- `Umbraco.TextBox` - Textbox with validation
-- `Umbraco.TextArea` - Multi-line text
+The `propertyEditorSchemaAlias` in your manifest must reference a schema that exists **on the server**:
+
+| Part | Location | Language |
+|------|----------|----------|
+| Property Editor UI | Client | TypeScript |
+| Property Editor Schema | Server | C# |
+
+- **Built-in schemas** (listed below) are always available - use these for simple storage needs
+- **Custom schemas** require a C# `DataEditor` class - only needed for custom validation/conversion
+
+These built-in schemas are always available:
+
+| Schema Alias | Stores | Use Case |
+|--------------|--------|----------|
+| `Umbraco.Plain.String` | `string` | Simple text values |
+| `Umbraco.Integer` | `int` | Numbers, ratings, counts |
+| `Umbraco.Decimal` | `decimal` | Prices, percentages |
+| `Umbraco.Plain.Json` | `object` | Complex JSON data |
+| `Umbraco.DateTime` | `DateTime` | Dates and times |
+| `Umbraco.TrueFalse` | `bool` | Toggles, checkboxes |
+| `Umbraco.TextBox` | `string` | Textbox with validation |
+| `Umbraco.TextArea` | `string` | Multi-line text |
+
+## Troubleshooting
+
+### 404 Error When Creating Data Type
+
+**Symptom:** Data Type fails to save, browser DevTools shows 404 when fetching schema.
+
+**Cause:** The `propertyEditorSchemaAlias` references a schema that doesn't exist on the server.
+
+**Solution:**
+1. **Use a built-in schema** (recommended) - Change to `Umbraco.Plain.String`, `Umbraco.Integer`, etc.
+2. **Create a C# DataEditor** - If you need custom behavior, implement the schema server-side:
+
+```csharp
+[DataEditor(
+    alias: "MyPackage.CustomSchema",
+    ValueType = ValueTypes.Integer)]
+public class MyCustomPropertyEditor : DataEditor
+{
+    public MyCustomPropertyEditor(IDataValueEditorFactory dataValueEditorFactory)
+        : base(dataValueEditorFactory)
+    { }
+}
+```
+
+See skill: `umbraco-property-editor-schema` for full details on creating custom schemas.
+
+---
 
 That's it! Always fetch fresh docs, keep examples minimal, generate complete working code.
