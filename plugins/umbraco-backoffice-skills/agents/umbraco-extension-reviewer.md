@@ -48,13 +48,22 @@ Apply the checks from the skill. Auto-fix safe issues (marked with "Auto-Fix: Ye
 
 ## Post-Review Actions (MANDATORY)
 
-After fixes are applied:
+After fixes are applied, you MUST:
 
 1. **Build the extension:**
    ```bash
+   cd [extension-directory]
    npm run build
    ```
+   Verify the build completes without errors.
 
-2. **Restart Umbraco** to pick up changes
+2. **Restart Umbraco:**
+   The .NET server must be restarted to pick up the new extension files.
+   ```bash
+   # Stop the running instance (Ctrl+C) then restart:
+   dotnet run
+   ```
 
-**Without these steps, fixes will NOT be visible.**
+**⚠️ Without these steps, your fixes will NOT be visible in Umbraco.**
+
+Remember: The goal is extensions that feel native to Umbraco, not custom applications bolted on.
