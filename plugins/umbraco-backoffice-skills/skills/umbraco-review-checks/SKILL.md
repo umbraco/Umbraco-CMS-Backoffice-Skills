@@ -1,7 +1,7 @@
 ---
 name: umbraco-review-checks
 description: Review checks reference for validating Umbraco backoffice extensions
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read
 ---

@@ -1,6 +1,6 @@
 {
   "name": "umbraco-cms-backoffice-skills",
-  "version": "17.0.0-beta.6",
+  "version": "17.0.0-beta.7",
   "description": "Complete skill set for Umbraco backoffice customization - 57 skills covering Foundation concepts, Extension Types, Property Editors, Rich Text, Backend integration, and Setup tools",
   "author": {
     "name": "Phil W",
