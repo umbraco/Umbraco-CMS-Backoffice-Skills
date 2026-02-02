@@ -1,7 +1,7 @@
 ---
 name: umbraco-backoffice
 description: Blueprints for Umbraco backoffice customisation - complete working examples showing how extension types combine
-version: 1.1.0
+version: 1.2.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -25,18 +25,28 @@ For details on individual extension types, invoke the referenced sub-skills.
 
 ## Required Workflow
 
-**CRITICAL**: Follow this workflow for ALL extension development:
+**CRITICAL**: This workflow is MANDATORY for ALL extension development.
 
 ```
-1. PLAN ──► Read PRE-BUILD-PLANNING.md, draw wireframes, identify extension types
-      ↓
+1. PLAN ──► Read PRE-BUILD-PLANNING.md FIRST
+   │        Draw wireframe, label extension types, identify UUI components
+   │        ⚠️ DO NOT write code until wireframe is approved
+   ↓
 2. BUILD ──► Use examples and sub-skills to create extension
-      ↓
-3. VALIDATE ──► Read POST-BUILD-VALIDATION.md, run umbraco-extension-reviewer
+   │
+   │        ⛔ STOP - Do not skip validation
+   ↓
+3. VALIDATE ──► MANDATORY post-build steps:
+               • npm run build (must pass)
+               • Spawn umbraco-extension-reviewer agent
+               • Fix High/Medium issues without asking
+               • Browser test per POST-BUILD-VALIDATION.md
 ```
 
-- **Never skip planning** - Wireframes prevent building the wrong extension type
-- **Never skip validation** - The reviewer catches issues before they reach users
+**If you skip planning**: You WILL build the wrong extension type.
+**If you skip validation**: Bugs WILL reach the user.
+
+This workflow applies whether invoked via `/umbraco-quickstart` or directly.
 
 ---
 
