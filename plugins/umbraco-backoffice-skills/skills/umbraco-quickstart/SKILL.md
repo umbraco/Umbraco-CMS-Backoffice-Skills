@@ -119,8 +119,9 @@ When the user describes what they want:
    - Identify UUI components
    - Map data flow (contexts, APIs)
 3. Identify which sub-skills to invoke
-4. **The first step of the implementation plan MUST be:** Load `/umbraco-backoffice` skill
-   - This ensures blueprints and examples are available during the build phase
+4. **Include a "Pre-Build Validation" section in the plan:**
+    Load `/umbraco-backoffice` skill
+   - This ensures best practice and examples are available during the build phase
 5. **Include a "Post-Build Validation" section in the plan:**
    ```markdown
    ## Post-Build Validation (REQUIRED)

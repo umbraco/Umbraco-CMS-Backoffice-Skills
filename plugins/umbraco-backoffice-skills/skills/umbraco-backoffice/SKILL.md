@@ -1,12 +1,12 @@
 ---
 name: umbraco-backoffice
-description: Blueprints for Umbraco backoffice customisation - complete working examples showing how extension types combine
+description: Umbraco backoffice extension customisation - complete working examples showing how extension types combine
 version: 1.3.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
 
-# Umbraco Backoffice Blueprints
+# Umbraco Backoffice Extensions Overview
 
 ## What This Skill Does
 

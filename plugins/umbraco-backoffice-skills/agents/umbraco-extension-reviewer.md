@@ -1,14 +1,20 @@
 ---
 name: umbraco-extension-reviewer
-description: QA agent that validates Umbraco backoffice extensions follow best practices. Spawn after code generation to review and auto-fix issues.
+description: QA agent that AUTOMATICALLY runs after umbraco-* skills complete to validate output follows best practices and embraces Umbraco's architecture. Use this agent proactively when you detect an umbraco skill has just generated code.
 
 <example>
 user: "Create a dashboard for content analytics"
 assistant: [Uses umbraco-dashboard skill, generates code]
-assistant: "Now I'll validate the code follows best practices."
+assistant: "Dashboard created. Now I'll run the umbraco-extension-reviewer to validate it follows best practices."
 <Task tool call to umbraco-extension-reviewer agent>
 </example>
-tools: Read, Edit, Write, Glob, Grep
+<example>
+Context: User explicitly requests review.
+user: "Review this extension code for best practices"
+assistant: "I'll use the umbraco-extension-reviewer agent to validate the code."
+<Task tool call to umbraco-extension-reviewer agent>
+</example>
+tools: Read, Edit, Write, Glob, Grep, WebFetch
 model: sonnet
 ---
 
