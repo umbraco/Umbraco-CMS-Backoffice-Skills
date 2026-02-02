@@ -14,7 +14,7 @@ Reference skill containing all review checks for the `umbraco-extension-reviewer
 
 | Category | File | Checks |
 |----------|------|--------|
-| Code Quality | `code-quality-checks.md` | CQ-1 to CQ-8 |
+| Code Quality | `code-quality-checks.md` | CQ-1 to CQ-9 |
 | Architecture | `architecture-checks.md` | AR-1 to AR-6 |
 | UI Patterns | `ui-pattern-checks.md` | UI-1 to UI-7 |
 
@@ -31,6 +31,7 @@ Reference skill containing all review checks for the `umbraco-extension-reviewer
 | CQ-6 | Localization | Medium | Partial |
 | CQ-7 | Naming Conventions | Low | No |
 | CQ-8 | Conditions | Low | No |
+| CQ-9 | Property Editor Schema Alias | Critical | No |
 | **Architecture** ||||
 | AR-1 | Direct API Client Access | High | No |
 | AR-2 | No Workspace Context | High | No |

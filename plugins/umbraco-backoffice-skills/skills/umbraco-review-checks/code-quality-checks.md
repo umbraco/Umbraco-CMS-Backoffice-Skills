@@ -173,3 +173,37 @@ conditions: [{ alias: 'Umb.Condition.SectionUserPermission' }]
 **Detection:** Unknown condition aliases in manifests
 
 **Reference:** `umbraco-conditions` skill
+
+---
+
+## CQ-9: Property Editor Schema Alias
+
+**Severity:** Critical | **Auto-Fix:** No
+
+Property editor UIs must reference schema aliases that exist on the server.
+
+```typescript
+// BAD - Custom alias without C# implementation
+meta: {
+  propertyEditorSchemaAlias: 'MyPackage.CustomSchema' // 404 error!
+}
+
+// GOOD - Built-in schema
+meta: {
+  propertyEditorSchemaAlias: 'Umbraco.Plain.String'
+}
+```
+
+**Detection:** `propertyEditorSchemaAlias` value not in built-in list:
+- `Umbraco.Plain.String`
+- `Umbraco.Integer`
+- `Umbraco.Decimal`
+- `Umbraco.Plain.Json`
+- `Umbraco.DateTime`
+- `Umbraco.TrueFalse`
+- `Umbraco.TextBox`
+- `Umbraco.TextArea`
+
+If custom alias used, verify corresponding C# `DataEditor` exists in project.
+
+**Reference:** `umbraco-property-editor-ui`, `umbraco-property-editor-schema` skills
