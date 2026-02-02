@@ -89,13 +89,13 @@ Check extended workspace (including `/add-dir` directories) and warn if missing:
   /plugin install umbraco-cms-backoffice-testing-skills@umbraco-backoffice-marketplace
 ```
 
-### 5. Plan what to build
+### 5. MANDATORY: Enter Plan Mode
 
-Once setup is complete, **enter plan mode** to help the user design their extension:
+**Do NOT proceed to building until this step is complete.**
 
 1. Tell the user setup is complete and show the login credentials
-2. Ask them to describe what they want to build
-3. **Use `/plan` to enter planning mode** before creating the implementation plan
+2. Read `PRE-BUILD-PLANNING.md` from the `umbraco-backoffice` skill
+3. Ask the user what they want to build
 
 ```
 ✅ Setup complete! Your extension is ready.
@@ -111,16 +111,44 @@ Examples:
 ```
 
 When the user describes what they want:
-1. Enter plan mode with `/plan`
-2. Use `/umbraco-backoffice` to identify which extension types are needed
-3. Create a detailed plan with the specific skills required
-4. Exit plan mode and ask if they want to proceed with implementation
 
-This turns quickstart into a complete onboarding experience - from zero to planning to building.
+1. **Enter plan mode with `/plan`**
+2. Follow the PRE-BUILD-PLANNING.md workflow:
+   - Draw ASCII wireframe of the UI
+   - Label extension types needed (section, dashboard, workspace, etc.)
+   - Identify UUI components
+   - Map data flow (contexts, APIs)
+3. Identify which sub-skills to invoke
+4. **Include a "Post-Build Validation" section in the plan:**
+   ```markdown
+   ## Post-Build Validation (REQUIRED)
+
+   After implementation is complete:
+   - [ ] Run `npm run build` - must compile without errors
+   - [ ] Spawn `umbraco-extension-reviewer` agent for code review
+   - [ ] Fix all High/Medium severity issues
+   - [ ] Browser test: extension loads, UI renders, interactions work
+   ```
+5. Exit plan mode only when wireframe AND validation steps are in the plan
+
+**⚠️ Do NOT generate code until planning is complete and approved by the user.**
+
+### 6. Build the Extension
+
+Use the identified sub-skills to generate code.
+
+### 7. MANDATORY: Post-Build Validation
+
+After ALL code generation is complete:
+
+1. **Run `npm run build`** - must compile without errors
+2. **Spawn `umbraco-extension-reviewer` agent** - MANDATORY code review
+3. Fix any High/Medium severity issues automatically
+4. Guide user through browser testing per POST-BUILD-VALIDATION.md
 
 ## Goal
 
-Get the user to a working extension as quickly as possible. Don't just report - take action.
+Get the user to a working, validated extension. Follow the workflow: PLAN → BUILD → VALIDATE. Don't just report - take action.
 
 ## Default Credentials
 
@@ -142,5 +170,8 @@ This will:
 2. Create extension (e.g. "MyDashboard")
 3. Register the extension with the Umbraco project
 4. Warn about missing CMS/UUI source if applicable
+5. Enter plan mode to design the extension (wireframe, extension types)
+6. Build using identified sub-skills
+7. Validate with npm build + umbraco-extension-reviewer
 
 **Login with:** `admin@test.com` / `SecurePass1234`

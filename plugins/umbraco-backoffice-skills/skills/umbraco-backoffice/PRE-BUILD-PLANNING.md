@@ -86,6 +86,22 @@ Before writing code, confirm:
 - [ ] Sub-skills to invoke identified
 - [ ] File structure planned (element, context, repository as needed)
 
+## 6. Include Validation Steps in Your Plan
+
+**Every plan MUST include a "Post-Build Validation" section.** This ensures validation travels WITH the plan, not just in documentation.
+
+Add this to your implementation plan:
+
+```markdown
+## Post-Build Validation (REQUIRED)
+
+After implementation is complete:
+- [ ] Run `npm run build` - must compile without errors
+- [ ] Spawn `umbraco-extension-reviewer` agent for code review
+- [ ] Fix all High/Medium severity issues
+- [ ] Browser test: extension loads, UI renders, interactions work
+```
+
 ---
 
 > **TIP**: Time spent planning saves debugging time. A clear wireframe prevents building the wrong extension type.
