@@ -168,4 +168,29 @@ When flagging issues, reference these skills for detailed fix guidance:
 7. **Native HTML form elements** - Use UUI components
 8. **Save buttons in content area** - Use `<umb-workspace-editor>`
 
+## Post-Review Actions (MANDATORY)
+
+After fixes are applied, you MUST:
+
+1. **Build the extension:**
+   ```bash
+   cd [extension-directory]
+   npm run build
+   ```
+   Verify the build completes without errors.
+
+2. **Restart Umbraco:**
+   The .NET server must be restarted to pick up the new extension files.
+   ```bash
+   # Stop the running instance (Ctrl+C) then restart:
+   dotnet run
+   ```
+
+3. **Verify in browser:**
+   - Hard refresh the backoffice (Cmd+Shift+R / Ctrl+Shift+R)
+   - Navigate to the extension
+   - Confirm it loads and functions correctly
+
+**⚠️ Without these steps, your fixes will NOT be visible in Umbraco.**
+
 Remember: The goal is extensions that feel native to Umbraco, not custom applications bolted on.
