@@ -28,7 +28,7 @@ These skills are your entry points for Umbraco backoffice extension development.
 
 ### `umbraco-quickstart` - Quick Setup
 
-**Start here if you're new.** Sets up everything in one command:
+**Start here if you're new.** Sets up everything in one command and guides you through planning, building, and validating your extension.
 
 ```bash
 # Full setup with custom credentials
@@ -44,12 +44,13 @@ These skills are your entry points for Umbraco backoffice extension development.
 /umbraco-quickstart
 ```
 
-This skill will:
-1. Create an Umbraco instance (if needed)
-2. Create an extension
-3. Register the extension with the Umbraco project
-4. Warn about missing CMS/UUI source
-5. Enter plan mode to help design your extension
+This skill follows a **PLAN → BUILD → VALIDATE** workflow:
+
+1. **Setup** - Create Umbraco instance and extension (if needed), register extension
+2. **Plan** - Enter plan mode with ASCII wireframes, identify extension types, map data flow
+3. **Build** - Generate code using identified sub-skills
+4. **Review** - Auto-run `umbraco-extension-reviewer` to catch and fix issues
+5. **Validate** - Auto-validate in browser (if Playwright MCP or browser automation available) or provide manual test steps
 
 ---
 
