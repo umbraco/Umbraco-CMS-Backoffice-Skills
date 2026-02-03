@@ -1,15 +1,15 @@
 ---
 name: umbraco-add-extension-reference
-description: Add a new Umbraco extension project reference to the main Umbraco instance
-version: 1.0.0
+description: Add a new Umbraco extension project reference to the main Umbraco instance and solution
+version: 1.1.0
 location: managed
-allowed-tools: Read, Edit, Glob, Grep
+allowed-tools: Read, Edit, Glob, Grep, Bash
 ---
 
 # Add Extension Reference to Umbraco Instance
 
 ## What is it?
-After creating a new Umbraco backoffice extension project, it must be added as a project reference in the main Umbraco instance's `.csproj` file. Without this reference, the extension will not be loaded when running the Umbraco site.
+After creating a new Umbraco backoffice extension project, it must be added as a project reference in the main Umbraco instance's `.csproj` file and to the solution file (`.sln`). Without these references, the extension will not be loaded when running the Umbraco site and won't appear in IDEs as part of the solution.
 
 ## When to Use
 Use this skill after:
@@ -68,6 +68,32 @@ Add a `<ProjectReference>` entry in an `<ItemGroup>`:
 
 If there's already an `<ItemGroup>` with `<ProjectReference>` entries, add to that one. Otherwise, create a new `<ItemGroup>`.
 
+### Step 5: Add Extension to Solution File
+
+The PSW CLI creates a solution file (`.sln`) that should include the extension project for proper IDE support.
+
+**Find the solution file:**
+```bash
+# Find the .sln file in the workspace
+Glob: **/*.sln
+```
+
+**Add the extension project to the solution:**
+```bash
+dotnet sln <path-to-solution.sln> add <path-to-extension.csproj>
+```
+
+Example:
+```bash
+# If solution is at ./MySite/MySite.sln and extension is at ./MyExtension/MyExtension.csproj
+dotnet sln ./MySite/MySite.sln add ./MyExtension/MyExtension.csproj
+```
+
+This ensures:
+- The extension appears in Visual Studio/Rider solution explorer
+- Building the solution builds the extension
+- IDE features like "Go to Definition" work across projects
+
 ## Example
 
 ### Before
@@ -112,7 +138,9 @@ If there's already an `<ItemGroup>` with `<ProjectReference>` entries, add to th
 3. [ ] **Calculate** relative path from main project to new extension
 4. [ ] **Verify** the extension `.csproj` file exists at the calculated path
 5. [ ] **Edit** the main project file to add `<ProjectReference>`
-6. [ ] **Ask user** to verify with `dotnet build`
+6. [ ] **Find** the solution file (`.sln`) using Glob
+7. [ ] **Add** the extension to the solution using `dotnet sln add`
+8. [ ] **Ask user** to verify with `dotnet build`
 
 ## Verification
 
@@ -136,3 +164,11 @@ After adding the reference, the user should verify by:
 **Multiple Umbraco projects found**
 - If there are multiple `.csproj` files with `Umbraco.Cms`, ask the user which one is the main instance
 - The main instance is typically the one with `Microsoft.NET.Sdk.Web` SDK and a `Program.cs` or `Startup.cs`
+
+**No solution file found**
+- If no `.sln` file exists, create one: `dotnet new sln -n SolutionName`
+- Then add both the main project and extension: `dotnet sln add <main.csproj> <extension.csproj>`
+
+**Extension already in solution**
+- If `dotnet sln add` reports the project is already in the solution, this is safe to ignore
+- The command is idempotent and won't create duplicates
