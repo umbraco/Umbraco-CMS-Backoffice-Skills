@@ -9,7 +9,7 @@ allowed-tools: Read, Write, Edit, WebFetch
 # Umbraco Localization
 
 ## What is it?
-Localization enables UI translation through localization files managed by the Extension Registry, with English as the fallback language. The Localization Controller (automatically available in Umbraco Elements via `this.localize`) provides access to translated strings using keys. Custom translations can be added via the Extension Registry and referenced in manifests using the `#` prefix.
+Localization enables UI translation through localization files managed by the Extension Registry, with English (iso code: 'en') as the fallback language. The Localization Controller (automatically available in Umbraco Elements via `this.localize`) provides access to translated strings using keys. Custom translations can be added via the Extension Registry and referenced in manifests using the `#` prefix.
 
 ## Documentation
 Always fetch the latest docs before implementing:
@@ -40,6 +40,22 @@ export class MyElement extends UmbLitElement {
         ${this.localize.term('general_close')}
       </uui-button>
       <p>${this.localize.term('general_welcome')}</p>
+    `;
+  }
+}
+```
+
+### Using Localize Controller with fallback (Umbraco 17.1+ only!)
+```typescript
+import { html, customElement } from '@umbraco-cms/backoffice/external/lit';
+import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
+
+@customElement('my-element')
+export class MyElement extends UmbLitElement {
+  render() {
+    return html`
+      <p>Renders "Welcome": ${this.localize.term('general_welcome')}</p>
+      <p>Renders "This is a fallback": ${this.localize.termOrDefault('test_unavailable', 'This is a fallback')}</p>
     `;
   }
 }
@@ -210,7 +226,9 @@ export const manifests = [
 
 **Translation Keys**: Use underscore notation (e.g., `general_close`, `myExtension_welcomeMessage`)
 
-**Fallback**: English (en) is the default fallback when translations are missing
+**Fallback**: English (en) is the default fallback when translations are missing - all extensions should, as a minimum, include an 'en' localization manifest
+
+**Default text**: If unsure whether the localization key exists, or for easier readability, add a default text to `<umb-localize key="section_key">Default text</umb-localize>` or as second argument to `termOrDefault()`
 
 **Arguments**: Pass dynamic values using `.args` attribute or second parameter to `term()`
 
@@ -224,3 +242,4 @@ export const manifests = [
 - Register via Extension Registry
 
 That's it! Always fetch fresh docs, keep examples minimal, generate complete working code.
+
