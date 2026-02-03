@@ -9,7 +9,9 @@ allowed-tools: Read, Edit, Glob, Grep, Bash
 # Add Extension Reference to Umbraco Instance
 
 ## What is it?
-After creating a new Umbraco backoffice extension project, it must be added as a project reference in the main Umbraco instance's `.csproj` file and to the solution file (`.sln`). Without these references, the extension will not be loaded when running the Umbraco site and won't appear in IDEs as part of the solution.
+After creating a new Umbraco backoffice extension project, it must be added as a project reference in the main Umbraco instance's `.csproj` file. Without this reference, the extension will not be loaded when running the Umbraco site.
+
+If a solution file (`.sln`) exists, the extension should also be added to it for proper IDE support (Visual Studio, Rider). This is optional - the extension will work without being in the solution.
 
 ## When to Use
 Use this skill after:
@@ -68,15 +70,24 @@ Add a `<ProjectReference>` entry in an `<ItemGroup>`:
 
 If there's already an `<ItemGroup>` with `<ProjectReference>` entries, add to that one. Otherwise, create a new `<ItemGroup>`.
 
-### Step 5: Add Extension to Solution File
+### Step 5: Add Extension to Solution File (Optional)
 
-The PSW CLI creates a solution file (`.sln`) that should include the extension project for proper IDE support.
+If a solution file (`.sln`) exists, the extension project should be added to it for proper IDE support. This step is optional - not all projects use solution files.
 
 **Find the solution file:**
 ```bash
-# Find the .sln file in the workspace
+# Find any .sln files in the workspace
 Glob: **/*.sln
 ```
+
+**Scenarios to handle:**
+
+| Scenario | Action |
+|----------|--------|
+| No `.sln` file found | Skip this step - it's not required |
+| One `.sln` file found | Add the extension to it |
+| Multiple `.sln` files found | Ask the user which solution to use |
+| Extension already in solution | `dotnet sln add` will report this - safe to ignore |
 
 **Add the extension project to the solution:**
 ```bash
@@ -89,7 +100,7 @@ Example:
 dotnet sln ./MySite/MySite.sln add ./MyExtension/MyExtension.csproj
 ```
 
-This ensures:
+When a solution file exists, adding the extension ensures:
 - The extension appears in Visual Studio/Rider solution explorer
 - Building the solution builds the extension
 - IDE features like "Go to Definition" work across projects
@@ -138,8 +149,8 @@ This ensures:
 3. [ ] **Calculate** relative path from main project to new extension
 4. [ ] **Verify** the extension `.csproj` file exists at the calculated path
 5. [ ] **Edit** the main project file to add `<ProjectReference>`
-6. [ ] **Find** the solution file (`.sln`) using Glob
-7. [ ] **Add** the extension to the solution using `dotnet sln add`
+6. [ ] **Check** for a solution file (`.sln`) using Glob
+7. [ ] **If found**, add the extension to the solution using `dotnet sln add`
 8. [ ] **Ask user** to verify with `dotnet build`
 
 ## Verification
@@ -166,9 +177,14 @@ After adding the reference, the user should verify by:
 - The main instance is typically the one with `Microsoft.NET.Sdk.Web` SDK and a `Program.cs` or `Startup.cs`
 
 **No solution file found**
-- If no `.sln` file exists, create one: `dotnet new sln -n SolutionName`
-- Then add both the main project and extension: `dotnet sln add <main.csproj> <extension.csproj>`
+- This is fine - solution files are optional
+- The `<ProjectReference>` in the `.csproj` is sufficient for the extension to work
+- Skip the solution step and proceed with verification
+
+**Multiple solution files found**
+- Ask the user which solution they want the extension added to
+- Common scenarios: separate solutions for different IDEs, test solutions, etc.
 
 **Extension already in solution**
-- If `dotnet sln add` reports the project is already in the solution, this is safe to ignore
+- `dotnet sln add` will report the project is already added - this is safe to ignore
 - The command is idempotent and won't create duplicates
