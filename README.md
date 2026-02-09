@@ -24,30 +24,34 @@ Install the plugins:
 
 ## Install for Other Editors (Cursor, GitHub Copilot, Windsurf, and more)
 
-These skills use the open [SKILL.md](https://agentskills.io/home) format, which is now supported natively by multiple AI coding tools. You can install them into any supported editor using the [Vercel Skills CLI](https://github.com/vercel-labs/skills):
+These skills use the open [SKILL.md](https://agentskills.io/home) format, which is now supported natively by multiple AI coding tools. You can install them into any supported editor using the [Vercel Skills CLI](https://github.com/vercel-labs/skills).
 
-Install all skills:
+> **Important:** Always use the `-a` flag to target your editor, otherwise skills will be symlinked into every supported agent directory.
+
+Install all skills for your editor:
 ```bash
-npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --all
+# For Cursor
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --all -a cursor
+
+# For GitHub Copilot
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --all -a github-copilot
+
+# For Windsurf
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --all -a windsurf
 ```
 
 Or install each skill set separately:
 ```bash
 # Backoffice extension skills (58 skills)
-npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-backoffice-skills/skills
+npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-backoffice-skills/skills -a cursor
 
 # Testing skills (8 skills) - optional but recommended
-npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-testing-skills/skills
+npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-testing-skills/skills -a cursor
 ```
-
-Skills are placed in `.agents/skills/` and symlinked into each editor's expected location automatically.
 
 ```bash
 # Install specific skills
-npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill umbraco-dashboard --skill umbraco-tree
-
-# Target a specific editor
-npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-backoffice-skills/skills -a cursor
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill umbraco-dashboard --skill umbraco-tree -a cursor
 ```
 
 ### Editor Requirements
