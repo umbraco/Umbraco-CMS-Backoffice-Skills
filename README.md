@@ -22,6 +22,48 @@ Install the plugins:
 
 ---
 
+## Install for Other Editors (Cursor, GitHub Copilot, Windsurf, and more)
+
+These skills use the open [SKILL.md](https://agentskills.io/home) format, which is now supported natively by multiple AI coding tools. You can install them into any supported editor using the [Vercel Skills CLI](https://github.com/vercel-labs/skills):
+
+Install all skills:
+```bash
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --all
+```
+
+Or install each skill set separately:
+```bash
+# Backoffice extension skills (58 skills)
+npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-backoffice-skills/skills
+
+# Testing skills (8 skills) - optional but recommended
+npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-testing-skills/skills
+```
+
+Skills are placed in `.agents/skills/` and symlinked into each editor's expected location automatically.
+
+```bash
+# Install specific skills
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill umbraco-dashboard --skill umbraco-tree
+
+# Target a specific editor
+npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-backoffice-skills/skills -a cursor
+```
+
+### Editor Requirements
+
+| Editor | Minimum Version | Skills Path |
+|--------|----------------|-------------|
+| **Cursor** | 2.4+ (January 2026) | `.cursor/skills/` |
+| **GitHub Copilot** (VS Code) | VS Code 1.109+ (January 2026) | `.github/skills/` |
+| **GitHub Copilot** (Coding Agent) | Supported | `.github/skills/` |
+| **Windsurf** | Current | `.windsurf/skills/` |
+| **Claude Code** | Current (use Quick Start above) | `.claude/skills/` |
+
+All of these editors load skills **on-demand** — only the skill relevant to your current task is loaded into context, so installing all 66 skills won't affect performance.
+
+---
+
 ## Getting Started Skills
 
 These skills are your entry points for Umbraco backoffice extension development. Start here.
