@@ -56,8 +56,6 @@ npx skills add umbraco/Umbraco-CMS-Backoffice-Skills -a github-copilot
 
 All of these editors load skills **on-demand** — only the skill relevant to your current task is loaded into context, so installing all 66 skills won't affect performance.
 
-For a full analysis of cross-tool compatibility, see [docs/analysis-cross-tool-packaging.md](docs/analysis-cross-tool-packaging.md).
-
 ---
 
 ## Getting Started Skills
