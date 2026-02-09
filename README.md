@@ -24,7 +24,7 @@ Install the plugins:
 
 ## Install for Other Editors (Cursor, GitHub Copilot, Windsurf, and more)
 
-These skills use the open [SKILL.md](https://www.mintlify.com/blog/skill-md) format, which is now supported natively by multiple AI coding tools. You can install them into any supported editor using the [Vercel Skills CLI](https://github.com/vercel-labs/skills):
+These skills use the open [SKILL.md](https://agentskills.io/home) format, which is now supported natively by multiple AI coding tools. You can install them into any supported editor using the [Vercel Skills CLI](https://github.com/vercel-labs/skills):
 
 ```bash
 npx skills add umbraco/Umbraco-CMS-Backoffice-Skills
