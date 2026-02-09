@@ -26,7 +26,12 @@ Install the plugins:
 
 These skills use the open [SKILL.md](https://agentskills.io/home) format, which is now supported natively by multiple AI coding tools. You can install them into any supported editor using the [Vercel Skills CLI](https://github.com/vercel-labs/skills):
 
-Install the skill sets:
+Install all skills:
+```bash
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --all
+```
+
+Or install each skill set separately:
 ```bash
 # Backoffice extension skills (58 skills)
 npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-backoffice-skills/skills
