@@ -26,22 +26,23 @@ Install the plugins:
 
 These skills use the open [SKILL.md](https://agentskills.io/home) format, which is now supported natively by multiple AI coding tools. You can install them into any supported editor using the [Vercel Skills CLI](https://github.com/vercel-labs/skills):
 
+Install the skill sets:
 ```bash
-npx skills add umbraco/Umbraco-CMS-Backoffice-Skills
+# Backoffice extension skills (58 skills)
+npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-backoffice-skills/skills
+
+# Testing skills (8 skills) - optional but recommended
+npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-testing-skills/skills
 ```
 
-This gives you an interactive prompt to pick which skills to install. They are placed in `.agents/skills/` and symlinked into each editor's expected location automatically.
+Skills are placed in `.agents/skills/` and symlinked into each editor's expected location automatically.
 
 ```bash
 # Install specific skills
 npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill umbraco-dashboard --skill umbraco-tree
 
-# Install all skills
-npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --all
-
 # Target a specific editor
-npx skills add umbraco/Umbraco-CMS-Backoffice-Skills -a cursor
-npx skills add umbraco/Umbraco-CMS-Backoffice-Skills -a github-copilot
+npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-backoffice-skills/skills -a cursor
 ```
 
 ### Editor Requirements
