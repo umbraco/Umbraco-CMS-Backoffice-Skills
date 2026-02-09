@@ -22,6 +22,44 @@ Install the plugins:
 
 ---
 
+## Install for Other Editors (Cursor, GitHub Copilot, Windsurf, and more)
+
+These skills use the open [SKILL.md](https://www.mintlify.com/blog/skill-md) format, which is now supported natively by multiple AI coding tools. You can install them into any supported editor using the [Vercel Skills CLI](https://github.com/vercel-labs/skills):
+
+```bash
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills
+```
+
+This gives you an interactive prompt to pick which skills to install. They are placed in `.agents/skills/` and symlinked into each editor's expected location automatically.
+
+```bash
+# Install specific skills
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill umbraco-dashboard --skill umbraco-tree
+
+# Install all skills
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --all
+
+# Target a specific editor
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills -a cursor
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills -a github-copilot
+```
+
+### Editor Requirements
+
+| Editor | Minimum Version | Skills Path |
+|--------|----------------|-------------|
+| **Cursor** | 2.4+ (January 2026) | `.cursor/skills/` |
+| **GitHub Copilot** (VS Code) | VS Code 1.109+ (January 2026) | `.github/skills/` |
+| **GitHub Copilot** (Coding Agent) | Supported | `.github/skills/` |
+| **Windsurf** | Current | `.windsurf/skills/` |
+| **Claude Code** | Current (use Quick Start above) | `.claude/skills/` |
+
+All of these editors load skills **on-demand** — only the skill relevant to your current task is loaded into context, so installing all 66 skills won't affect performance.
+
+For a full analysis of cross-tool compatibility, see [docs/analysis-cross-tool-packaging.md](docs/analysis-cross-tool-packaging.md).
+
+---
+
 ## Getting Started Skills
 
 These skills are your entry points for Umbraco backoffice extension development. Start here.
