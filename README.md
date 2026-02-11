@@ -31,13 +31,14 @@ These skills use the open [SKILL.md](https://agentskills.io/home) format, which 
 Install all skills for your editor:
 ```bash
 # For Cursor
-npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --all -a cursor
+# For Cursor
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill '*' -a cursor
 
 # For GitHub Copilot
-npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --all -a github-copilot
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill '*' -a github-copilot
 
 # For Windsurf
-npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --all -a windsurf
+npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill '*' -a windsurf
 ```
 
 Or install each skill set separately:
