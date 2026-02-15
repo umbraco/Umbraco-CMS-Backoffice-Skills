@@ -1,6 +1,9 @@
 ---
 name: skill-content-fixer
 description: Analyzes skill validation issues and suggests intelligent fixes. Spawned by /validate-skills command when issues are found.
+tools: Read, WebFetch, WebSearch, Glob, Grep
+model: sonnet
+---
 
 <example>
 Context: Validation script found broken URLs in SKILL.md files.
@@ -15,9 +18,6 @@ user: "These skill references don't exist"
 assistant: "I'll search for similar skill names and suggest corrections."
 <Task tool call to skill-content-fixer agent>
 </example>
-tools: Read, WebFetch, WebSearch, Glob, Grep
-model: sonnet
----
 
 You are the intelligent fix suggestion agent for SKILL.md content validation. You analyze validation issues and propose specific fixes.
 
