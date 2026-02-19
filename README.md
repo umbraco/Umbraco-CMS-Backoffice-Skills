@@ -2,9 +2,48 @@
 
 > **Experimental Beta:** This project is an exploration of what's possible with Skills for Umbraco. It's evolving as we learn what works best.
 
-A Claude Code plugin marketplace with 66 skills for Umbraco backoffice customization and testing.
+A Claude Code plugin marketplace with 73 skills for Umbraco backoffice customization and testing.
 
-## Quick Start
+## Table of Contents
+
+- [What are Skills?](#what-are-skills)
+- [Quick Start (Claude Code)](#quick-start-claude-code)
+- [Install for Other Editors](#install-for-other-editors-cursor-github-copilot-windsurf-and-more)
+- [Getting Started Skills](#getting-started-skills)
+- [Best Practice: Add Source Code References](#best-practice-add-source-code-references)
+- [All Skills Reference](#all-skills-reference)
+  - [Foundation](#foundation-10-skills)
+  - [Extension Types](#extension-types-30-skills)
+  - [Property Editors](#property-editors-6-skills)
+  - [Rich Text](#rich-text-4-skills)
+  - [Backend](#backend-4-skills)
+  - [Setup & Tools](#setup--tools-6-skills)
+  - [Validation & Data](#validation--data-5-skills)
+  - [Testing](#testing-8-skills)
+- [Examples](#examples)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+- [Credits](#credits)
+
+---
+
+## What are Skills?
+
+Skills are markdown files (`SKILL.md`) that give AI coding assistants domain-specific knowledge. They follow the open [SKILL.md](https://agentskills.io/home) format and are loaded **on-demand** — only the skill relevant to your current task is pulled into context, so installing all 73 skills won't affect performance.
+
+Each skill contains:
+- **Architectural guidance** for a specific Umbraco extension type
+- **Working code examples** that follow current Umbraco patterns
+- **API references** with correct imports and type signatures
+- **Links to related skills** for multi-extension workflows
+
+Skills are supported natively by Claude Code, Cursor, GitHub Copilot, Windsurf, and other AI coding tools.
+
+---
+
+## Quick Start (Claude Code)
 
 Add the marketplace:
 ```bash
@@ -13,7 +52,7 @@ Add the marketplace:
 
 Install the plugins:
 ```bash
-# Backoffice extension skills (58 skills)
+# Backoffice extension skills (65 skills)
 /plugin install umbraco-cms-backoffice-skills@umbraco-backoffice-marketplace
 
 # Testing skills (8 skills) - optional but recommended
@@ -31,7 +70,6 @@ These skills use the open [SKILL.md](https://agentskills.io/home) format, which 
 Install all skills for your editor:
 ```bash
 # For Cursor
-# For Cursor
 npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill '*' -a cursor
 
 # For GitHub Copilot
@@ -43,7 +81,7 @@ npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill '*' -a windsurf
 
 Or install each skill set separately:
 ```bash
-# Backoffice extension skills (58 skills)
+# Backoffice extension skills (65 skills)
 npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-backoffice-skills/skills -a cursor
 
 # Testing skills (8 skills) - optional but recommended
@@ -65,7 +103,7 @@ npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill umbraco-dashboard -
 | **Windsurf** | Current | `.windsurf/skills/` |
 | **Claude Code** | Current (use Quick Start above) | `.claude/skills/` |
 
-All of these editors load skills **on-demand** — only the skill relevant to your current task is loaded into context, so installing all 66 skills won't affect performance.
+All of these editors load skills **on-demand** — only the skill relevant to your current task is loaded into context, so installing all 73 skills won't affect performance.
 
 ---
 
@@ -286,6 +324,29 @@ Authentication and API integration:
 | `umbraco-mfa-login-provider` | Two-factor authentication |
 | `umbraco-granular-user-permissions` | Fine-grained access |
 
+### Setup & Tools (6 skills)
+Project scaffolding and workflow automation:
+
+| Skill | Description |
+|-------|-------------|
+| `umbraco-quickstart` | Full PLAN → BUILD → VALIDATE workflow |
+| `umbraco-backoffice` | Extension map, blueprints, and sub-skill reference |
+| `umbraco-extension-template` | Scaffold a new extension project |
+| `umbraco-add-extension-reference` | Register extension with Umbraco `.csproj` |
+| `umbraco-manifest-picker` | Interactive manifest type selection |
+| `package-script-writer` | Create Umbraco instances via PSW CLI |
+
+### Validation & Data (5 skills)
+Form validation, sorting, and data selection:
+
+| Skill | Description |
+|-------|-------------|
+| `umbraco-review-checks` | Extension review and common issue detection |
+| `umbraco-validation-checks` | Client-side validation patterns |
+| `umbraco-validation-context` | Validation context API |
+| `umbraco-sorter` | Drag-and-drop sorting |
+| `umbraco-picker-data-source` | Custom picker data sources |
+
 ### Testing (8 skills)
 Complete testing pyramid for Umbraco extensions:
 
@@ -323,13 +384,27 @@ Complete testing pyramid for Umbraco extensions:
 
 ## Examples
 
-Complete working examples in the `examples/` folder:
+Complete working examples are included across the skills:
 
-- **Blueprint** - Section + Menu + Dashboard + Workspace
-- **TimeDashboard** - 13 extension types working together
-- **tree-example** - Settings tree with workspace + **complete testing pyramid** (32 tests across unit, mocked, and E2E)
-- **notes-wiki** - Full-stack with C# backend (27 skills)
-- **document-type-crud** - E2E testing example with testhelpers
+### Backoffice Examples
+Located in `plugins/umbraco-backoffice-skills/skills/umbraco-backoffice/examples/`:
+
+| Example | Description | Skills Demonstrated |
+|---------|-------------|---------------------|
+| **Blueprint** | Section + Menu + Dashboard + Workspace | 6 skills |
+| **TimeDashboard** | 13 extension types working together | 13 skills |
+| **tree-example** | Settings tree with workspace + complete testing pyramid (32 tests) | 7 skills |
+| **notes-wiki** | Full-stack with C# backend | 27 skills |
+
+### Testing Examples
+Located across individual testing skill directories:
+
+| Example | Description | Location |
+|---------|-------------|----------|
+| **counter-dashboard** | Unit testing with @open-wc/testing | `umbraco-unit-testing/examples/` |
+| **api-mocking** | MSW integration testing | `umbraco-msw-testing/examples/` |
+| **document-type-crud** | E2E testing with testhelpers | `umbraco-e2e-testing/examples/` |
+| **workspace-feature-toggle** | Generated testable extension | `umbraco-example-generator/examples/` |
 
 ## Usage
 
@@ -350,24 +425,38 @@ Claude will automatically use the relevant skills (`umbraco-tree`, `umbraco-cond
 Umbraco-CMS-Backoffice-Skills/
 ├── .claude-plugin/marketplace.json     # Marketplace manifest
 ├── plugins/
-│   ├── umbraco-backoffice-skills/      # Plugin with 58 extension skills
+│   ├── umbraco-backoffice-skills/      # Plugin with 65 extension skills
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── skills/
 │   │       ├── umbraco-dashboard/SKILL.md
 │   │       ├── umbraco-tree/SKILL.md
-│   │       └── ... (57 skills)
+│   │       └── ... (65 skills)
 │   └── umbraco-testing-skills/         # Plugin with 8 testing skills
 │       ├── .claude-plugin/plugin.json
 │       └── skills/
 │           ├── umbraco-testing/SKILL.md
 │           ├── umbraco-e2e-testing/SKILL.md
 │           └── ... (8 skills + examples)
-├── examples/                           # Working code examples
 ├── Umbraco-CMS.Skills/                 # .NET test project
 └── .claude/
     ├── commands/                       # Local commands
-    └── settings.local.json             # Local permissions
+    ├── skills/                         # Local validation skills
+    └── settings.json
 ```
+
+## Contributing
+
+Contributions are welcome. Here are some ways to help:
+
+- **Report issues** with specific skills (incorrect imports, outdated patterns, broken examples)
+- **Suggest new skills** for extension types not yet covered
+- **Improve examples** by adding tests or fixing bugs
+- **Validate skills** by running the built-in validation tooling:
+  ```bash
+  /validate-skills
+  ```
+
+When submitting changes to skill files, ensure code examples compile correctly and follow current Umbraco v17 patterns.
 
 ## License
 
