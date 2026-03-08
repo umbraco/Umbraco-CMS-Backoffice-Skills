@@ -1,0 +1,36 @@
+/**
+ * Tree Extension Tests (MSW Mocked)
+ *
+ * Validates that a tree extension renders correctly
+ * in the mocked Umbraco backoffice sidebar.
+ */
+import { test, expect, type Page } from '@playwright/test';
+
+async function navigateToSettings(page: Page) {
+  await page.goto('/section/settings');
+  await page.waitForLoadState('domcontentloaded');
+  await page.waitForSelector('umb-section-sidebar', { timeout: 30000 });
+}
+
+test.describe('{{TREE_NAME}}', () => {
+  test.beforeEach(async ({ page }) => {
+    await navigateToSettings(page);
+  });
+
+  test('should display tree in sidebar', async ({ page }) => {
+    const menuItem = page.locator('umb-section-sidebar').getByText('{{TREE_LABEL}}');
+    await expect(menuItem).toBeVisible({ timeout: 15000 });
+  });
+
+  test('should display root tree items', async ({ page }) => {
+    await page.getByText('{{TREE_LABEL}}').click();
+    const treeItems = page.locator('umb-tree-item');
+    await expect(treeItems.first()).toBeVisible({ timeout: 15000 });
+  });
+
+  test('should navigate to workspace on item click', async ({ page }) => {
+    const firstItem = page.locator('umb-tree-item').first();
+    await firstItem.click();
+    await page.waitForSelector('{{WORKSPACE_ELEMENT}}', { timeout: 15000 });
+  });
+});

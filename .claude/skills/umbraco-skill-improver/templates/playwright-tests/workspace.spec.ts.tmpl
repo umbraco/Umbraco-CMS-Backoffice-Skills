@@ -1,0 +1,36 @@
+/**
+ * Workspace Extension Tests (MSW Mocked)
+ *
+ * Validates that a workspace extension renders correctly.
+ */
+import { test, expect, type Page } from '@playwright/test';
+
+async function navigateToWorkspace(page: Page) {
+  await page.goto('/section/{{SECTION}}/workspace/{{WORKSPACE_ALIAS}}');
+  await page.waitForLoadState('domcontentloaded');
+}
+
+test.describe('{{WORKSPACE_NAME}}', () => {
+  test.beforeEach(async ({ page }) => {
+    await navigateToWorkspace(page);
+  });
+
+  test('should render workspace element', async ({ page }) => {
+    const workspace = page.locator('{{ELEMENT_TAG}}');
+    await expect(workspace).toBeVisible({ timeout: 15000 });
+  });
+
+  test('should display workspace header', async ({ page }) => {
+    await expect(page.getByText('{{WORKSPACE_LABEL}}')).toBeVisible({ timeout: 15000 });
+  });
+
+  test('should have no console errors', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+    await navigateToWorkspace(page);
+    await page.waitForTimeout(3000);
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
+});

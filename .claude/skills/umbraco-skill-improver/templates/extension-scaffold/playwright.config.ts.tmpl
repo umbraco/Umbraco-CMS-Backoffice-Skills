@@ -1,0 +1,53 @@
+import { defineConfig, devices } from '@playwright/test';
+import { resolve } from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const EXTENSION_PATH = resolve(__dirname, '../..');
+const UMBRACO_CLIENT_PATH = process.env.UMBRACO_CLIENT_PATH;
+if (!UMBRACO_CLIENT_PATH) {
+  throw new Error('UMBRACO_CLIENT_PATH environment variable is required');
+}
+
+const DEV_SERVER_PORT = {{PORT}};
+
+export default defineConfig({
+  testDir: '.',
+  testMatch: ['*.spec.ts'],
+  timeout: 60000,
+  expect: { timeout: 15000 },
+  fullyParallel: false,
+  workers: 1,
+  reporter: [['html', { outputFolder: './playwright-report' }], ['list']],
+  outputDir: './test-results',
+
+  webServer: {
+    command: `VITE_EXAMPLE_PATH=${EXTENSION_PATH} VITE_UMBRACO_USE_MSW=on npm run dev -- --port ${DEV_SERVER_PORT}`,
+    cwd: UMBRACO_CLIENT_PATH,
+    port: DEV_SERVER_PORT,
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+  },
+
+  use: {
+    baseURL: `http://localhost:${DEV_SERVER_PORT}`,
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    actionTimeout: 15000,
+  },
+
+  projects: [
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        launchOptions: {
+          args: ['--disable-web-security', '--disable-features=IsolateOrigins,site-per-process'],
+        },
+      },
+    },
+  ],
+});

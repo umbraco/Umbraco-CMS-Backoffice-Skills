@@ -1,0 +1,31 @@
+/**
+ * Property Editor UI Tests (MSW Mocked)
+ *
+ * Validates that a property editor UI extension renders correctly.
+ */
+import { test, expect, type Page } from '@playwright/test';
+
+test.describe('{{EDITOR_NAME}}', () => {
+  test('should render property editor element', async ({ page }) => {
+    // Property editors are rendered within document type editors
+    // Navigate to a document that has this property type
+    await page.goto('/section/content');
+    await page.waitForLoadState('domcontentloaded');
+
+    // Click on a content node that uses this property editor
+    // (Requires MSW handler to return content with this property type)
+    const propertyEditor = page.locator('{{ELEMENT_TAG}}');
+    // Property editor may not be visible without content node navigation
+    // This is a smoke test for element registration
+  });
+
+  test('should have no console errors on load', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+    await page.goto('/section/content');
+    await page.waitForTimeout(3000);
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
+});

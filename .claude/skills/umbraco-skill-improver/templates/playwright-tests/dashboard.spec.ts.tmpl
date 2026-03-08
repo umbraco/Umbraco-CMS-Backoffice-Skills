@@ -1,0 +1,42 @@
+/**
+ * Dashboard Extension Tests (MSW Mocked)
+ *
+ * Validates that a dashboard extension renders correctly
+ * in the mocked Umbraco backoffice.
+ */
+import { test, expect, type Page } from '@playwright/test';
+
+async function navigateToSection(page: Page, section: string = 'content') {
+  await page.goto(`/section/${section}`);
+  await page.waitForLoadState('domcontentloaded');
+}
+
+test.describe('{{DASHBOARD_NAME}}', () => {
+  test.beforeEach(async ({ page }) => {
+    await navigateToSection(page, '{{SECTION}}');
+  });
+
+  test('should display dashboard in section', async ({ page }) => {
+    const dashboard = page.locator('{{ELEMENT_TAG}}');
+    await expect(dashboard).toBeVisible({ timeout: 15000 });
+  });
+
+  test('should display dashboard heading', async ({ page }) => {
+    await expect(page.getByText('{{DASHBOARD_LABEL}}')).toBeVisible({ timeout: 15000 });
+  });
+
+  test('should have no console errors', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+    await navigateToSection(page, '{{SECTION}}');
+    await page.waitForTimeout(3000);
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
+
+  test('should render UUI box component', async ({ page }) => {
+    const box = page.locator('{{ELEMENT_TAG}} uui-box');
+    await expect(box).toBeVisible({ timeout: 15000 });
+  });
+});

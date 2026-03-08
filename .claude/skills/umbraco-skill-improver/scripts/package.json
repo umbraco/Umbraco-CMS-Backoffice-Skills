@@ -1,0 +1,19 @@
+{
+  "name": "umbraco-skill-improver",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "improve": "npx tsx improve-loop.ts",
+    "generate-evals": "npx tsx generate-eval-set.ts",
+    "run-eval": "npx tsx run-skill-eval.ts",
+    "validate": "npx tsx validate.ts",
+    "score": "npx tsx score-iteration.ts"
+  },
+  "dependencies": {
+    "glob": "^11.0.0",
+    "tsx": "^4.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
+}
