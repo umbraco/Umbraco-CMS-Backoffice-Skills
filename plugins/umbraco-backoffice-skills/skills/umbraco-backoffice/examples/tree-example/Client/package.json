@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@hey-api/client-fetch": "^0.10.0",
-    "@hey-api/openapi-ts": "^0.85.0",
+    "@hey-api/openapi-ts": "^0.94.5",
     "@open-wc/testing": "^4.0.0",
     "@playwright/test": "^1.56.0",
     "@umbraco/playwright-testhelpers": "^17.0.11",
