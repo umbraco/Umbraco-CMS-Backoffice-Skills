@@ -1,0 +1,16 @@
+{
+  "eval_id": 3,
+  "eval_name": "media-overview-dashboard",
+  "prompt": "I want to add a dashboard to the Media section with a custom URL path of 'media-overview' and I'd like it to load before other dashboards. The dashboard should just show a heading for now. Put it in App_Plugins/MediaOverview/.",
+  "assertions": [
+    "Manifest JSON has type set to 'dashboard'",
+    "Manifest JSON has meta.pathname set to 'media-overview'",
+    "Manifest JSON has meta.label field",
+    "Manifest JSON has a weight field with a numeric value",
+    "Manifest JSON has a condition with alias 'Umb.Condition.SectionAlias' and match 'Umb.Section.Media'",
+    "Element file path references App_Plugins/MediaOverview/",
+    "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'",
+    "Element class extends UmbLitElement",
+    "Element uses @customElement() decorator for registration"
+  ]
+}

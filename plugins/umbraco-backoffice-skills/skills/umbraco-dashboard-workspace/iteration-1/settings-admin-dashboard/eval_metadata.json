@@ -1,0 +1,15 @@
+{
+  "eval_id": 2,
+  "eval_name": "settings-admin-dashboard",
+  "prompt": "Create a dashboard for the Settings section that should only be visible to admin users. It should display a heading 'System Info' and a placeholder paragraph. I want it in my existing Umbraco project at App_Plugins/SystemInfo/.",
+  "assertions": [
+    "Manifest JSON has type set to 'dashboard'",
+    "Manifest JSON has a condition with alias 'Umb.Condition.SectionAlias' and match 'Umb.Section.Settings'",
+    "Manifest JSON has a condition with alias 'Umb.Condition.CurrentUser.IsAdmin'",
+    "Manifest conditions array contains exactly 2 condition objects",
+    "Element file path references App_Plugins/SystemInfo/",
+    "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'",
+    "Element class extends UmbLitElement",
+    "Element uses @customElement() decorator for registration"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "eval_id": 1,
+  "eval_name": "welcome-dashboard",
+  "prompt": "I need a simple welcome dashboard that appears in the Content section of the Umbraco backoffice. It should show a heading that says 'Welcome' and a short paragraph underneath. Nothing fancy, just the basics to get started.",
+  "assertions": [
+    "Manifest JSON has type set to 'dashboard'",
+    "Manifest JSON includes alias, name, and element fields",
+    "Manifest JSON has meta.label and meta.pathname",
+    "Manifest JSON has a condition with alias 'Umb.Condition.SectionAlias' and match 'Umb.Section.Content'",
+    "Manifest is wrapped in an extensions array inside umbraco-package.json",
+    "Element imports from '@umbraco-cms/backoffice/external/lit'",
+    "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'",
+    "Element class extends UmbLitElement (not UmbElementMixin(LitElement))",
+    "Element uses @customElement() decorator for registration (not customElements.define)",
+    "Element has a render() method returning html template with welcome content"
+  ]
+}

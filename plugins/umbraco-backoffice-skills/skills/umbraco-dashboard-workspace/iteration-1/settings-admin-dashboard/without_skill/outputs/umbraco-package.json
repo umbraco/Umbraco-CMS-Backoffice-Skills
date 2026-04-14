@@ -1,0 +1,27 @@
+{
+    "name": "System Info Dashboard",
+    "version": "1.0.0",
+    "extensions": [
+        {
+            "type": "dashboard",
+            "alias": "system.info.dashboard",
+            "name": "System Info Dashboard",
+            "element": "/App_Plugins/SystemInfo/dashboard.js",
+            "weight": 100,
+            "meta": {
+                "label": "System Info",
+                "pathname": "system-info"
+            },
+            "conditions": [
+                {
+                    "alias": "Umb.Condition.SectionAlias",
+                    "match": "Umb.Section.Settings"
+                },
+                {
+                    "alias": "Umb.Condition.UserGroupAlias",
+                    "match": "admin"
+                }
+            ]
+        }
+    ]
+}

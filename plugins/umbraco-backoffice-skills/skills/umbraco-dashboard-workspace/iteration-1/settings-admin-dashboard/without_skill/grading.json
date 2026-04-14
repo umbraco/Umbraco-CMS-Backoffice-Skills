@@ -1,0 +1,13 @@
+{
+  "expectations": [
+    {"text": "Manifest JSON has type set to 'dashboard'", "passed": true, "evidence": "type: \"dashboard\""},
+    {"text": "Manifest JSON has a condition with alias 'Umb.Condition.SectionAlias' and match 'Umb.Section.Settings'", "passed": true, "evidence": "conditions[0] matches Umb.Section.Settings"},
+    {"text": "Manifest JSON has a condition with alias 'Umb.Condition.CurrentUser.IsAdmin'", "passed": false, "evidence": "Uses 'Umb.Condition.UserGroupAlias' with match 'admin' instead of 'Umb.Condition.CurrentUser.IsAdmin'"},
+    {"text": "Manifest conditions array contains exactly 2 condition objects", "passed": true, "evidence": "conditions array has 2 items"},
+    {"text": "Element file path references App_Plugins/SystemInfo/", "passed": true, "evidence": "element: \"/App_Plugins/SystemInfo/dashboard.js\""},
+    {"text": "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'", "passed": false, "evidence": "Imports UmbElementMixin from '@umbraco-cms/backoffice/element-api'"},
+    {"text": "Element class extends UmbLitElement", "passed": false, "evidence": "extends UmbElementMixin(LitElement)"},
+    {"text": "Element uses @customElement() decorator for registration", "passed": true, "evidence": "@customElement('system-info-dashboard')"}
+  ],
+  "summary": {"passed": 5, "failed": 3, "total": 8, "pass_rate": 0.625}
+}

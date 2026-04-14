@@ -1,0 +1,15 @@
+{
+  "expectations": [
+    {"text": "Manifest JSON has type set to 'dashboard'", "passed": true, "evidence": "type: \"dashboard\" on line 5"},
+    {"text": "Manifest JSON includes alias, name, and element fields", "passed": true, "evidence": "alias: \"welcome.dashboard\", name: \"Welcome Dashboard\", element: \"/App_Plugins/WelcomeDashboard/dashboard.js\""},
+    {"text": "Manifest JSON has meta.label and meta.pathname", "passed": true, "evidence": "meta.label: \"Welcome\", meta.pathname: \"welcome-dashboard\""},
+    {"text": "Manifest JSON has a condition with alias 'Umb.Condition.SectionAlias' and match 'Umb.Section.Content'", "passed": true, "evidence": "conditions[0] matches exactly"},
+    {"text": "Manifest is wrapped in an extensions array inside umbraco-package.json", "passed": true, "evidence": "Top-level extensions array wraps the dashboard extension"},
+    {"text": "Element imports from '@umbraco-cms/backoffice/external/lit'", "passed": true, "evidence": "import { css, html, customElement, LitElement } from '@umbraco-cms/backoffice/external/lit'"},
+    {"text": "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'", "passed": false, "evidence": "Imports UmbElementMixin from '@umbraco-cms/backoffice/element-api' instead"},
+    {"text": "Element class extends UmbLitElement (not UmbElementMixin(LitElement))", "passed": false, "evidence": "extends UmbElementMixin(LitElement)"},
+    {"text": "Element uses @customElement() decorator for registration (not customElements.define)", "passed": true, "evidence": "@customElement('welcome-dashboard') on line 5"},
+    {"text": "Element has a render() method returning html template with welcome content", "passed": true, "evidence": "render() returns html with 'Welcome' headline and paragraph"}
+  ],
+  "summary": {"passed": 8, "failed": 2, "total": 10, "pass_rate": 0.80}
+}

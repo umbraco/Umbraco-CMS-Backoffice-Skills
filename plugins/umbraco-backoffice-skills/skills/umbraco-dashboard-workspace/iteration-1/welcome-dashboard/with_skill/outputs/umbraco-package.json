@@ -1,0 +1,22 @@
+{
+  "name": "welcome-dashboard",
+  "extensions": [
+    {
+      "type": "dashboard",
+      "alias": "welcome.dashboard",
+      "name": "Welcome Dashboard",
+      "element": "/App_Plugins/WelcomeDashboard/dashboard.js",
+      "weight": 30,
+      "meta": {
+        "label": "Welcome",
+        "pathname": "welcome-dashboard"
+      },
+      "conditions": [
+        {
+          "alias": "Umb.Condition.SectionAlias",
+          "match": "Umb.Section.Content"
+        }
+      ]
+    }
+  ]
+}

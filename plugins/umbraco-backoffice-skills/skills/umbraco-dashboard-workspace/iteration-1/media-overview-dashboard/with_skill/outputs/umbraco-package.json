@@ -1,0 +1,24 @@
+{
+  "$schema": "../../umbraco-package-schema.json",
+  "name": "Media Overview",
+  "version": "1.0.0",
+  "extensions": [
+    {
+      "type": "dashboard",
+      "alias": "media.overview.dashboard",
+      "name": "Media Overview Dashboard",
+      "element": "/App_Plugins/MediaOverview/dashboard.js",
+      "weight": 1000,
+      "meta": {
+        "label": "Media Overview",
+        "pathname": "media-overview"
+      },
+      "conditions": [
+        {
+          "alias": "Umb.Condition.SectionAlias",
+          "match": "Umb.Section.Media"
+        }
+      ]
+    }
+  ]
+}

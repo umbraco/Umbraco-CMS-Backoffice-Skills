@@ -1,0 +1,56 @@
+{
+  "skill_name": "umbraco-dashboard",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need a simple welcome dashboard that appears in the Content section of the Umbraco backoffice. It should show a heading that says 'Welcome' and a short paragraph underneath. Nothing fancy, just the basics to get started.",
+      "expected_output": "A umbraco-package.json manifest and a TypeScript/JavaScript element file that together produce a working dashboard in the Content section, following current Umbraco docs patterns.",
+      "files": [],
+      "expectations": [
+        "Manifest JSON has type set to 'dashboard'",
+        "Manifest JSON includes alias, name, and element fields",
+        "Manifest JSON has meta.label and meta.pathname",
+        "Manifest JSON has a condition with alias 'Umb.Condition.SectionAlias' and match 'Umb.Section.Content'",
+        "Manifest is wrapped in an extensions array inside umbraco-package.json",
+        "Element imports from '@umbraco-cms/backoffice/external/lit'",
+        "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'",
+        "Element class extends UmbLitElement (not UmbElementMixin(LitElement))",
+        "Element uses @customElement() decorator for registration (not customElements.define)",
+        "Element has a render() method returning html template with welcome content"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a dashboard for the Settings section that should only be visible to admin users. It should display a heading 'System Info' and a placeholder paragraph. I want it in my existing Umbraco project at App_Plugins/SystemInfo/.",
+      "expected_output": "A manifest with both section and admin conditions, plus an element file, both following current docs patterns.",
+      "files": [],
+      "expectations": [
+        "Manifest JSON has type set to 'dashboard'",
+        "Manifest JSON has a condition with alias 'Umb.Condition.SectionAlias' and match 'Umb.Section.Settings'",
+        "Manifest JSON has a condition with alias 'Umb.Condition.CurrentUser.IsAdmin'",
+        "Manifest conditions array contains exactly 2 condition objects",
+        "Element file path references App_Plugins/SystemInfo/",
+        "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'",
+        "Element class extends UmbLitElement",
+        "Element uses @customElement() decorator for registration"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I want to add a dashboard to the Media section with a custom URL path of 'media-overview' and I'd like it to load before other dashboards. The dashboard should just show a heading for now. Put it in App_Plugins/MediaOverview/.",
+      "expected_output": "A manifest with weight, custom pathname, and Media section condition, plus an element file following docs patterns.",
+      "files": [],
+      "expectations": [
+        "Manifest JSON has type set to 'dashboard'",
+        "Manifest JSON has meta.pathname set to 'media-overview'",
+        "Manifest JSON has meta.label field",
+        "Manifest JSON has a weight field with a numeric value",
+        "Manifest JSON has a condition with alias 'Umb.Condition.SectionAlias' and match 'Umb.Section.Media'",
+        "Element file path references App_Plugins/MediaOverview/",
+        "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'",
+        "Element class extends UmbLitElement",
+        "Element uses @customElement() decorator for registration"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "expectations": [
+    {"text": "Manifest JSON has type set to 'dashboard'", "passed": true, "evidence": "type: \"dashboard\""},
+    {"text": "Manifest JSON has meta.pathname set to 'media-overview'", "passed": true, "evidence": "meta.pathname: \"media-overview\""},
+    {"text": "Manifest JSON has meta.label field", "passed": true, "evidence": "meta.label: \"Media Overview\""},
+    {"text": "Manifest JSON has a weight field with a numeric value", "passed": true, "evidence": "weight: 300"},
+    {"text": "Manifest JSON has a condition with alias 'Umb.Condition.SectionAlias' and match 'Umb.Section.Media'", "passed": true, "evidence": "conditions[0] matches Umb.Section.Media"},
+    {"text": "Element file path references App_Plugins/MediaOverview/", "passed": true, "evidence": "element: \"/App_Plugins/MediaOverview/dashboard.js\""},
+    {"text": "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'", "passed": false, "evidence": "Imports UmbElementMixin from '@umbraco-cms/backoffice/element-api'"},
+    {"text": "Element class extends UmbLitElement", "passed": false, "evidence": "extends UmbElementMixin(LitElement)"},
+    {"text": "Element uses @customElement() decorator for registration", "passed": true, "evidence": "@customElement('media-overview-dashboard')"}
+  ],
+  "summary": {"passed": 7, "failed": 2, "total": 9, "pass_rate": 0.778}
+}

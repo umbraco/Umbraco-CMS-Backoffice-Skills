@@ -1,0 +1,14 @@
+{
+  "name": "umbraco-skill-improver-v2",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "improve": "npx tsx improve.ts"
+  },
+  "dependencies": {
+    "tsx": "^4.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
+}

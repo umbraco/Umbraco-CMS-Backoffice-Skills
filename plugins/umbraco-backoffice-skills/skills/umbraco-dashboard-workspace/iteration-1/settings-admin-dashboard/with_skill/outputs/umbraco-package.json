@@ -1,0 +1,25 @@
+{
+  "name": "SystemInfo",
+  "extensions": [
+    {
+      "type": "dashboard",
+      "alias": "system.info.dashboard",
+      "name": "System Info Dashboard",
+      "element": "/App_Plugins/SystemInfo/dashboard.js",
+      "weight": -1,
+      "meta": {
+        "label": "System Info",
+        "pathname": "system-info"
+      },
+      "conditions": [
+        {
+          "alias": "Umb.Condition.SectionAlias",
+          "match": "Umb.Section.Settings"
+        },
+        {
+          "alias": "Umb.Condition.CurrentUser.IsAdmin"
+        }
+      ]
+    }
+  ]
+}

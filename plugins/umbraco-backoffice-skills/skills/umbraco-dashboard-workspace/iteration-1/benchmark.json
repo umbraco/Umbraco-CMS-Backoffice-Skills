@@ -1,0 +1,199 @@
+{
+  "metadata": {
+    "skill_name": "umbraco-dashboard",
+    "skill_path": "/Users/philw/Projects/UmbracoCMS_Skills/plugins/umbraco-backoffice-skills/skills/umbraco-dashboard",
+    "executor_model": "claude-opus-4-6",
+    "timestamp": "2026-03-07T00:00:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "Welcome Dashboard",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.80,
+        "passed": 8,
+        "failed": 2,
+        "total": 10,
+        "time_seconds": 43.6,
+        "tokens": 10373,
+        "tool_calls": 11,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Manifest JSON has type set to 'dashboard'", "passed": true, "evidence": "type: \"dashboard\""},
+        {"text": "Manifest JSON includes alias, name, and element fields", "passed": true, "evidence": "All present"},
+        {"text": "Manifest JSON has meta.label and meta.pathname", "passed": true, "evidence": "Both present"},
+        {"text": "Manifest JSON has a condition with alias 'Umb.Condition.SectionAlias' and match 'Umb.Section.Content'", "passed": true, "evidence": "Correct"},
+        {"text": "Manifest is wrapped in an extensions array inside umbraco-package.json", "passed": true, "evidence": "Correct"},
+        {"text": "Element imports from '@umbraco-cms/backoffice/external/lit'", "passed": true, "evidence": "Correct"},
+        {"text": "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'", "passed": false, "evidence": "Uses UmbElementMixin from element-api"},
+        {"text": "Element class extends UmbLitElement", "passed": false, "evidence": "extends UmbElementMixin(LitElement)"},
+        {"text": "Element uses @customElement() decorator", "passed": true, "evidence": "@customElement used"},
+        {"text": "Element has render() with welcome content", "passed": true, "evidence": "Welcome heading and paragraph"}
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "Welcome Dashboard",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.80,
+        "passed": 8,
+        "failed": 2,
+        "total": 10,
+        "time_seconds": 19.3,
+        "tokens": 4322,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Manifest JSON has type set to 'dashboard'", "passed": true, "evidence": "Correct"},
+        {"text": "Manifest JSON includes alias, name, and element fields", "passed": true, "evidence": "All present"},
+        {"text": "Manifest JSON has meta.label and meta.pathname", "passed": true, "evidence": "Both present"},
+        {"text": "Manifest JSON has a condition with alias 'Umb.Condition.SectionAlias' and match 'Umb.Section.Content'", "passed": true, "evidence": "Correct"},
+        {"text": "Manifest is wrapped in an extensions array inside umbraco-package.json", "passed": true, "evidence": "Correct"},
+        {"text": "Element imports from '@umbraco-cms/backoffice/external/lit'", "passed": true, "evidence": "Correct"},
+        {"text": "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'", "passed": false, "evidence": "Uses UmbElementMixin from element-api"},
+        {"text": "Element class extends UmbLitElement", "passed": false, "evidence": "extends UmbElementMixin(LitElement)"},
+        {"text": "Element uses @customElement() decorator", "passed": true, "evidence": "@customElement used"},
+        {"text": "Element has render() with welcome content", "passed": true, "evidence": "Welcome heading and paragraph"}
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "Settings Admin Dashboard",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 6,
+        "failed": 2,
+        "total": 8,
+        "time_seconds": 35.9,
+        "tokens": 10231,
+        "tool_calls": 9,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Manifest JSON has type set to 'dashboard'", "passed": true, "evidence": "Correct"},
+        {"text": "Condition: Umb.Condition.SectionAlias + Umb.Section.Settings", "passed": true, "evidence": "Correct"},
+        {"text": "Condition: Umb.Condition.CurrentUser.IsAdmin", "passed": true, "evidence": "Correct alias used"},
+        {"text": "Exactly 2 conditions", "passed": true, "evidence": "2 conditions in array"},
+        {"text": "Element file path references App_Plugins/SystemInfo/", "passed": true, "evidence": "Correct path"},
+        {"text": "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'", "passed": false, "evidence": "Uses UmbElementMixin from element-api"},
+        {"text": "Element class extends UmbLitElement", "passed": false, "evidence": "extends UmbElementMixin(LitElement)"},
+        {"text": "Element uses @customElement() decorator", "passed": true, "evidence": "@customElement used"}
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "Settings Admin Dashboard",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.625,
+        "passed": 5,
+        "failed": 3,
+        "total": 8,
+        "time_seconds": 34.5,
+        "tokens": 7979,
+        "tool_calls": 9,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Manifest JSON has type set to 'dashboard'", "passed": true, "evidence": "Correct"},
+        {"text": "Condition: Umb.Condition.SectionAlias + Umb.Section.Settings", "passed": true, "evidence": "Correct"},
+        {"text": "Condition: Umb.Condition.CurrentUser.IsAdmin", "passed": false, "evidence": "Used Umb.Condition.UserGroupAlias instead"},
+        {"text": "Exactly 2 conditions", "passed": true, "evidence": "2 conditions in array"},
+        {"text": "Element file path references App_Plugins/SystemInfo/", "passed": true, "evidence": "Correct path"},
+        {"text": "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'", "passed": false, "evidence": "Uses UmbElementMixin from element-api"},
+        {"text": "Element class extends UmbLitElement", "passed": false, "evidence": "extends UmbElementMixin(LitElement)"},
+        {"text": "Element uses @customElement() decorator", "passed": true, "evidence": "@customElement used"}
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "Media Overview Dashboard",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.667,
+        "passed": 6,
+        "failed": 3,
+        "total": 9,
+        "time_seconds": 46.4,
+        "tokens": 13265,
+        "tool_calls": 12,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Manifest JSON has type set to 'dashboard'", "passed": true, "evidence": "Correct"},
+        {"text": "meta.pathname set to 'media-overview'", "passed": true, "evidence": "Correct"},
+        {"text": "meta.label field present", "passed": true, "evidence": "Media Overview"},
+        {"text": "weight field with numeric value", "passed": true, "evidence": "weight: 1000"},
+        {"text": "Condition: Umb.Condition.SectionAlias + Umb.Section.Media", "passed": true, "evidence": "Correct"},
+        {"text": "Element file path references App_Plugins/MediaOverview/", "passed": true, "evidence": "Correct path"},
+        {"text": "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'", "passed": false, "evidence": "Uses UmbElementMixin from element-api"},
+        {"text": "Element class extends UmbLitElement", "passed": false, "evidence": "extends UmbElementMixin(LitElement)"},
+        {"text": "Element uses @customElement() decorator", "passed": false, "evidence": "Uses customElements.define() instead"}
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "Media Overview Dashboard",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.778,
+        "passed": 7,
+        "failed": 2,
+        "total": 9,
+        "time_seconds": 49.1,
+        "tokens": 12014,
+        "tool_calls": 15,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Manifest JSON has type set to 'dashboard'", "passed": true, "evidence": "Correct"},
+        {"text": "meta.pathname set to 'media-overview'", "passed": true, "evidence": "Correct"},
+        {"text": "meta.label field present", "passed": true, "evidence": "Media Overview"},
+        {"text": "weight field with numeric value", "passed": true, "evidence": "weight: 300"},
+        {"text": "Condition: Umb.Condition.SectionAlias + Umb.Section.Media", "passed": true, "evidence": "Correct"},
+        {"text": "Element file path references App_Plugins/MediaOverview/", "passed": true, "evidence": "Correct path"},
+        {"text": "Element imports UmbLitElement from '@umbraco-cms/backoffice/lit-element'", "passed": false, "evidence": "Uses UmbElementMixin from element-api"},
+        {"text": "Element class extends UmbLitElement", "passed": false, "evidence": "extends UmbElementMixin(LitElement)"},
+        {"text": "Element uses @customElement() decorator", "passed": true, "evidence": "@customElement used"}
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 0.739, "stddev": 0.055, "min": 0.667, "max": 0.80},
+      "time_seconds": {"mean": 41.97, "stddev": 4.4, "min": 35.9, "max": 46.4},
+      "tokens": {"mean": 11290, "stddev": 1370, "min": 10231, "max": 13265}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.734, "stddev": 0.073, "min": 0.625, "max": 0.80},
+      "time_seconds": {"mean": 34.3, "stddev": 12.2, "min": 19.3, "max": 49.1},
+      "tokens": {"mean": 8105, "stddev": 3150, "min": 4322, "max": 12014}
+    },
+    "delta": {
+      "pass_rate": "+0.005",
+      "time_seconds": "+7.67",
+      "tokens": "+3185"
+    }
+  },
+  "notes": [
+    "UmbLitElement assertions fail 100% across BOTH configurations — neither skill nor baseline uses the docs-recommended pattern. All use UmbElementMixin(LitElement) instead.",
+    "The skill's embedded example uses UmbElementMixin + customElements.define, which contradicts the current official docs that show UmbLitElement + @customElement decorator.",
+    "Skill adds value on eval 2 (admin condition): with_skill correctly uses Umb.Condition.CurrentUser.IsAdmin while baseline guessed Umb.Condition.UserGroupAlias.",
+    "Eval 3 with-skill REGRESSED on @customElement — it followed the skill's customElements.define example instead of the docs pattern. The baseline actually outperformed here.",
+    "Manifest structure assertions (type, alias, meta, conditions, extensions array) pass uniformly — these are well-known and don't differentiate skill value.",
+    "Skill costs ~3x more tokens and ~20% more time than baseline, with negligible pass rate improvement overall."
+  ]
+}

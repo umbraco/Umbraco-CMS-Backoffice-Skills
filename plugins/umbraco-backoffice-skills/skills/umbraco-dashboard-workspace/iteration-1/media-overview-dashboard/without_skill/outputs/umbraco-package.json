@@ -1,0 +1,22 @@
+{
+  "name": "MediaOverview",
+  "extensions": [
+    {
+      "type": "dashboard",
+      "alias": "MediaOverview.Dashboard",
+      "name": "Media Overview Dashboard",
+      "element": "/App_Plugins/MediaOverview/dashboard.js",
+      "weight": 300,
+      "meta": {
+        "label": "Media Overview",
+        "pathname": "media-overview"
+      },
+      "conditions": [
+        {
+          "alias": "Umb.Condition.SectionAlias",
+          "match": "Umb.Section.Media"
+        }
+      ]
+    }
+  ]
+}

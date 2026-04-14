@@ -174,3 +174,4 @@ lerna-debug.log*
 validation-report.json
 code-analysis-report.json
 test-report.json
+eval-results/
