@@ -1,7 +1,7 @@
 ---
 name: umbraco-ufm-component
 description: Implement UFM (Umbraco Flavored Markdown) components in Umbraco backoffice using official docs
-version: 1.0.0
+version: 1.0.1
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
