@@ -31,7 +31,6 @@ These skills use the open [SKILL.md](https://agentskills.io/home) format, which 
 Install all skills for your editor:
 ```bash
 # For Cursor
-# For Cursor
 npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill '*' -a cursor
 
 # For GitHub Copilot
