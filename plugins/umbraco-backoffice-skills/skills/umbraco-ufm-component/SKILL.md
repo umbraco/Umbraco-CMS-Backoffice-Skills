@@ -79,6 +79,12 @@ export { MyUfmComponent as api };
 ```
 
 ### Component with Custom Element (my-ufm-component.ts)
+
+> **Important**: UFM's post-processing sanitizer only allows custom element
+> tag names that start with `umb-`, `ufm-`, or `uui-`. Any other prefix
+> (e.g. `my-hidden-label`) will be stripped from the rendered output.
+> See the [UFM sanitization docs](https://docs.umbraco.com/umbraco-cms/reference/umbraco-flavored-markdown#post-processing-and-sanitization).
+
 ```typescript
 import { html, customElement, property } from '@umbraco-cms/backoffice/external/lit';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
@@ -88,13 +94,14 @@ import type { UfmToken } from '@umbraco-cms/backoffice/ufm';
 // The UFM component that renders to custom element
 export class MyUfmComponent extends UmbUfmComponentBase {
   render(token: UfmToken): string | undefined {
-    // Output a custom element with the token text as attribute
-    return `<my-ufm-element text="${token.text}"></my-ufm-element>`;
+    // Output a custom element with the token text as attribute.
+    // Tag name MUST start with umb-, ufm-, or uui- to survive sanitization.
+    return `<ufm-my-element text="${token.text}"></ufm-my-element>`;
   }
 }
 
 // The custom element that gets rendered
-@customElement('my-ufm-element')
+@customElement('ufm-my-element')
 export class MyUfmElement extends UmbLitElement {
   @property()
   text?: string;
@@ -186,5 +193,7 @@ UFM components are used in label descriptions and markdown text:
 - Return safe HTML (escape user input)
 - Keep rendering lightweight
 - Consider accessibility in output
+- When rendering custom elements, use an allowed tag-name prefix: `umb-`,
+  `ufm-`, or `uui-`. Other prefixes are removed by UFM's sanitizer.
 
 That's it! Always fetch fresh docs, keep examples minimal, generate complete working code.
