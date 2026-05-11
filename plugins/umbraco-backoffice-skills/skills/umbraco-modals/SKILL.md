@@ -1,6 +1,6 @@
 ---
 name: umbraco-modals
-description: Implement modals in Umbraco backoffice using official docs
+description: Use when building Umbraco backoffice modal dialogs or sidebars — creating modal tokens (UmbModalToken), modal elements (UmbModalBaseElement, umb-body-layout), deep-link route-registered modals (modalRoute extension type), or opening modals programmatically via UMB_MODAL_MANAGER_CONTEXT
 version: 1.0.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
