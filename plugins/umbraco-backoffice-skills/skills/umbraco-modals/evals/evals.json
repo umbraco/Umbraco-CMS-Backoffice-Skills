@@ -1,0 +1,57 @@
+{
+  "skill_name": "umbraco-modals",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm building a custom Umbraco backoffice package and I need a confirmation popup before editors can delete one of our custom content items. Here's what it should do:\n\n- When triggered, a dialog pops up in the middle of the screen (not a sidebar) showing the name of the item they're about to delete\n- There's a text box where they have to type the item name exactly before a 'Delete' button becomes clickable — until they type it correctly, the button should stay greyed out / disabled\n- If they change their mind they can hit Cancel or close the popup and nothing happens\n- If they confirm, I need to know in my calling code that they went through with it (so I can actually do the delete)\n\nI want this wired up properly as a backoffice extension — not just a quick HTML dialog hack. What files do I need to create and how does it all fit together? I'll be putting this in a package called @acme/documents.",
+      "expected_output": "A properly registered modal extension with: a typed UmbModalToken configured as type 'dialog'; a modal element extending UmbModalBaseElement (not bare LitElement) that uses umb-body-layout with footer slot buttons; a Lit @state() reactive property tracking the text input so the Delete button is conditionally disabled; Cancel calls modalContext.reject(), Confirm calls modalContext.submit(); manifest entry using type 'modal' with a dynamic import.",
+      "files": [],
+      "expectations": [
+        "A modal token is created using UmbModalToken (not a generic custom element or HTML dialog) with typed data and value interfaces",
+        "The modal type is configured as 'dialog' (centred on screen), not 'sidebar'",
+        "The modal element extends UmbModalBaseElement (not bare LitElement or HTMLElement) with the correct typed generics",
+        "The Cancel action calls modalContext.reject() — not just a DOM event or ignoring the result",
+        "The Confirm action calls modalContext.submit() passing a value object the caller can receive",
+        "A Lit @state() property tracks the text input value so the button disabled state updates reactively as the user types",
+        "The Confirm button is conditionally disabled until the typed value matches the item name",
+        "The modal element uses umb-body-layout and slots buttons into the footer (actions) slot",
+        "A manifest entry of type 'modal' registers the element using a dynamic import (lazy-load), not a direct class reference",
+        "All Umbraco imports come from @umbraco-cms/backoffice/* package paths"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We're building an i18n package for Umbraco and need a language-picker sidebar. Editors click a button in the backoffice, a panel slides in from the right showing a list of available languages, they pick one and hit confirm.\n\nHere's the twist that's tripping me up: our support team wants to be able to send editors a direct browser URL that opens this sidebar straight away with a specific language pre-selected — like a deep link. So the sidebar needs to work in two ways:\n1. Opened programmatically when the editor clicks a button (passing in the list of languages and which one is currently active)\n2. Opened by navigating to a URL directly, where the available languages and current selection come from query parameters\n\nBoth routes should show exactly the same UI. The panel should be medium-width. When the editor picks a language and confirms, the caller gets back whichever language code they chose.\n\nThis is going in a package called @acme/i18n. What files do I need, and is there anything special about registering a modal that can also be opened via a URL in Umbraco?",
+      "expected_output": "Two distinct manifest entries: one type 'modal' for programmatic opening, and a second type 'modalRoute' (not type 'workspace' with kind 'routable') for the deep-link URL entry point. The route manifest includes a path. The modal element includes branching logic to read query parameters when opened via URL. The token is configured as type 'sidebar' with size 'medium'. Confirm calls modalContext.submit(), Cancel calls modalContext.reject().",
+      "files": [],
+      "expectations": [
+        "A modal token is created using UmbModalToken configured for type 'sidebar' with size 'medium'",
+        "The token's data type includes availableLanguages as an array of objects with code and name properties",
+        "Two distinct manifest entries are registered: one with type 'modal' for programmatic opening, and a second with type 'modalRoute' for the deep-link URL route",
+        "The route manifest includes a path corresponding to /umbraco/section/content/modal/... (or similar modal route path)",
+        "The modal element includes branching logic to read query parameters (using URLSearchParams or window.location.search) when opened via URL, falling back to token data when opened programmatically",
+        "The element pre-selects the currently active language on first render, regardless of which opening path was used",
+        "Confirm calls modalContext.submit() with the selected language code as the return value",
+        "Cancel/dismiss calls modalContext.reject()"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I've got a custom Lit element in my Umbraco package that manages tags on content. I want to add a 'Pick tags' button that opens a sidebar where editors can:\n- See a checklist of all available tags, with the ones already applied pre-ticked\n- Add a brand new tag inline (type it + click Add, and it appears in the list immediately, pre-ticked)\n- Hit Confirm to get back the final list of selected tags, or Cancel to bail out without changes\n\nI'm not sure how to:\na) Build the sidebar popup as a proper Umbraco extension (not just a random Lit component I drop in the DOM)\nb) Open it from inside my existing Lit element — I've seen references to some kind of 'context' system for accessing services in Umbraco but I don't really understand how it works. Do I import something? Instantiate something? I want to make sure I'm doing it the Umbraco way, not hacking something together.\nc) Get the result back after the editor confirms (and handle the case where they just close it without confirming, so my code doesn't crash)\n\nPackage is @acme/tags. Please show me all the files I need — both the sidebar popup itself and the changes to my existing element.",
+      "expected_output": "A complete modal extension plus a caller element update: UmbModalToken for the tag-picker, UmbModalBaseElement subclass for the sidebar UI, manifest entry of type 'modal'. The caller uses this.consumeContext(UMB_MODAL_MANAGER_CONTEXT, ...) in its constructor (not a singleton or DI pattern), stores the manager in a private field, opens the modal via modalManager.open(this, TOKEN, { data: {...} }), awaits the result, handles rejection gracefully with try/catch, and stores the returned tags in a @state() property.",
+      "files": [],
+      "expectations": [
+        "The tag-selection sidebar is built as a proper modal extension with a UmbModalToken (not a standalone custom element inserted into the DOM directly)",
+        "A manifest entry of type 'modal' registers the tag-selection element",
+        "The caller element imports UMB_MODAL_MANAGER_CONTEXT from @umbraco-cms/backoffice/modal (not a class instantiation or direct service import)",
+        "The caller element uses this.consumeContext(UMB_MODAL_MANAGER_CONTEXT, ...) in its constructor to get the modal manager — not dependency injection or a singleton call",
+        "The modal manager reference is stored in a private class field",
+        "The modal is opened by calling modalManager.open(this, TOKEN, { data: {...} }) with 'this' as the first argument",
+        "The openTagModal method awaits the result (via await modal.onSubmit() or equivalent async pattern)",
+        "Modal dismissal (the editor closes without confirming) is handled gracefully without an uncaught promise rejection — uses try/catch or .catch()",
+        "The returned selected tags are stored in a reactive @state() property on the caller element",
+        "The tag-selection modal pre-checks items that are in the currentTags input, and newly added inline tags appear immediately pre-checked"
+      ]
+    }
+  ]
+}

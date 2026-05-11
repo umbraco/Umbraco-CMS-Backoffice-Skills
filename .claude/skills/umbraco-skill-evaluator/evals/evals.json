@@ -1,0 +1,41 @@
+{
+  "skill_name": "REPLACE_WITH_SKILL_NAME",
+  "_comment": "Template eval set, tailored for skills in the umbraco/Umbraco-CMS-Backoffice-Skills repo (https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills). Each prompt below targets a different skill family in that repo and is shaped to be multi-step with realistic Umbraco backoffice traps a baseline run is likely to fall into (manifest schema details, element registration patterns, the right base classes, contexts, and conditions). Replace skill_name above with the skill you're evaluating, keep only the prompt(s) relevant to it, and rewrite the others to exercise different code paths of the same skill. Delete this _comment field when you're done. See SKILL.md > 'Writing eval prompts' for the bar.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm building an editorial workflow for our marketing team in the Umbraco 17 backoffice and I need a custom Property Editor UI for a 'Campaign Slug' field. It should: (1) take the value of another property on the same content type called 'campaignName' and propose a slugified version when the field is empty or hasn't been manually edited; (2) let the editor override the proposed slug, but show a small warning chip when the manual value diverges from what the auto-slug would produce; (3) validate that the slug is unique across published content of the same type by calling our existing CampaignService (assume it's exposed via an existing context token UMB_CAMPAIGN_CONTEXT). The element needs to live in our @acme/marketing package. Wire up the manifest, the web component, the schema, and any required dependencies — and make sure the validation runs through Umbraco's validation context so it surfaces in the workspace footer like a normal property error.",
+      "expected_output": "A working property editor UI registered through the correct manifest type, with a Lit-based element that consumes the workspace context to read the sibling 'campaignName' property, integrates with the validation context, declares its dependency on UMB_CAMPAIGN_CONTEXT, and exposes a sensible config schema. The skill should pull manifest field names and base classes from the official docs rather than guessing.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 2,
+      "prompt": "We need a 'Content Health' dashboard in the Content section of the backoffice that shows three things: total number of published pages, count of pages whose last edit was more than 6 months ago, and a list of the 5 most recently unpublished items. It should only appear for users in the 'editors' or 'administrators' user groups, and it should refresh when the user clicks a refresh button (no polling). The data comes from a backend endpoint at /umbraco/management/api/v1/acme/content-health which returns JSON. Set this up as a proper backoffice extension in our @acme/content-health package — manifest entry, custom element, conditions for the user group restriction, and a repository for the data fetching so we don't have fetch() calls inside the element itself.",
+      "expected_output": "A registered dashboard extension scoped to the Content section, gated by a user-group condition, with a Lit element that consumes a repository class for data access. Manifest type, alias, meta fields, and condition shape should match the official docs. The repository should follow the pattern from the umbraco-repository-pattern skill rather than inlining the fetch.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 3,
+      "prompt": "Add a custom Tiptap toolbar button to the Umbraco rich text editor that wraps the selected text in a 'callout' block with three variants: info, warning, and success. Clicking the button should open a small dropdown letting the editor pick the variant. The callout should serialise to HTML as <div class=\"umb-callout umb-callout--{variant}\">...</div> and round-trip correctly when the document is reopened. Register everything through the proper extension manifests (the Tiptap extension itself, the toolbar element, and any localisation keys for the button label and tooltip), and make sure it shows up in the toolbar configuration UI so editors can enable/disable it per data type — like the built-in formatting buttons do.",
+      "expected_output": "Three coordinated extension registrations (Tiptap extension defining the node/mark, toolbar element for the dropdown UI, and localisation entries) such that the button appears in the toolbar configurator, produces the correct HTML on save, and parses it back correctly on load. The element should extend the right backoffice base class and the manifest types should match what the official docs prescribe.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 4,
+      "prompt": "Build a 'Bulk Tagging' modal for our @acme/tagging package. Editors should be able to open it from a custom entity action on documents to apply or remove tags across multiple selected items. The modal needs: (1) a typed token so callers can pass in the selected entity unique IDs and the current tag set, and receive back the final list of additions and removals when the editor confirms; (2) a Lit-based modal element with a tag input, a 'pending changes' summary, and confirm/cancel buttons that uses the modal context to close with a typed result (or rejects on cancel); (3) registration as a sidebar-style modal via the modal extension type; (4) the ability to also be opened via a route like /umbraco/section/content/workspace/document/bulk-tag for deep-linking from emails or saved URLs — the routed entry point should reconstruct the same input from query params. Wire everything up so that opening it at runtime via the Modal Manager Context and opening it via the route both produce the same UX and resolve through the same token.",
+      "expected_output": "A working modal extension with a token (input + value typed), a Lit element that uses the modal context to submit/reject with the typed value, a manifest of the correct extension type with the appropriate modal size/type meta, AND a separate route registration that opens the same modal via URL — both paths sharing the token. Token-based typing should be enforced (no `any`), and the route should reconstruct the input from query parameters rather than relying on shared in-memory state.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 5,
+      "prompt": "Create a custom backoffice section called 'Content Insights' (alias acmeContentInsights, pathname content-insights) for our @acme/insights package, with three internal pages reachable via in-section navigation: an Overview at /, a Reports page at /reports/:reportId showing details for a specific report ID, and a Settings page at /settings. The section's root element should use umb-router-slot with route definitions that include the parameterised /reports/:reportId path, a default redirect from / to /overview, and a 404 fallback element for unknown paths. Add a left-hand menu inside the section that uses Umbraco's navigation conventions to switch between the three pages and keeps the active item in sync with the URL (so reloading on /reports/abc-123 still highlights 'Reports'). Make sure programmatic navigation from inside one of the pages — say, clicking a row in Overview to open that report — uses the proper backoffice routing API rather than window.location or raw history.pushState.",
+      "expected_output": "A registered section extension with a section view element that hosts umb-router-slot, route definitions covering the three pages including the :reportId parameter and a redirect + 404, and a menu wired up so the active item reflects the current pathname on navigation and on reload. Programmatic navigation should use the documented backoffice routing primitives. Manifest types, alias/pathname conventions, and the route definition shape should match the official routes documentation.",
+      "files": [],
+      "expectations": []
+    }
+  ]
+}
