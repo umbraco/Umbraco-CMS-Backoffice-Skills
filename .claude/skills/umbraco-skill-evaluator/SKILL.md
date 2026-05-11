@@ -1,5 +1,5 @@
 ---
-name: skill-evaluator
+name: umbraco-skill-evaluator
 description: Run quantitative + qualitative evaluations on an existing Claude skill. Use this whenever the user wants to test, benchmark, eval, validate, regression-check, or measure the value of a skill they've already drafted — including phrases like "run evals on this skill", "is this skill actually helping", "compare with-skill vs without-skill", "iterate on my skill based on results". This is the lightweight cousin of skill-creator: it skips drafting, blind comparison, and description-tuning, and focuses purely on the eval loop with Haiku-powered grading.
 ---
 
