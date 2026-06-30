@@ -16,8 +16,8 @@ UmbValidationContext provides a centralized validation system for forms in the U
 
 Always fetch the latest docs before implementing:
 
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-registry
 
 ## Reference Examples
 

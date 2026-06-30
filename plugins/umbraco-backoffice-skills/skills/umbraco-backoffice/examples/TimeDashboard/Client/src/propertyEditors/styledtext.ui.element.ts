@@ -2,6 +2,7 @@ import type { UmbPropertyEditorUiElement } from "@umbraco-cms/backoffice/propert
 import type { UmbPropertyEditorConfigCollection } from "@umbraco-cms/backoffice/property-editor";
 import { customElement, property, css, html, state } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
+import { UmbChangeEvent } from "@umbraco-cms/backoffice/event";
 
 @customElement('styled-textbox')
 export class StyledTextboxUiElement extends UmbLitElement implements UmbPropertyEditorUiElement {
@@ -21,7 +22,7 @@ export class StyledTextboxUiElement extends UmbLitElement implements UmbProperty
         const newValue = (e.target as HTMLInputElement).value;
         if (newValue === this.value) return;
         this.value = newValue;
-        this.dispatchEvent(new CustomEvent('property-value-change'));
+        this.dispatchEvent(new UmbChangeEvent());
     };
 
     override render() {

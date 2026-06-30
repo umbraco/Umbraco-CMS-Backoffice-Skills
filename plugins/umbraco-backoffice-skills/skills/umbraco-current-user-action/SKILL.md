@@ -14,9 +14,9 @@ Current User Actions appear in the user menu (accessed by clicking the user avat
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Extension Types**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
+- **Extension Types**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-types
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-registry
 
 ## Related Foundation Skills
 

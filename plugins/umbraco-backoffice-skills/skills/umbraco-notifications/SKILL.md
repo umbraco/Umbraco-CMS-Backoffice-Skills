@@ -14,9 +14,9 @@ Notifications provide user feedback in the Umbraco backoffice through the `UMB_N
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Context API**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/context-api
-- **Consume Context**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/context-api/consume-a-context
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Context API**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation/context-api
+- **Consume Context**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation/context-api/consume-a-context
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation
 
 ## Workflow
 

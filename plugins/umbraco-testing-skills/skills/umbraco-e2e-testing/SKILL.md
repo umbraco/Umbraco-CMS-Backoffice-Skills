@@ -94,8 +94,8 @@ Add to `package.json`:
 {
   "devDependencies": {
     "@playwright/test": "^1.56",
-    "@umbraco/playwright-testhelpers": "^17.0.15",
-    "@umbraco/json-models-builders": "^2.0.42",
+    "@umbraco/playwright-testhelpers": "^18.0.0",
+    "@umbraco/json-models-builders": "^18.0.0",
     "dotenv": "^16.3.1"
   },
   "scripts": {
@@ -115,8 +115,8 @@ npx playwright install chromium
 **Version Compatibility**: Match testhelpers to your Umbraco version:
 | Umbraco | Testhelpers |
 |---------|-------------|
-| 17.1.x (pre-release) | `17.1.0-beta.x` |
-| 17.0.x | `^17.0.15` |
+| 18.x | `^18.0.0` |
+| 17.x | `^17.0.15` |
 | 14.x | `^14.x` |
 
 ### Configuration

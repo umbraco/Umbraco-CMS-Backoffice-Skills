@@ -14,11 +14,11 @@ The Extension Registry is the core system managing all Umbraco backoffice UI ele
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **Register Extensions**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry/register-extensions
-- **Replace/Exclude**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry/replace-exclude-or-unregister
-- **Extension Manifest**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry/extension-manifest
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-registry
+- **Register Extensions**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-registry/register-extensions
+- **Replace/Exclude**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-registry/replace-exclude-or-unregister
+- **Extension Manifest**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-registry/extension-manifest
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation
 
 ## Workflow
 
@@ -222,8 +222,8 @@ Navigate to: **Settings > Extensions Insights** in the backoffice to see all reg
 - Dynamic dashboard registration
 
 ## Sources
-- [Extension Registry | Umbraco CMS](https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry)
-- [Register an Extension | Umbraco CMS](https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry/register-extensions)
-- [Replace, Exclude or Unregister | Umbraco CMS](https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry/replace-exclude-or-unregister)
+- [Extension Registry | Umbraco CMS](https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-registry)
+- [Register an Extension | Umbraco CMS](https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-registry/register-extensions)
+- [Replace, Exclude or Unregister | Umbraco CMS](https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-registry/replace-exclude-or-unregister)
 
 That's it! Always fetch fresh docs, keep examples minimal, generate complete working code.

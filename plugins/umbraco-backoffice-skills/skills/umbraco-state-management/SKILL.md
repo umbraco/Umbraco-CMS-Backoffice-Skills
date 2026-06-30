@@ -14,9 +14,9 @@ States in Umbraco are containers for reactive values that enable communication a
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/states
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Context API**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/context-api
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation/states
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation
+- **Context API**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation/context-api
 
 ## Workflow
 

@@ -200,7 +200,7 @@ export const manifests = [
   "name": "my-extension",
   "type": "module",
   "devDependencies": {
-    "@umbraco-cms/backoffice": "^17.0.0",
+    "@umbraco-cms/backoffice": "^18.0.0",
     "typescript": "~5.8.0"
   }
 }
