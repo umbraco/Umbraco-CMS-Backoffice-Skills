@@ -16,7 +16,7 @@
     "@hey-api/openapi-ts": "^0.97.0",
     "@playwright/test": "^1.56.0",
     "@umbraco-cms/backoffice": "^18.0.0",
-    "@umbraco/playwright-testhelpers": "^18.0.0",
+    "@umbraco-cms/acceptance-test-helpers": "^18.0.1",
     "chalk": "^5.4.1",
     "node-fetch": "^3.3.2",
     "typescript": "^5.8.3",

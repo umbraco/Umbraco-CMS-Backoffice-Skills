@@ -5,7 +5,7 @@ This directory contains tests that run against a **real Umbraco instance** with 
 ## How It Works
 
 1. The extension is built and installed on a real Umbraco instance
-2. Tests authenticate using `@umbraco/playwright-testhelpers`
+2. Tests authenticate using `@umbraco-cms/acceptance-test-helpers`
 3. Tests interact with the real backoffice UI
 4. The real backend API processes all requests
 
@@ -53,7 +53,7 @@ npx playwright test --config=tests/e2e/playwright.config.ts
 
 ## Authentication
 
-Tests use `@umbraco/playwright-testhelpers` for authentication:
+Tests use `@umbraco-cms/acceptance-test-helpers` for authentication:
 
 1. `auth.setup.ts` runs first to log in and save session
 2. Test projects depend on `setup` project

@@ -24,7 +24,7 @@
     "@hey-api/openapi-ts": "^0.97.0",
     "@open-wc/testing": "^4.0.0",
     "@playwright/test": "^1.56.0",
-    "@umbraco/playwright-testhelpers": "^18.0.0",
+    "@umbraco-cms/acceptance-test-helpers": "^18.0.1",
     "@umbraco-cms/backoffice": "^18.0.0",
     "@web/dev-server-esbuild": "^1.0.0",
     "@web/dev-server-import-maps": "^0.2.0",
