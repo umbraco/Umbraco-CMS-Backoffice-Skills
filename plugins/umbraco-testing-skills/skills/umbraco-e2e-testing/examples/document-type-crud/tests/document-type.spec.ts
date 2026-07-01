@@ -10,7 +10,7 @@
  * Based on: Umbraco.Tests.AcceptanceTest/tests/DefaultConfig/Settings/DocumentType/DocumentType.spec.ts
  */
 
-import { ConstantHelper, test } from '@umbraco/playwright-testhelpers';
+import { ConstantHelper, test } from '@umbraco-cms/acceptance-test-helpers';
 import { expect } from '@playwright/test';
 
 const documentTypeName = 'E2ETestDocumentType';
@@ -35,12 +35,10 @@ test('can create a document type', { tag: '@smoke' }, async ({ umbracoApi, umbra
 	await umbracoUi.documentType.clickCreateActionMenuOption();
 	await umbracoUi.documentType.clickCreateDocumentTypeButton();
 	await umbracoUi.documentType.enterDocumentTypeName(documentTypeName);
-	await umbracoUi.documentType.clickSaveButton();
+	await umbracoUi.documentType.clickSaveButtonAndWaitForDocumentTypeToBeCreated();
 
 	// Assert
-	await umbracoUi.documentType.waitForDocumentTypeToBeCreated();
 	expect(await umbracoApi.documentType.doesNameExist(documentTypeName)).toBeTruthy();
-	await umbracoUi.documentType.reloadTree('Document Types');
 	await umbracoUi.documentType.isDocumentTreeItemVisible(documentTypeName);
 });
 
@@ -53,10 +51,9 @@ test('can create an element type', { tag: '@smoke' }, async ({ umbracoApi, umbra
 	await umbracoUi.documentType.clickCreateActionMenuOption();
 	await umbracoUi.documentType.clickCreateElementTypeButton();
 	await umbracoUi.documentType.enterDocumentTypeName(documentTypeName);
-	await umbracoUi.documentType.clickSaveButton();
+	await umbracoUi.documentType.clickSaveButtonAndWaitForDocumentTypeToBeCreated();
 
 	// Assert
-	await umbracoUi.documentType.waitForDocumentTypeToBeCreated();
 	expect(await umbracoApi.documentType.doesNameExist(documentTypeName)).toBeTruthy();
 	// Verify isElement flag is true
 	const documentTypeData = await umbracoApi.documentType.getByName(documentTypeName);
@@ -91,10 +88,9 @@ test('can delete a document type', { tag: '@smoke' }, async ({ umbracoApi, umbra
 	// Act
 	await umbracoUi.documentType.clickRootFolderCaretButton();
 	await umbracoUi.documentType.clickActionsMenuForDocumentType(documentTypeName);
-	await umbracoUi.documentType.clickDeleteAndConfirmButton();
+	await umbracoUi.documentType.clickDeleteAndConfirmButtonAndWaitForDocumentTypeToBeDeleted();
 
 	// Assert
-	await umbracoUi.documentType.waitForDocumentTypeToBeDeleted();
 	expect(await umbracoApi.documentType.doesNameExist(documentTypeName)).toBeFalsy();
 });
 

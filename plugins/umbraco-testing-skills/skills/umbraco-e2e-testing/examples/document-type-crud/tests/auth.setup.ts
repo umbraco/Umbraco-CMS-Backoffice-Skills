@@ -9,7 +9,7 @@
 
 import { test as setup } from '@playwright/test';
 import { STORAGE_STATE } from '../playwright.config';
-import { ConstantHelper, UiHelpers } from '@umbraco/playwright-testhelpers';
+import { ConstantHelper, UiHelpers } from '@umbraco-cms/acceptance-test-helpers';
 
 setup('authenticate', async ({ page }) => {
 	const umbracoUi = new UiHelpers(page);

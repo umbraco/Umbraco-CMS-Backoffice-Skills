@@ -12,11 +12,11 @@
 	},
 	"dependencies": {
 		"@umbraco/json-models-builders": "^18.0.0",
-		"@umbraco/playwright-testhelpers": "^18.0.0",
 		"tslib": "^2.4.0"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.49.0",
+		"@umbraco-cms/acceptance-test-helpers": "^18.0.1",
 		"typescript": "^5.7.2"
 	},
 	"keywords": [
