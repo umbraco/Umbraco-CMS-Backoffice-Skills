@@ -39,7 +39,7 @@ export default defineConfig({
 
 	// Automatically start the mocked backoffice dev server with this extension
 	webServer: {
-		command: `VITE_EXTERNAL_EXTENSION=${EXTENSION_PATH} npm run dev:external -- --port ${DEV_SERVER_PORT}`,
+		command: `VITE_EXAMPLE_PATH=${EXTENSION_PATH} VITE_UMBRACO_USE_MSW=on npm run dev -- --port ${DEV_SERVER_PORT}`,
 		cwd: UMBRACO_CLIENT_PATH,
 		port: DEV_SERVER_PORT,
 		reuseExistingServer: !process.env.CI,
