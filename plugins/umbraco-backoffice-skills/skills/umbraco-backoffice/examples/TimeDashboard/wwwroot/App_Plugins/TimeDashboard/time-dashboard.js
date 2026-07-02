@@ -283,7 +283,7 @@ border:none; border-bottom: 1px solid #444;`
     type: "propertyEditorUi",
     alias: "styled.textbox.ui",
     name: "styled textbox",
-    js: () => import("./styledtext.ui.element-B8Wd4CK3.js"),
+    js: () => import("./styledtext.ui.element-ucpr2qZa.js"),
     elementName: "styled-text",
     meta: {
       label: "Styled textbox",

@@ -15,7 +15,7 @@ import { test, expect, type Page } from '@playwright/test';
  * Prerequisites:
  * - The mocked backoffice must be running with the extension loaded:
  *   cd /path/to/Umbraco.Web.UI.Client
- *   VITE_EXTERNAL_EXTENSION=/path/to/workspace-feature-toggle npm run dev:external
+ *   VITE_EXAMPLE_PATH=/absolute/path/to/workspace-feature-toggle VITE_UMBRACO_USE_MSW=on npm run dev
  */
 
 // Helper to open a document in the workspace

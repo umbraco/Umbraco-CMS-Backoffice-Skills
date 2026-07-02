@@ -71,7 +71,7 @@ Check extended workspace (including `/add-dir` directories) and warn if missing:
 ```
 ⚠ Umbraco CMS source not found in extended workspace.
   For better code generation, add it:
-  git clone https://github.com/umbraco/Umbraco-CMS.git
+  git clone https://github.com/umbraco/Umbraco-CMS
   /add-dir /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
 ```
 
@@ -79,7 +79,7 @@ Check extended workspace (including `/add-dir` directories) and warn if missing:
 ```
 ⚠ UUI library source not found in extended workspace.
   For UI component reference, add it:
-  git clone https://github.com/umbraco/Umbraco.UI.git
+  git clone https://github.com/umbraco/Umbraco.UI
   /add-dir /path/to/Umbraco.UI/packages/uui
 ```
 

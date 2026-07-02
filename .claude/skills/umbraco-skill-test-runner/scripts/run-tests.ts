@@ -26,6 +26,12 @@ interface TestSuiteResult {
   error?: string;
 }
 
+interface OrphanTest {
+  path: string;
+  kind: 'unrecognized-script' | 'uncovered-spec-file';
+  detail: string;
+}
+
 interface TestReport {
   timestamp: string;
   umbracoStarted: boolean;
@@ -37,6 +43,9 @@ interface TestReport {
     skipped: number;
   };
   results: TestSuiteResult[];
+  // Test files / scripts that exist but that discovery would NOT run. Non-empty means the
+  // discovery rules in discoverTestableExamples() have drifted — see auditTestCoverage().
+  orphans: OrphanTest[];
 }
 
 interface TestableExample {
@@ -83,9 +92,14 @@ async function discoverTestableExamples(): Promise<TestableExample[]> {
       tests.push({ type: 'unit', command: 'npm test' });
     }
 
-    // Mocked tests: explicit test:mocked script
-    if (scripts['test:mocked']) {
-      tests.push({ type: 'mocked', command: 'npm run test:mocked' });
+    // Mocked backoffice tests: test:mocked / test:msw / test:mock-repo scripts.
+    // These are Playwright suites run against the mocked client dev server (MSW),
+    // not the real host — an example may expose more than one (e.g. tree-example
+    // ships both an MSW and a mock-repository suite).
+    for (const key of Object.keys(scripts)) {
+      if (/^test:(mocked|msw|mock-repo)$/.test(key)) {
+        tests.push({ type: 'mocked', command: `npm run ${key}` });
+      }
     }
 
     // E2E tests: test:e2e script OR npm test with playwright (and NOT web-test-runner)
@@ -320,6 +334,60 @@ async function runTest(
 }
 
 /**
+ * Guard against silently-skipped tests.
+ *
+ * Discovery (discoverTestableExamples) maps a fixed set of npm-script names to suites. If a
+ * new example adds a test script whose name that mapping doesn't recognise — or drops a spec
+ * file into an example that has no runnable suite at all — the runner would just not run it,
+ * and a green report would hide the gap (this is exactly how tree-example's test:msw /
+ * test:mock-repo suites went unrun). This audit makes that loud instead of silent:
+ *   - unrecognized-script: a `test*` script invoking playwright/web-test-runner that produced
+ *     no discovered suite (interactive :watch/:headed/:ui/:debug/:report variants are ignored).
+ *   - uncovered-spec-file: a *.spec.ts / *.test.ts under examples/ whose example has no suite.
+ * Keep this in sync with discoverTestableExamples: when you teach discovery a new script
+ * pattern, this audit automatically stops flagging it.
+ */
+async function auditTestCoverage(examples: TestableExample[]): Promise<OrphanTest[]> {
+  const orphans: OrphanTest[] = [];
+  const AUX_SCRIPT = /:(watch|headed|ui|debug|report)$/;
+  const RUNNABLE = /playwright|web-test-runner/;
+
+  // 1) Every runnable test script should map to a discovered suite.
+  for (const example of examples) {
+    const covered = new Set(example.tests.map(t => t.command));
+    for (const [name, cmd] of Object.entries(example.scripts)) {
+      if (!name.startsWith('test') || AUX_SCRIPT.test(name) || !RUNNABLE.test(cmd)) continue;
+      const expected = name === 'test' ? 'npm test' : `npm run ${name}`;
+      if (!covered.has(expected)) {
+        orphans.push({
+          path: example.path,
+          kind: 'unrecognized-script',
+          detail: `script "${name}" (${cmd}) runs tests but discovery doesn't map it — add it to discoverTestableExamples()`
+        });
+      }
+    }
+  }
+
+  // 2) Every spec/test file under examples/ should belong to an example that has a suite.
+  const specFiles = await glob('**/examples/**/*.{spec,test}.ts', {
+    cwd: PROJECT_ROOT,
+    ignore: ['**/node_modules/**', '**/dist/**', '**/test-results/**', '**/playwright-report/**']
+  });
+  const testableDirs = examples.filter(e => e.tests.length > 0).map(e => e.path);
+  for (const spec of specFiles) {
+    const owner = testableDirs.find(dir => spec === dir || spec.startsWith(dir + '/'));
+    if (!owner) {
+      orphans.push({
+        path: spec,
+        kind: 'uncovered-spec-file',
+        detail: 'spec/test file has no example with a runnable test suite above it'
+      });
+    }
+  }
+  return orphans;
+}
+
+/**
  * Main test runner
  */
 async function runTests(): Promise<TestReport> {
@@ -328,6 +396,24 @@ async function runTests(): Promise<TestReport> {
   // Discover testable examples
   const examples = await discoverTestableExamples();
   console.error(`Found ${examples.length} testable examples`);
+
+  // Inventory: print every discovered suite so it's clear what will (and won't) run.
+  console.error('\n=== Discovered test suites ===');
+  for (const example of examples) {
+    for (const test of example.tests) {
+      console.error(`  [${test.type}] ${example.path} → ${test.command}`);
+    }
+  }
+
+  // Guard: fail loudly if any test file/script exists that discovery would not run.
+  const orphans = await auditTestCoverage(examples);
+  if (orphans.length > 0) {
+    console.error(`\n⚠️  ${orphans.length} ORPHAN test(s) — present but NOT run by discovery:`);
+    for (const o of orphans) {
+      console.error(`  ✗ [${o.kind}] ${o.path}\n      ${o.detail}`);
+    }
+    console.error('  Fix discoverTestableExamples() (or the example) so these run — see auditTestCoverage().');
+  }
 
   const results: TestSuiteResult[] = [];
   let umbracoStarted = false;
@@ -439,7 +525,8 @@ async function runTests(): Promise<TestReport> {
       failed: results.filter(r => r.status === 'failed').length,
       skipped: results.filter(r => r.status === 'skipped').length
     },
-    results
+    results,
+    orphans
   };
 
   return report;
@@ -468,7 +555,12 @@ runTests()
     console.error(`\nReport saved to ${reportPath}`);
     console.error(`Total: ${report.summary.total}, Passed: ${report.summary.passed}, Failed: ${report.summary.failed}, Skipped: ${report.summary.skipped}`);
 
-    // Exit with 0 (report only mode - don't fail on test failures)
+    // Report-only mode for test pass/fail (0), BUT orphaned tests are a discovery/config
+    // error the runner must surface — exit non-zero so validation can't silently miss suites.
+    if (report.orphans.length > 0) {
+      console.error(`\n⚠️  ${report.orphans.length} orphan test(s) not run — see "orphans" in the report. Failing.`);
+      process.exit(2);
+    }
     process.exit(0);
   })
   .catch(error => {

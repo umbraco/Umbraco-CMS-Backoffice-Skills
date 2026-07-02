@@ -115,7 +115,7 @@ When a solution file exists, adding the extension ensures:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms" Version="16.0.0" />
+    <PackageReference Include="Umbraco.Cms" Version="18.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -132,7 +132,7 @@ When a solution file exists, adding the extension ensures:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms" Version="16.0.0" />
+    <PackageReference Include="Umbraco.Cms" Version="18.0.0" />
   </ItemGroup>
 
   <ItemGroup>

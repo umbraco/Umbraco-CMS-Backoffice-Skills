@@ -28,7 +28,7 @@ Use this pattern whenever you:
 
 The setup has 4 parts:
 1. **C# Backend**: Controller with Swagger/OpenAPI documentation
-2. **Client Dependencies**: `@hey-api/openapi-ts` and `@hey-api/client-fetch`
+2. **Client Dependencies**: `@hey-api/openapi-ts` (the `@hey-api/client-fetch` plugin is bundled with it)
 3. **Generation Script**: Fetches swagger.json and generates TypeScript client
 4. **Entry Point Configuration**: Configures client with Umbraco auth
 
@@ -36,58 +36,41 @@ The setup has 4 parts:
 
 ### 1. C# Backend Setup (Swagger/OpenAPI)
 
-Your API must be exposed via Swagger. Create a composer:
+Your API must be exposed as a backoffice OpenAPI document. Create a composer:
+
+> **Umbraco 18+**: The OpenAPI stack moved off Swashbuckle's `SwaggerGenOptions`
+> (and the `BackOfficeSecurityRequirementsOperationFilterBase` / `OperationIdHandler`
+> types) to a fluent `AddBackOfficeOpenApiDocument(...)` builder. Use the pattern
+> below; the old `SwaggerGenOptions` approach no longer compiles on v18.
 
 ```csharp
 // Composers/MyApiComposer.cs
-using Asp.Versioning;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Api.Common.OpenApi;
+using Umbraco.Cms.Api.Management.OpenApi;
 using Umbraco.Cms.Core.Composing;
-using Umbraco.Cms.Web.Common.ApplicationBuilder;
+using Umbraco.Cms.Core.DependencyInjection;
 
 namespace MyExtension.Composers;
 
 public class MyApiComposer : IComposer
 {
-    public void Compose(IUmbracoBuilder builder)
-    {
-        // Register the API and Swagger
-        builder.Services.AddSingleton<ISchemaIdHandler, MySchemaIdHandler>();
-        builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, MySwaggerGenOptions>();
-        builder.Services.Configure<UmbracoPipelineOptions>(options =>
-        {
-            options.AddFilter(new UmbracoPipelineFilter(Constants.ApiName)
-            {
-                SwaggerPath = $"/umbraco/swagger/{Constants.ApiName.ToLower()}/swagger.json",
-                SwaggerRoutePrefix = $"{Constants.ApiName.ToLower()}",
-            });
-        });
-    }
-}
+    public void Compose(IUmbracoBuilder builder) =>
 
-// Swagger schema ID handler
-public class MySchemaIdHandler : SchemaIdHandler
-{
-    public override bool CanHandle(Type type)
-        => type.Namespace?.StartsWith("MyExtension") ?? false;
-}
-
-// Swagger generation options
-public class MySwaggerGenOptions : IConfigureOptions<SwaggerGenOptions>
-{
-    public void Configure(SwaggerGenOptions options)
-    {
-        options.SwaggerDoc(
+        // Registers a dedicated backoffice OpenAPI document, served at
+        // /umbraco/swagger/{ApiName}/swagger.json and browsable via Swagger UI.
+        // See https://docs.umbraco.com/umbraco-cms/extend-your-project/tutorials/creating-a-backoffice-api
+        builder.AddBackOfficeOpenApiDocument(
             Constants.ApiName,
-            new OpenApiInfo
-            {
-                Title = "My Extension API",
-                Version = "1.0",
-            });
-    }
+            document => document
+                .WithTitle("My Extension API")
+                .WithBackOfficeAuthentication()
+                .WithJsonOptions(Umbraco.Cms.Core.Constants.JsonOptionsNames.BackOffice)
+                .ConfigureOpenApiOptions(options =>
+                    options.AddDocumentTransformer((doc, _, _) =>
+                    {
+                        doc.Info.Version = "1.0";
+                        return Task.CompletedTask;
+                    })));
 }
 
 // Constants
@@ -107,8 +90,7 @@ Add to your `Client/package.json`:
     "generate-client": "node scripts/generate-openapi.js https://localhost:44325/umbraco/swagger/myextension/swagger.json"
   },
   "devDependencies": {
-    "@hey-api/client-fetch": "^0.10.0",
-    "@hey-api/openapi-ts": "^0.66.7",
+    "@hey-api/openapi-ts": "^0.97.0",
     "chalk": "^5.4.1",
     "node-fetch": "^3.3.2"
   }

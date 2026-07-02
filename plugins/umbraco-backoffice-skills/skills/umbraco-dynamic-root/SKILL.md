@@ -18,9 +18,9 @@ These enable flexible content picker configurations that adapt based on context.
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Extension Types**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
-- **Content Picker**: https://docs.umbraco.com/umbraco-cms/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/content-picker
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Extension Types**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-types
+- **Content Picker**: https://docs.umbraco.com/umbraco-cms/model-your-content/property-editors/built-in-umbraco-property-editors/content-picker
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation
 
 ## Workflow
 

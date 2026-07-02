@@ -214,7 +214,6 @@ const KNOWN_EXTENSION_TYPES = new Set([
   'tiptapStatusbarExtension',
   'tree',
   'treeItem',
-  'treeStore',
   'ufmComponent',
   'userGranularPermission',
   'userProfileApp',
@@ -231,6 +230,8 @@ const KNOWN_EXTENSION_TYPES = new Set([
 const DEPRECATED_PATTERNS = [
   { pattern: /ManifestDashboard(?!Collection)/g, message: 'ManifestDashboard type changed, check current docs' },
   { pattern: /from ['"]@umbraco-cms\/backoffice\/lit['"]/g, message: 'Import from @umbraco-cms/backoffice/lit-element instead' },
+  { pattern: /['"]treeStore['"]/g, message: "The 'treeStore' extension type was removed in Umbraco 18; caching lives in the repository now" },
+  { pattern: /['"]property-value-change['"]/g, message: "The 'property-value-change' event is deprecated; dispatch UmbChangeEvent from @umbraco-cms/backoffice/event instead" },
 ];
 
 // Extract code blocks from markdown

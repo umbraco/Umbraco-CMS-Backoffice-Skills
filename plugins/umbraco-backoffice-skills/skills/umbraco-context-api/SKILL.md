@@ -14,10 +14,10 @@ The Context API is Umbraco's communication system that enables extensions to sha
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/context-api
-- **Consume Context**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/context-api/consume-a-context
-- **Provide Context**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/context-api/provide-a-context
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation/context-api
+- **Consume Context**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation/context-api/consume-a-context
+- **Provide Context**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation/context-api/provide-a-context
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation
 
 ## Workflow
 

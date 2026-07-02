@@ -14,14 +14,14 @@ The Umbraco Extension Template is the official .NET template for creating backof
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/development-flow/umbraco-extension-template
-- **Development Flow**: https://docs.umbraco.com/umbraco-cms/customizing/development-flow
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/development-flow/umbraco-extension-template
+- **Development Flow**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/development-flow
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation
 
 ## Prerequisites
 
-- .NET SDK 9.0 or later
-- Node.js 22 or later
+- .NET SDK 10.0 or later
+- Node.js 24 or later
 
 ## Workflow
 

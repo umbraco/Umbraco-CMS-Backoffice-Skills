@@ -117,9 +117,11 @@ const menuItemManifest: UmbExtensionManifest = {
 };
 ```
 
-## Key Pattern: Tree Repository + Store
+## Key Pattern: Tree Repository
 
-Trees require a repository and store for data management:
+Trees require a repository for data management. (The separate `treeStore`
+extension type was deprecated in v14 and **removed in v18** — caching now lives
+in the repository itself, so do not register a store.)
 
 ```typescript
 // Repository: fetches data from API
@@ -127,13 +129,6 @@ const repositoryManifest: UmbExtensionManifest = {
   type: "repository",
   alias: "OurTree.Repository",
   api: () => import("./ourtree.repository.js"),
-};
-
-// Store: caches tree state
-const storeManifest: UmbExtensionManifest = {
-  type: "treeStore",
-  alias: "OurTree.Store",
-  api: () => import("./ourtree.store.js"),
 };
 
 // Tree references the repository

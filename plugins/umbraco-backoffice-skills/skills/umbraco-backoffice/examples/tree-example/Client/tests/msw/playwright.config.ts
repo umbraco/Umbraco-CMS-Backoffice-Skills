@@ -41,10 +41,16 @@ const DEV_SERVER_PORT = 5176;
  */
 export default defineConfig({
 	testDir: '.',
+	// Inject external-example support into the client dev server before starting it; revert after.
+	globalSetup: fileURLToPath(new URL('../../../../../../../../umbraco-testing-skills/harness/mocked-backoffice/global-setup.mjs', import.meta.url)),
+	globalTeardown: fileURLToPath(new URL('../../../../../../../../umbraco-testing-skills/harness/mocked-backoffice/global-teardown.mjs', import.meta.url)),
 	testMatch: ['*.spec.ts'],
 	timeout: 60000,
 	expect: { timeout: 15000 },
 	fullyParallel: false,
+	// Retry the transient dev-server cold-start window (vite re-optimizes deps after the
+	// harness patches the client config, briefly refusing connections on the first run).
+	retries: 2,
 	workers: 1,
 	reporter: [['html', { outputFolder: './playwright-report' }], ['list']],
 	outputDir: './test-results',
@@ -66,8 +72,14 @@ export default defineConfig({
     storageState: undefined,
   },
   projects: [
+    // Warm the dev server first so the real tests never hit vite's cold-start restart.
+    {
+      name: 'warmup',
+      testMatch: /warmup\.setup\.ts/,
+    },
     {
       name: 'chromium',
+      dependencies: ['warmup'],
       use: {
         ...devices['Desktop Chrome'],
         launchOptions: {

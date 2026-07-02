@@ -14,12 +14,12 @@ Workspaces are dedicated editing environments designed for specific entity types
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/workspaces
-- **Workspace Context**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/workspaces/workspace-context
-- **Workspace Views**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/workspaces/workspace-views
-- **Workspace Actions**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/workspaces/workspace-editor-actions
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-types/workspaces
+- **Workspace Context**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-types/workspaces/workspace-context
+- **Workspace Views**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-types/workspaces/workspace-views
+- **Workspace Actions**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-types/workspaces/workspace-editor-actions
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-registry
 
 ## CRITICAL: Workspace Kinds
 

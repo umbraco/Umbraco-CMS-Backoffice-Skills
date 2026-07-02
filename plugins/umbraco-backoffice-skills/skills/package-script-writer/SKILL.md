@@ -53,7 +53,7 @@ psw -d -n ProjectName -s ProjectName -u --database-type SQLite --admin-email adm
 
 With specific versions:
 ```bash
-psw -d -n ProjectName -s ProjectName -u --database-type SQLite --admin-email admin@test.com --admin-password "SecurePass1234" -p "uSync|17.0.0,Umbraco.Forms|17.0.1" --auto-run
+psw -d -n ProjectName -s ProjectName -u --database-type SQLite --admin-email admin@test.com --admin-password "SecurePass1234" -p "uSync|18.0.0,Umbraco.Forms|18.0.0" --auto-run
 ```
 
 ## IMPORTANT

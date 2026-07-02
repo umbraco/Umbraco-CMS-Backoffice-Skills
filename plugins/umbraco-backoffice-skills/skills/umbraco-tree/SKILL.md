@@ -14,10 +14,10 @@ A tree in Umbraco is a hierarchical structure of nodes registered in the Backoff
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/tree
-- **Sections & Trees**: https://docs.umbraco.com/umbraco-cms/customizing/overview
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-types/tree
+- **Sections & Trees**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/extending-overview/extension-registry
 
 ## CRITICAL: Tree + Workspace Integration
 
@@ -68,7 +68,7 @@ If you need to explain these foundational concepts when implementing trees, refe
 2. **Ask questions** - What data will the tree display? What repository will provide the data? Where will it appear? **Will tree items be clickable?**
 3. **Generate files** - Create minimal files based on latest docs
    - ✅ Create: `manifest.ts`, `tree.repository.ts` (with inline data source)
-   - ❌ Don't create: `tree.store.ts` (deprecated), separate `tree.data-source.ts` (can inline)
+   - ❌ Don't create: `tree.store.ts` (removed in v18), separate `tree.data-source.ts` (can inline)
    - **Use the inline data source pattern** shown in examples below
 4. **If clickable** - Also create routable workspaces for each entity type (reference `umbraco-workspace` skill)
 5. **Explain** - Show what was created and how to test
