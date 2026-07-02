@@ -31,22 +31,37 @@ CHECK_TYPESCRIPT=false npx tsx analyze-code.ts
 
 Set `CHECK_TYPESCRIPT=true` for TypeScript compilation checking (slower but more thorough).
 
-### Phase 3: Run Tests
+### Phase 3: Run Tests (unit + mocked + **all E2E**)
+
+Full validation **must run the E2E suites**, not just unit/mocked. E2E runs against
+the real Umbraco host in this repo (`Umbraco-CMS.Skills/`, at `https://localhost:44325`).
+The test runner **auto-starts that instance** (`dotnet run`) if it is not already up, and
+stops it afterwards — but it will **skip** E2E unless credentials are provided, so always
+pass the repo's unattended-install credentials:
 
 ```bash
 cd .claude/skills/umbraco-skill-test-runner/scripts
 npm install --silent
+URL=https://localhost:44325 \
+UMBRACO_USER_LOGIN=admin@example.com \
+UMBRACO_USER_PASSWORD=1234567890 \
+UMBRACO_CLIENT_PATH=/path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client \
 npx tsx run-tests.ts
 ```
 
-This runs all tests from skill examples:
-- **Unit tests** - Component tests with `@open-wc/testing`
-- **Mocked tests** - Integration tests against mocked backoffice
-- **E2E tests** - Full tests against real Umbraco (auto-starts if needed)
+This runs every test suite discovered under `**/examples/**`:
+- **Unit tests** - Component tests with `@open-wc/testing` (no instance needed)
+- **Mocked tests** - Playwright against the Umbraco **client dev server** (MSW). Needs
+  `UMBRACO_CLIENT_PATH` pointing at a built v18 `Umbraco.Web.UI.Client`.
+- **E2E tests** - Playwright against the **real running instance** (auto-started). Needs
+  the credentials above.
 
-For E2E tests, set credentials:
+If a run reports E2E as `skipped`, treat validation as **incomplete** — the instance
+wasn't reachable or credentials were missing. Start the host manually and re-run:
+
 ```bash
-UMBRACO_USER_LOGIN=admin@example.com UMBRACO_USER_PASSWORD=password npx tsx run-tests.ts
+ASPNETCORE_ENVIRONMENT=Development dotnet run \
+  --project Umbraco-CMS.Skills/Umbraco-CMS.Skills.csproj -c Debug   # https://localhost:44325
 ```
 
 ### Phase 4: Read Reports
@@ -145,9 +160,10 @@ Only execute fixes the user explicitly approves.
 |----------|---------|-------------|
 | `CHECK_TYPESCRIPT` | `false` | Enable TypeScript compilation checks |
 | `UMBRACO_CMS_PATH` | (auto) | Path to local Umbraco-CMS for path validation |
-| `UMBRACO_USER_LOGIN` | - | Admin email for E2E test authentication |
-| `UMBRACO_USER_PASSWORD` | - | Admin password for E2E test authentication |
-| `UMBRACO_URL` | `https://localhost:44325` | Umbraco instance URL for E2E tests |
+| `UMBRACO_USER_LOGIN` | - | Admin email for E2E test authentication (repo default: `admin@example.com`) |
+| `UMBRACO_USER_PASSWORD` | - | Admin password for E2E test authentication (repo default: `1234567890`) |
+| `URL` / `UMBRACO_URL` | `https://localhost:44325` | Umbraco instance URL for E2E tests |
+| `UMBRACO_CLIENT_PATH` | - | Path to a built v18 `Umbraco.Web.UI.Client` — required for the mocked-backoffice suites |
 
 ## Report Files
 
@@ -172,12 +188,17 @@ All validators save JSON reports to the project root:
 - `/validate-skills` - Run all phases including tests
 - `/validate-skills --skip-tests` - Skip Phase 3 (tests), only run link and code validation
 
-**For Phase 3 (Tests)**, use these environment variables:
+**For Phase 3 (Tests)**, always run the full suite with the instance + credentials so
+E2E actually executes (the runner auto-starts `Umbraco-CMS.Skills` and stops it after):
 ```bash
 URL=https://localhost:44325 \
 UMBRACO_USER_LOGIN=admin@example.com \
 UMBRACO_USER_PASSWORD=1234567890 \
+UMBRACO_CLIENT_PATH=/path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client \
 npx tsx run-tests.ts
 ```
 
-If Umbraco credentials are not available, tests will still run but E2E tests may be skipped. Unit and mocked tests do not require credentials.
+E2E is a **required** part of validation — a run where E2E is `skipped` is not a pass.
+Unit and mocked tests don't need credentials, but the full `/validate-skills` run does.
+(The mocked-backoffice suites additionally need `UMBRACO_CLIENT_PATH` to point at a built
+v18 client; without it those suites are skipped.)
