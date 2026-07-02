@@ -58,14 +58,11 @@ const VITE_CONFIG_PLUGINS = {
 		"\tresolve: externalExamplePath ? { dedupe: [...SHARED_PACKAGE_PREFIXES] } : undefined,\n" +
 		"\t// Allow Vite to serve files from the external example folder (outside the project root).\n" +
 		"\tserver: externalExamplePath ? { fs: { allow: ['.', externalExamplePath] } } : undefined,\n" +
-		"\t// Crawl the external example at startup so its deps optimize up-front — otherwise vite\n" +
-		"\t// discovers them on first navigation and does a full restart mid-run (connection refused\n" +
-		"\t// / flaky first test). Exclude dev/test-only deps that break pre-bundling.\n" +
+		"\t// External example folders may drag in dev/test-only deps that break pre-bundling.\n" +
+		"\t// (The mocked test suites warm the dev server first, so vite's one-time dep\n" +
+		"\t// re-optimization restart happens before the real tests run.)\n" +
 		"\toptimizeDeps: externalExamplePath\n" +
-		"\t\t? {\n" +
-		"\t\t\t\tentries: [path.join(externalExamplePath, 'index.ts')],\n" +
-		"\t\t\t\texclude: ['puppeteer-core', '@web/dev-server-core', '@web/dev-server-esbuild', '@web/dev-server-rollup'],\n" +
-		"\t\t\t}\n" +
+		"\t\t? { exclude: ['puppeteer-core', '@web/dev-server-core', '@web/dev-server-esbuild', '@web/dev-server-rollup'] }\n" +
 		"\t\t: undefined,\n" +
 		"\tplugins: [\n" +
 		"\t\t...plugins,\n" +

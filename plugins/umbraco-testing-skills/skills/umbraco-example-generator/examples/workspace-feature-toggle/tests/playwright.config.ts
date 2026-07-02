@@ -59,8 +59,14 @@ export default defineConfig({
 	},
 
 	projects: [
+		// Warm the dev server first so the real tests never hit vite's cold-start restart.
+		{
+			name: 'warmup',
+			testMatch: /warmup\.setup\.ts/,
+		},
 		{
 			name: 'chromium',
+			dependencies: ['warmup'],
 			use: {
 				...devices['Desktop Chrome'],
 			},
