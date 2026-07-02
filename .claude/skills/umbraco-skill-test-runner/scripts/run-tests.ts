@@ -57,7 +57,12 @@ interface TestableExample {
 }
 
 // Config
-const UMBRACO_URL = process.env.UMBRACO_URL || 'https://localhost:44325';
+// UMBRACO_URL is mutable: when we start the host ourselves and no URL was pinned, we learn
+// the real URL from the boot log ("Now listening on: …"). This lets worktrees run the host
+// on an OS-assigned dynamic port (launchSettings rewritten to :0) without clashing — see
+// scripts/worktree-create.sh. An explicitly-set UMBRACO_URL is always honoured as-is.
+let UMBRACO_URL = process.env.UMBRACO_URL || 'https://localhost:44325';
+const UMBRACO_URL_EXPLICIT = !!process.env.UMBRACO_URL;
 const UMBRACO_PROJECT_PATH = join(PROJECT_ROOT, 'Umbraco-CMS.Skills');
 const TEST_TIMEOUT_UNIT = 60000;
 const TEST_TIMEOUT_MOCKED = 120000;
@@ -165,14 +170,36 @@ async function waitForUmbraco(url: string, timeout: number): Promise<boolean> {
 }
 
 /**
+ * True if the host's launchSettings uses a dynamic (OS-assigned) port — i.e. this is a
+ * worktree whose launchSettings.json was rewritten to :0 (see scripts/worktree-create.sh).
+ * In that case we must NOT reuse whatever is on the default port (it'd be another checkout's
+ * host) — we always start our own and discover its URL from the boot log.
+ */
+function hostUsesDynamicPort(): boolean {
+  try {
+    const ls = readFileSync(join(UMBRACO_PROJECT_PATH, 'Properties', 'launchSettings.json'), 'utf-8');
+    const appUrl = JSON.parse(ls)?.profiles?.['Umbraco.Web.UI']?.applicationUrl ?? '';
+    return /:0(?:$|;|\/)/.test(appUrl);
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Start Umbraco if not running
  */
 async function ensureUmbracoRunning(): Promise<boolean> {
-  // Check if already running
-  const running = await checkUmbracoHealth(UMBRACO_URL);
-  if (running) {
-    console.error(`Umbraco already running at ${UMBRACO_URL}`);
-    return false;
+  const dynamicPort = !UMBRACO_URL_EXPLICIT && hostUsesDynamicPort();
+
+  // Reuse an already-running host only when we know its URL for certain: an explicit
+  // UMBRACO_URL, or the fixed default port in a normal checkout. Never reuse in a worktree
+  // (dynamic port) — that host belongs to another checkout.
+  if (!dynamicPort) {
+    const running = await checkUmbracoHealth(UMBRACO_URL);
+    if (running) {
+      console.error(`Umbraco already running at ${UMBRACO_URL}`);
+      return false;
+    }
   }
 
   // Check if project exists
@@ -181,7 +208,7 @@ async function ensureUmbracoRunning(): Promise<boolean> {
     return false;
   }
 
-  console.error(`Starting Umbraco from ${UMBRACO_PROJECT_PATH}...`);
+  console.error(`Starting Umbraco from ${UMBRACO_PROJECT_PATH}${dynamicPort ? ' (dynamic port)' : ''}...`);
 
   // Start Umbraco
   umbracoProcess = spawn('dotnet', ['run'], {
@@ -190,14 +217,36 @@ async function ensureUmbracoRunning(): Promise<boolean> {
     detached: true
   });
 
-  // Log output for debugging
+  // Discover the real base URL from the boot log ("Now listening on: https://127.0.0.1:PORT").
+  // Essential when the port is dynamic; a harmless confirmation of the default otherwise.
+  let resolveListening: (url: string) => void = () => {};
+  const listeningUrl = new Promise<string>((res) => { resolveListening = res; });
   umbracoProcess.stdout?.on('data', (data) => {
-    console.error(`[Umbraco] ${data.toString().trim()}`);
+    const text = data.toString();
+    console.error(`[Umbraco] ${text.trim()}`);
+    const match = text.match(/Now listening on:\s*(https:\/\/\S+)/i);
+    if (match) resolveListening(match[1].replace(/\/+$/, ''));
   });
 
   umbracoProcess.stderr?.on('data', (data) => {
     console.error(`[Umbraco Error] ${data.toString().trim()}`);
   });
+
+  // When the URL isn't pinned, wait for the boot log to reveal it before health-checking.
+  if (!UMBRACO_URL_EXPLICIT) {
+    const discovered = await Promise.race([
+      listeningUrl,
+      new Promise<null>((res) => setTimeout(() => res(null), UMBRACO_STARTUP_TIMEOUT)),
+    ]);
+    if (discovered) {
+      UMBRACO_URL = discovered;
+      console.error(`Discovered Umbraco URL: ${UMBRACO_URL}`);
+    } else if (dynamicPort) {
+      console.error('Could not discover the dynamic Umbraco URL from the boot log — aborting host start.');
+      stopUmbraco();
+      return false;
+    }
+  }
 
   // Wait for ready
   const ready = await waitForUmbraco(UMBRACO_URL, UMBRACO_STARTUP_TIMEOUT);

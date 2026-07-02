@@ -33,6 +33,15 @@ ASPNETCORE_ENVIRONMENT=Development dotnet run --project Umbraco-CMS.Skills/Umbra
 ```
 Backoffice at `https://localhost:44325/umbraco`. The DB auto-upgrades on boot. (The public front-end homepage may 500 via InMemoryAuto Razor compilation — unrelated to the backoffice, which is what these skills cover.)
 
+## Worktrees
+
+Creating a Claude Code worktree fires hooks (`.claude/settings.json` → `scripts/worktree-create.sh` / `worktree-remove.sh`) that let a worktree's Umbraco host run **alongside** the primary checkout without a port clash:
+
+- **Dynamic host port.** The create hook rewrites the worktree's `Umbraco-CMS.Skills/Properties/launchSettings.json` to port `0`, so the OS assigns a free ephemeral port instead of the fixed `44325`/`60290`. (This is a local-only edit inside the worktree — don't commit it.) The test-runner discovers the actual URL from the host's `Now listening on: …` boot log; it never reuses another checkout's host when the port is dynamic. If you start the host manually in a worktree, read the port it prints.
+- **DB is already isolated.** The host uses SQLite with a gitignored DB file, so each worktree does its own unattended install into its own DB — no per-worktree DB setup needed.
+- **Mocked dev-server ports** (`5174`/`5175`/`5176`) are overridable via the `DEV_SERVER_PORT` env var, so concurrent worktrees running mocked suites don't collide.
+- Worktrees live under `.claude/worktrees/<slug>` (gitignored). The remove hook kills any process holding the worktree (host, vite, Playwright) before `git worktree remove`.
+
 ## Validation (run before considering skill changes done)
 
 ```bash

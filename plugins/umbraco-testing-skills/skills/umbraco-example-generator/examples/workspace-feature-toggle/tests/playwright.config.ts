@@ -13,8 +13,9 @@ const EXTENSION_PATH = resolve(__dirname, '..');
 const UMBRACO_CLIENT_PATH = process.env.UMBRACO_CLIENT_PATH ||
 	'/Users/philw/Projects/Umbraco-CMS/src/Umbraco.Web.UI.Client';
 
-// Use port 5174 to avoid conflict with other dev servers
-const DEV_SERVER_PORT = 5174;
+// Use port 5174 to avoid conflict with other dev servers.
+// Overridable (DEV_SERVER_PORT env) so concurrent worktrees don't clash on this port.
+const DEV_SERVER_PORT = Number(process.env.DEV_SERVER_PORT) || 5174;
 
 /**
  * Playwright Configuration for Workspace Feature Toggle Mocked Tests
