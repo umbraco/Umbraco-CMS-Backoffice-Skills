@@ -90,4 +90,27 @@ export const VITE_CONFIG = {
 	edits: [VITE_CONFIG_HEADER, VITE_CONFIG_PLUGINS],
 };
 
-export const OVERLAY_FILES = [INDEX_TS, VITE_CONFIG];
+// --- mocks/index.ts: runtime MSW mock injection (window.MockServiceWorker.addMockHandlers) ---
+// The other half of the `external-extension-dev-support` work: stock v18 exposes the MSW
+// primitives on window.MockServiceWorker but no way to add handlers to the running worker.
+// An external example that mocks its OWN API endpoints (e.g. a custom tree data source)
+// needs this hook. Uses MSW's native worker.use() so injected handlers take priority over
+// the active mock set. Without it, such examples load but their endpoints go unhandled.
+export const MOCKS_INDEX_TS = {
+	file: 'mocks/index.ts',
+	// Marker proving support is already present (WIP branch or a previous patch).
+	marker: 'addMockHandlers',
+	find: "const worker = setupWorker(...handlers);\n\nexport { setupWorker };",
+	replace:
+		"const worker = setupWorker(...handlers);\n\n" +
+		"export { setupWorker };\n\n" +
+		"// Runtime MSW mock injection (injected by UmbracoCMS_Skills mocked-backoffice harness).\n" +
+		"// Lets an externally-loaded example mock its own API endpoints on top of the active mock\n" +
+		"// set via MSW's native worker.use(); exposed as window.MockServiceWorker.addMockHandlers(...).\n" +
+		"export const addMockHandlers = (...additionalHandlers) => {\n" +
+		"\tworker.use(...additionalHandlers);\n" +
+		"};\n" +
+		"(window.MockServiceWorker as any).addMockHandlers = addMockHandlers;",
+};
+
+export const OVERLAY_FILES = [INDEX_TS, VITE_CONFIG, MOCKS_INDEX_TS];

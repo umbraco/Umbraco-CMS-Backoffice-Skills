@@ -64,10 +64,36 @@ Notes:
 
 Example test suites (under each example's `Client/tests/` or the testing-skill `examples/`):
 - **Unit** — `@open-wc/testing` via web-test-runner (`npm test`). No instance needed.
-- **Mocked backoffice** — Playwright against the **Umbraco client dev server** (MSW). Requires `UMBRACO_CLIENT_PATH` pointing at a built `Umbraco.Web.UI.Client`, launched via `VITE_EXAMPLE_PATH=<abs> VITE_UMBRACO_USE_MSW=on npm run dev`. External-extension support (absolute `VITE_EXAMPLE_PATH` via `/@fs/` + a shared-package resolver) is **injected into the client automatically** by a self-contained harness (`plugins/umbraco-testing-skills/harness/mocked-backoffice/`, wired as Playwright `globalSetup`/`globalTeardown`) and reverted afterward — so a stock v18 client works, no CMS branch required. First cold run may re-optimize deps (flaky first navigation); configs set `retries`.
+- **Mocked backoffice** — Playwright against the **Umbraco client dev server** (MSW). Requires `UMBRACO_CLIENT_PATH` pointing at a built `Umbraco.Web.UI.Client`, launched via `VITE_EXAMPLE_PATH=<abs> VITE_UMBRACO_USE_MSW=on npm run dev`. A self-contained harness (`plugins/umbraco-testing-skills/harness/mocked-backoffice/`, wired as Playwright `globalSetup`/`globalTeardown`) **patches a stock client and reverts afterward** — so a stock v18 client works, no CMS branch required. It injects **both** halves of the unmerged `external-extension-dev-support` work: (1) external-extension loading (absolute `VITE_EXAMPLE_PATH` via `/@fs/` + shared-package resolver in `index.ts`/`vite.config.ts`), and (2) `window.MockServiceWorker.addMockHandlers(...)` in `mocks/index.ts`, which an example needs to mock its **own** custom API endpoint (e.g. a custom tree). Omitting (2) makes such an example load but silently render nothing. First cold run may re-optimize deps (flaky first navigation); configs set `retries`.
 - **E2E** — Playwright against the **real running instance** at `https://localhost:44325`. Run with `URL=https://localhost:44325 UMBRACO_USER_LOGIN=admin@example.com UMBRACO_USER_PASSWORD=1234567890 npx playwright test`.
 
 Testhelpers package: **`@umbraco-cms/acceptance-test-helpers`** (v18 rename of the old `@umbraco/playwright-testhelpers`). Use the renamed package for v18.
+
+### Test suite inventory
+
+Every runnable test suite in the repo (all live under an `examples/**` dir with a `package.json`). The test-runner auto-discovers these; `npx tsx run-tests.ts` also prints this list ("Discovered test suites") at startup.
+
+| Plugin / skill | Example | Suite(s) — script → type |
+|---|---|---|
+| testing / `umbraco-unit-testing` | `counter-dashboard` | `npm test` → unit |
+| testing / `umbraco-msw-testing` | `api-mocking` | `npm test` → unit |
+| testing / `umbraco-example-generator` | `workspace-feature-toggle` | `npm test` → unit · `npm run test:e2e` → mocked-backoffice¹ |
+| testing / `umbraco-e2e-testing` | `document-type-crud` | `npm test` (playwright) → e2e |
+| backoffice / `umbraco-backoffice` | `tree-example/Client` | `npm test` → unit · `npm run test:mock-repo` → mocked · `npm run test:msw` → mocked · `npm run test:e2e` → e2e |
+| backoffice / `umbraco-backoffice` | `notes-wiki/Client` | `npm run test:e2e` → e2e |
+
+Examples with a `Client/` but **no** test scripts (nothing to run): `Blueprint/Client`, `TimeDashboard/Client`.
+
+¹ `workspace-feature-toggle`'s `test:e2e` is a mocked-backoffice suite but is classified `e2e` by discovery (it uses the `test:e2e` script name); it runs in the e2e phase and needs `UMBRACO_CLIENT_PATH`, not the real host.
+
+### Discovery contract (keep this and `discoverTestableExamples()` in sync)
+
+The runner globs `**/examples/**/package.json` and maps script names to suite types:
+- `test` containing `web-test-runner` → **unit**
+- `test:mocked` / `test:msw` / `test:mock-repo` → **mocked**
+- `test:e2e`, or `test` containing `playwright` (and not web-test-runner) → **e2e**
+
+**Adding a new suite** = add a script whose name matches the above (or teach `discoverTestableExamples()` a new name). Interactive variants (`:watch` / `:headed` / `:ui` / `:debug` / `:report`) are intentionally ignored. A **coverage guard** (`auditTestCoverage()`) fails the run (exit 2, `orphans` in `test-report.json`) if any `test*` script that invokes playwright/web-test-runner, or any `*.spec.ts`/`*.test.ts` under `examples/`, isn't covered by a discovered suite — so a silently-skipped suite (as `test:msw`/`test:mock-repo` once were) can't recur.
 
 ## Umbraco v18 gotchas (learned the hard way)
 
