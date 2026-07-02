@@ -14,8 +14,9 @@ if (!UMBRACO_CLIENT_PATH) {
 	throw new Error('UMBRACO_CLIENT_PATH environment variable is required. See .env.example');
 }
 
-// Use port 5176 to avoid conflict with other dev servers
-const DEV_SERVER_PORT = 5176;
+// Use port 5176 to avoid conflict with other dev servers.
+// Overridable (DEV_SERVER_PORT env) so concurrent worktrees don't clash on this port.
+const DEV_SERVER_PORT = Number(process.env.DEV_SERVER_PORT) || 5176;
 
 /**
  * Playwright Configuration for MSW (Mock Service Worker) Tests
