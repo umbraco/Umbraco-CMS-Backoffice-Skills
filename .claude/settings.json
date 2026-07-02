@@ -1,5 +1,29 @@
 {
   "enabledPlugins": {
     "playwright@claude-plugins-official": true
+  },
+  "hooks": {
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/scripts/worktree-create.sh",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "WorktreeRemove": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/scripts/worktree-remove.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
   }
 }

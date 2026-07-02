@@ -174,3 +174,6 @@ lerna-debug.log*
 validation-report.json
 code-analysis-report.json
 test-report.json
+
+# Worktree directories
+.claude/worktrees/
