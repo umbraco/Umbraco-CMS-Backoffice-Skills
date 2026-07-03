@@ -1,7 +1,7 @@
 ---
 name: umbraco-sorter
 description: Implement drag-and-drop sorting with UmbSorterController in Umbraco backoffice
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---

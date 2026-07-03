@@ -1,7 +1,7 @@
 ---
 name: umbraco-property-editor-ui
 description: Implement property editor UIs in Umbraco backoffice using official docs
-version: 1.2.0
+version: 1.3.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---

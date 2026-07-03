@@ -1,7 +1,7 @@
 ---
 name: umbraco-manifest-picker
 description: Use umb-input-manifest to pick registered extensions in Umbraco backoffice
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---

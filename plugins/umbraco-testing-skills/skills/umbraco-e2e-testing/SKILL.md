@@ -1,7 +1,7 @@
 ---
 name: umbraco-e2e-testing
 description: E2E testing for Umbraco backoffice extensions using Playwright and @umbraco-cms/acceptance-test-helpers
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---

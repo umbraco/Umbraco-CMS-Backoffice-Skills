@@ -1,7 +1,7 @@
 ---
 name: umbraco-tiptap-extension
 description: Implement Tiptap extensions for Umbraco rich text editor using official docs
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---

@@ -1,7 +1,7 @@
 ---
 name: umbraco-mocked-backoffice
 description: Run Umbraco backoffice with mocked APIs for visual extension testing
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---

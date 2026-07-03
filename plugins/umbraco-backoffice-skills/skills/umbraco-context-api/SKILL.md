@@ -1,7 +1,7 @@
 ---
 name: umbraco-context-api
 description: Understand and use Context API in Umbraco backoffice (foundational concept)
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---

@@ -1,7 +1,7 @@
 ---
 name: umbraco-controllers
 description: Understand and create controllers in Umbraco backoffice (foundational concept)
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---

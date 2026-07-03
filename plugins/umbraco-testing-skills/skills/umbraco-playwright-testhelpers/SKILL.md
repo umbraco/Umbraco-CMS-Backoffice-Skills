@@ -1,7 +1,7 @@
 ---
 name: umbraco-playwright-testhelpers
 description: Reference for @umbraco-cms/acceptance-test-helpers package - fixtures, API helpers, and UI helpers for E2E testing
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---

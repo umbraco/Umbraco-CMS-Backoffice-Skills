@@ -1,7 +1,7 @@
 ---
 name: umbraco-extension-template
 description: Create new Umbraco backoffice extensions using the official dotnet template
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch, Bash
 ---

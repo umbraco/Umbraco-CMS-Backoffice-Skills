@@ -1,7 +1,7 @@
 ---
 name: umbraco-picker-data-source
 description: Implement custom picker data sources for property editors in Umbraco backoffice
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---

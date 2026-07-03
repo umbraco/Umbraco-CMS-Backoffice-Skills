@@ -1,7 +1,7 @@
 ---
 name: umbraco-workspace
 description: Implement workspaces in Umbraco backoffice using official docs
-version: 1.1.0
+version: 1.2.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
