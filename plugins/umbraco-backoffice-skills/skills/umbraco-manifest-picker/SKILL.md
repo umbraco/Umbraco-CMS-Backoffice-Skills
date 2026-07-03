@@ -16,8 +16,8 @@ The `<umb-input-manifest>` component provides a picker UI for selecting register
 
 Always fetch the latest docs before implementing:
 
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Reference Example
 

@@ -8,9 +8,9 @@ Create a lightweight Claude Code skill for: **{{arg}}**
 
 ## Documentation URLs (Use these in the skill)
 
-1. **Extending Overview**: `https://docs.umbraco.com/umbraco-cms/customizing/extending-overview`
-2. **Foundation**: `https://docs.umbraco.com/umbraco-cms/customizing/foundation`
-3. **Workspaces**: `https://docs.umbraco.com/umbraco-cms/customizing/workspaces`
+1. **Extending Overview**: `https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview`
+2. **Foundation**: `https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation`
+3. **Workspaces**: `https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/workspaces`
 
 ## What to Create
 
@@ -41,9 +41,9 @@ allowed-tools: Read, Write, Edit, WebFetch
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/{{arg}}
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/{{arg}}
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
 
 ## Workflow
 

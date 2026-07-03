@@ -14,11 +14,11 @@ An Umbraco Element is a Web Component enhancement that simplifies integration wi
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/umbraco-element
-- **Context API**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/context-api
-- **Controllers**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/umbraco-controller
-- **Localization**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/localization
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation/umbraco-element
+- **Context API**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation/context-api
+- **Controllers**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation/umbraco-controller
+- **Localization**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation/localization
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Workflow
 

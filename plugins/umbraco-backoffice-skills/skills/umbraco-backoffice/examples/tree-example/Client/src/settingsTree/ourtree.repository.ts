@@ -13,8 +13,37 @@ import {
   type OurTreeItemModel,
   type OurTreeRootModel,
 } from "./types.js";
-import type { OurTreeItemResponseModel } from "../api/index.js";
+import type {
+  OurTreeItemResponseModel,
+  PagedOurTreeItemResponseModel,
+} from "../api/index.js";
 import { UmbTreeClientService } from "../api/index.js";
+
+/**
+ * Extract offset paging (skip/take) from the tree request args.
+ * Since 16.3 paging moved into `args.paging` (skip/take are deprecated), which is either offset-based
+ * ({ skip, take }) or target-based. This server API only supports offset.
+ */
+function toOffsetQuery(paging: UmbTreeRootItemsRequestArgs["paging"]) {
+  if (paging && "skip" in paging) {
+    return { skip: paging.skip, take: paging.take };
+  }
+  return { skip: 0, take: 100 };
+}
+
+/**
+ * The tree data source (16.3+) expects a UmbTargetPagedModel response with
+ * totalBefore/totalAfter. The server returns a simple paged model, so pad
+ * the windowed counts (unused by this flat tree).
+ */
+function toTargetPaged(data: PagedOurTreeItemResponseModel) {
+  return {
+    items: data.items,
+    total: data.total,
+    totalBefore: 0,
+    totalAfter: 0,
+  };
+}
 
 /**
  * Data source for the tree - inlined in repository file for simplicity.
@@ -26,19 +55,23 @@ class OurTreeDataSource extends UmbTreeServerDataSourceBase<
 > {
   constructor(host: UmbControllerHost) {
     super(host, {
-      getRootItems: async (args: UmbTreeRootItemsRequestArgs) =>
-        await UmbTreeClientService.getRoot({
-          query: { skip: args.skip, take: args.take },
-        }),
+      getRootItems: async (args: UmbTreeRootItemsRequestArgs) => {
+        const { data, ...rest } = await UmbTreeClientService.getRoot({
+          query: toOffsetQuery(args.paging),
+        });
+        return { ...rest, data: data ? toTargetPaged(data) : undefined };
+      },
       getChildrenOf: async (args: UmbTreeChildrenOfRequestArgs) => {
         if (args.parent?.unique === null) {
-          return await UmbTreeClientService.getRoot({
-            query: { skip: args.skip, take: args.take },
+          const { data, ...rest } = await UmbTreeClientService.getRoot({
+            query: toOffsetQuery(args.paging),
           });
+          return { ...rest, data: data ? toTargetPaged(data) : undefined };
         } else {
-          return await UmbTreeClientService.getChildren({
+          const { data, ...rest } = await UmbTreeClientService.getChildren({
             query: { parent: args.parent.unique },
           });
+          return { ...rest, data: data ? toTargetPaged(data) : undefined };
         }
       },
       getAncestorsOf: async (args: UmbTreeAncestorsOfRequestArgs) => {

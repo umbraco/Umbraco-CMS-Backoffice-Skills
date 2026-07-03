@@ -14,11 +14,11 @@ A modal is a popup layer that darkens the surroundings and comes with a focus lo
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/modals
-- **Custom Modals**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/modals/custom-modals
-- **Route Registration**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/modals/route-registration
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/modals
+- **Custom Modals**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/modals/custom-modals
+- **Route Registration**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/modals/route-registration
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
 
 ## Reference Examples
 

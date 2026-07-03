@@ -1,6 +1,6 @@
 ---
 name: umbraco-playwright-testhelpers
-description: Reference for @umbraco/playwright-testhelpers package - fixtures, API helpers, and UI helpers for E2E testing
+description: Reference for @umbraco-cms/acceptance-test-helpers package - fixtures, API helpers, and UI helpers for E2E testing
 version: 1.0.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
@@ -10,14 +10,16 @@ allowed-tools: Read, Write, Edit, WebFetch
 
 ## What is it?
 
-`@umbraco/playwright-testhelpers` is the official Umbraco package that provides Playwright fixtures, API helpers, and UI helpers for writing E2E tests against an Umbraco backoffice instance.
+`@umbraco-cms/acceptance-test-helpers` is the official Umbraco package that provides Playwright fixtures, API helpers, and UI helpers for writing E2E tests against an Umbraco backoffice instance.
 
-**Repository**: https://github.com/umbraco/Umbraco.Playwright.Testhelpers
+> **Package rename:** This package was previously published as `@umbraco/playwright-testhelpers`. From Umbraco 17.3 onward the helpers were moved into the CMS acceptance-test project and are published as `@umbraco-cms/acceptance-test-helpers`, versioned to match CMS releases (e.g. `^17.5.1` for Umbraco 17.5). The old package name is deprecated.
+
+**Source**: `Umbraco-CMS/tests/Umbraco.Tests.AcceptanceTest` (in the [Umbraco CMS repository](https://github.com/umbraco/Umbraco-CMS))
 
 ## Installation
 
 ```bash
-npm install @umbraco/playwright-testhelpers --save-dev
+npm install @umbraco-cms/acceptance-test-helpers --save-dev
 ```
 
 ## Related Skills
@@ -40,7 +42,7 @@ import {
   ConstantHelper,    // Constants for sections, actions, buttons
   AliasHelper,       // Alias generation utilities
   JsonHelper         // JSON parsing utilities
-} from '@umbraco/playwright-testhelpers';
+} from '@umbraco-cms/acceptance-test-helpers';
 ```
 
 ---
@@ -50,7 +52,7 @@ import {
 The `test` export extends Playwright's test with two fixtures:
 
 ```typescript
-import { test } from '@umbraco/playwright-testhelpers';
+import { test } from '@umbraco-cms/acceptance-test-helpers';
 
 test('my test', async ({ umbracoApi, umbracoUi }) => {
   // umbracoApi - API helpers for fast test setup/teardown
@@ -331,7 +333,7 @@ await umbracoUi.dragAndDrop(
 ## ConstantHelper
 
 ```typescript
-import { ConstantHelper } from '@umbraco/playwright-testhelpers';
+import { ConstantHelper } from '@umbraco-cms/acceptance-test-helpers';
 
 // Sections
 ConstantHelper.sections.content    // "content"
@@ -385,7 +387,7 @@ See **umbraco-test-builders** for comprehensive AliasHelper documentation.
 ## JsonHelper
 
 ```typescript
-import { JsonHelper } from '@umbraco/playwright-testhelpers';
+import { JsonHelper } from '@umbraco-cms/acceptance-test-helpers';
 
 // Parse response body
 const response = await umbracoApi.get(url);

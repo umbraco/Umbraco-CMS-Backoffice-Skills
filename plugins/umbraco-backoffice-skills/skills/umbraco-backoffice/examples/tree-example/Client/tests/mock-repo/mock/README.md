@@ -6,7 +6,7 @@ Run the tree extension in the mocked Umbraco backoffice without a .NET backend.
 
 ```bash
 cd /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
-VITE_EXTERNAL_EXTENSION=/path/to/tree-example/Client npm run dev:external
+VITE_EXAMPLE_PATH=/absolute/path/to/tree-example/Client VITE_USE_MOCK_REPO=on VITE_UMBRACO_USE_MSW=on npm run dev
 ```
 
 Open http://localhost:5173 and navigate to Settings section.

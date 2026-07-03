@@ -14,10 +14,10 @@ Routing in Umbraco's backoffice enables navigation between sections, dashboards,
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/routes
-- **Sections**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/sections/section
-- **Dashboards**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/dashboard
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation/routes
+- **Sections**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/sections/section
+- **Dashboards**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/dashboard
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Reference Example
 

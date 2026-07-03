@@ -14,9 +14,9 @@ An Auth Provider enables external login (OAuth/SSO) for the Umbraco backoffice. 
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **External Login Providers**: https://docs.umbraco.com/umbraco-cms/reference/security/external-login-providers
-- **Extension Types**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **External Login Providers**: https://docs.umbraco.com/umbraco-cms/17.latest/run-in-production/security/external-login-providers
+- **Extension Types**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Workflow
 

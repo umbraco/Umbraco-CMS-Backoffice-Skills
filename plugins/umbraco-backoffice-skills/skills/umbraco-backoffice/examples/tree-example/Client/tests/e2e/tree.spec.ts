@@ -2,7 +2,7 @@
  * E2E Tests against a real Umbraco instance
  *
  * These tests run against a live Umbraco instance with the extension installed.
- * They use @umbraco/playwright-testhelpers for authentication and navigation.
+ * They use @umbraco-cms/acceptance-test-helpers for authentication and navigation.
  *
  * Prerequisites:
  * - Umbraco instance running with the tree-example extension installed
@@ -16,7 +16,7 @@
  * Run with: npm run test:e2e
  */
 import { expect } from '@playwright/test';
-import { ConstantHelper, test } from '@umbraco/playwright-testhelpers';
+import { ConstantHelper, test } from '@umbraco-cms/acceptance-test-helpers';
 
 test.describe('Our Tree Extension (Real E2E)', () => {
   test('should display Our Tree menu in Settings sidebar', async ({ umbracoUi }) => {

@@ -5,7 +5,7 @@ import { dirname, join } from 'path';
 /**
  * Playwright Configuration for Umbraco E2E Tests
  *
- * Uses @umbraco/playwright-testhelpers which provides:
+ * Uses @umbraco-cms/acceptance-test-helpers which provides:
  * - umbracoApi fixture for API operations
  * - umbracoUi fixture for UI interactions
  * - ConstantHelper for common values

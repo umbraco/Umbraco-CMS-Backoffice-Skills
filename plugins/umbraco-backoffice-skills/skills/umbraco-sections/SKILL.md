@@ -14,12 +14,12 @@ Sections are top-level navigation items in the Umbraco backoffice that appear al
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/sections/section
-- **Section Views**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/sections/section-view
-- **Section Sidebar**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/sections/section-sidebar
-- **Dashboard**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/dashboard
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/sections/section
+- **Section Views**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/sections/section-view
+- **Section Sidebar**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/sections/section-sidebar
+- **Dashboard**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/dashboard
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
 
 ## Reference Example
 

@@ -24,7 +24,7 @@
  * If UMBRACO_DATA_PATH is set, test data is reset to seed state before each test run.
  */
 import { expect } from '@playwright/test';
-import { test } from '@umbraco/playwright-testhelpers';
+import { test } from '@umbraco-cms/acceptance-test-helpers';
 
 // Section alias for Notes - matches the pathname in section/constants.ts
 const NOTES_SECTION = 'notes';

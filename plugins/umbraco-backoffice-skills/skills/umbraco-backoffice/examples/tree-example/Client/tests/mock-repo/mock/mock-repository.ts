@@ -1,6 +1,10 @@
 import type { UmbControllerHost } from '@umbraco-cms/backoffice/controller-api';
 import type { UmbApi } from '@umbraco-cms/backoffice/extension-api';
-import { UmbTreeRepositoryBase } from '@umbraco-cms/backoffice/tree';
+import {
+  UmbTreeRepositoryBase,
+  type UmbTreeChildrenOfRequestArgs,
+  type UmbTreeRootItemsRequestArgs,
+} from '@umbraco-cms/backoffice/tree';
 
 // Import from original src files
 import {
@@ -21,17 +25,34 @@ class MockTreeDataSource {
     // Host not needed for mock data source
   }
 
-  async getRootItems(args: { skip: number; take: number }) {
-    const items = rootItems.slice(args.skip, args.skip + args.take);
-    return { data: { total: rootItems.length, items: this.#mapItems(items) } };
+  async getRootItems(args: UmbTreeRootItemsRequestArgs) {
+    const paging = args.paging;
+    const skip = paging && 'skip' in paging ? paging.skip : 0;
+    const take = paging && 'skip' in paging ? paging.take : 100;
+    const items = rootItems.slice(skip, skip + take);
+    return {
+      data: {
+        total: rootItems.length,
+        totalBefore: 0,
+        totalAfter: 0,
+        items: this.#mapItems(items),
+      },
+    };
   }
 
-  async getChildrenOf(args: { parent: { unique: string | null } }) {
+  async getChildrenOf(args: UmbTreeChildrenOfRequestArgs) {
     if (!args.parent?.unique) {
-      return this.getRootItems({ skip: 0, take: 100 });
+      return this.getRootItems({});
     }
     const children = childrenByParent[args.parent.unique] || [];
-    return { data: { total: children.length, items: this.#mapItems(children) } };
+    return {
+      data: {
+        total: children.length,
+        totalBefore: 0,
+        totalAfter: 0,
+        items: this.#mapItems(children),
+      },
+    };
   }
 
   async getAncestorsOf() {
