@@ -115,16 +115,24 @@ The runner globs `**/examples/**/package.json` and maps script names to suite ty
 
 ## Releasing
 
-Releases are cut from a `release/<version>` branch and tagged `v<version>` once merged.
-The tag is the release marker — "what changed since the last release" is always
-`git diff <last tag>..HEAD`. **Bump only the plugins whose files changed since that tag.**
+**Branch model.** Each Umbraco major has an integration branch and a stable/released branch:
+
+| Major | Integration (feature PRs land here) | Stable (releases live here) |
+|---|---|---|
+| 18 (current) | `dev` | `main` |
+| 17 | `v17/dev` | `v17/main` |
+
+Feature PRs merge into the integration branch. A **release promotes the integration branch to
+its stable branch** and tags it `v<version>`. The tag is the release marker — "what changed since
+the last release" is always `git diff <last tag>..HEAD`. **Bump only the plugins whose files
+changed since that tag.**
 
 There are **three** version fields, and the two per-plugin ones must stay paired:
 - `.claude-plugin/marketplace.json` → `metadata.version` — the overall marketplace/release version.
 - `.claude-plugin/marketplace.json` → each `plugins[].version` — one per plugin.
 - `plugins/<plugin>/.claude-plugin/plugin.json` → `version` — must equal that plugin's marketplace entry.
 
-Steps:
+Steps (shown for the 18 line — for 17 substitute `v17/dev` / `v17/main`):
 
 1. **Find the last release** and confirm the target version:
    ```bash
@@ -144,7 +152,7 @@ Steps:
    A plugin **changed** if it has any commits/file changes under `plugins/<plugin>/` — including
    example code, lockfiles, and generated `wwwroot/App_Plugins/` assets, not just SKILL.md text.
 
-3. **Create the release branch** off `dev`:
+3. **Create the release branch** off the integration branch:
    ```bash
    git checkout dev && git pull
    git checkout -b release/<version>
@@ -157,10 +165,18 @@ Steps:
 5. **Validate** — run `/validate-skills` (full: links + code + all tests incl. E2E). A release
    is not ready while any suite fails or E2E is `skipped`.
 
-6. **PR → merge → tag.** Open the release PR against `dev`, merge, then tag the merge commit and push:
+6. **Land the bump on the integration branch.** PR `release/<version>` → `dev` and merge, so
+   `dev` carries the new version.
+
+7. **Promote to the stable branch.** PR `dev` → `main` and merge (use a **merge commit**, not
+   squash, so the exact released commit stays reachable on `main`). Direct pushes to `main` are
+   blocked — always go through the PR.
+
+8. **Tag the release on the stable branch** and create the GitHub release:
    ```bash
-   git tag -a v<version> -m "Release <version>" && git push origin v<version>
+   gh release create v<version> --target main --title "v<version> — Umbraco 18 line" --notes "…"
    ```
+   Mark the highest active major `--latest`; older lines (e.g. `v17.x`) use `--latest=false`.
    The tag is what the *next* release diffs against — don't skip it.
 
 ## Conventions
