@@ -1,6 +1,6 @@
 {
   "name": "umbraco-cms-backoffice-testing-skills",
-  "version": "18.0.0",
+  "version": "18.0.1",
   "description": "Complete skill set for testing Umbraco backoffice extensions - Unit testing with @open-wc/testing, MSW mocking, and E2E testing with Playwright + Testhelpers",
   "author": {
     "name": "Phil W",

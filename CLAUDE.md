@@ -10,7 +10,7 @@ Two plugins (see `.claude-plugin/marketplace.json`):
 - **`umbraco-cms-backoffice-skills`** (`plugins/umbraco-backoffice-skills/`, ~65 skills) — Foundation concepts, Extension Types, Property Editors, Rich Text, Backend, Setup.
 - **`umbraco-cms-backoffice-testing-skills`** (`plugins/umbraco-testing-skills/`, ~8 skills) — unit, MSW/mocked, and E2E testing.
 
-Both are versioned to the targeted Umbraco major (currently **18.0.0**). When bumping, keep `marketplace.json` and both `plugin.json` versions in sync.
+Both are versioned to the targeted Umbraco major (currently **18**). Within a major, each plugin carries its own patch/minor and the two can diverge — a release bumps **only the plugins whose files actually changed** since the last release. A plugin's version must be identical in its own `plugin.json` and its entry in `marketplace.json`. See **Releasing** below.
 
 ## Layout
 
@@ -112,6 +112,56 @@ The runner globs `**/examples/**/package.json` and maps script names to suite ty
 - **Property editor value events**: dispatch `UmbChangeEvent` from `@umbraco-cms/backoffice/event`, not the legacy `property-value-change` CustomEvent.
 - **Backoffice API client** only gets the auth token if a `backofficeEntryPoint` manifest is registered in the bundle the real host loads (`bundle.manifests.ts`), not just the external `index.ts`.
 - **Docs URLs** for backoffice moved to `docs.umbraco.com/umbraco-cms/extend-your-project/backoffice-extensions/...` (was `.../customizing/...`).
+
+## Releasing
+
+Releases are cut from a `release/<version>` branch and tagged `v<version>` once merged.
+The tag is the release marker — "what changed since the last release" is always
+`git diff <last tag>..HEAD`. **Bump only the plugins whose files changed since that tag.**
+
+There are **three** version fields, and the two per-plugin ones must stay paired:
+- `.claude-plugin/marketplace.json` → `metadata.version` — the overall marketplace/release version.
+- `.claude-plugin/marketplace.json` → each `plugins[].version` — one per plugin.
+- `plugins/<plugin>/.claude-plugin/plugin.json` → `version` — must equal that plugin's marketplace entry.
+
+Steps:
+
+1. **Find the last release** and confirm the target version:
+   ```bash
+   git tag --sort=-v:refname | head -1        # e.g. v18.0.0  (empty = this is the first tag)
+   ```
+   The Umbraco **major** is fixed by what the skills target; bump patch/minor for a normal release.
+
+2. **See what changed per plugin** since the last release (substitute the tag; for the
+   first-ever release, diff from the commit that set the previous version):
+   ```bash
+   LAST=v18.0.0   # or a commit SHA if no tag exists yet
+   for p in plugins/umbraco-backoffice-skills plugins/umbraco-testing-skills; do
+     echo "== $p =="
+     git log --oneline "$LAST"..HEAD -- "$p"
+   done
+   ```
+   A plugin **changed** if it has any commits/file changes under `plugins/<plugin>/` — including
+   example code, lockfiles, and generated `wwwroot/App_Plugins/` assets, not just SKILL.md text.
+
+3. **Create the release branch** off `dev`:
+   ```bash
+   git checkout dev && git pull
+   git checkout -b release/<version>
+   ```
+
+4. **Bump only the changed plugins.** For each plugin that changed, set the new version in
+   *both* its `plugin.json` and its `marketplace.json` entry. Set `marketplace.json`
+   `metadata.version` to the release version. Leave unchanged plugins at their existing version.
+
+5. **Validate** — run `/validate-skills` (full: links + code + all tests incl. E2E). A release
+   is not ready while any suite fails or E2E is `skipped`.
+
+6. **PR → merge → tag.** Open the release PR against `dev`, merge, then tag the merge commit and push:
+   ```bash
+   git tag -a v<version> -m "Release <version>" && git push origin v<version>
+   ```
+   The tag is what the *next* release diffs against — don't skip it.
 
 ## Conventions
 
