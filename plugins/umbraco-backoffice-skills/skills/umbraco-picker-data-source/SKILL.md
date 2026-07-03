@@ -1,7 +1,7 @@
 ---
 name: umbraco-picker-data-source
 description: Implement custom picker data sources for property editors in Umbraco backoffice
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -16,9 +16,9 @@ A Picker Data Source provides data for picker-based property editors. It allows 
 
 Always fetch the latest docs before implementing:
 
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **Property Editors**: https://docs.umbraco.com/umbraco-cms/customizing/property-editors
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
+- **Property Editors**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/property-editors
 
 ## Reference Example
 

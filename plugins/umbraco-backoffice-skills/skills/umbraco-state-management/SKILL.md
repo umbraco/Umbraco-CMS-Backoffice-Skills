@@ -1,7 +1,7 @@
 ---
 name: umbraco-state-management
 description: Understand and use state management in Umbraco backoffice (foundational concept)
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,9 +14,9 @@ States in Umbraco are containers for reactive values that enable communication a
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/states
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Context API**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/context-api
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation/states
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Context API**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation/context-api
 
 ## Workflow
 

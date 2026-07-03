@@ -1,7 +1,7 @@
 ---
 name: umbraco-tiptap-extension
 description: Implement Tiptap extensions for Umbraco rich text editor using official docs
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,10 +14,10 @@ A Tiptap Extension adds functionality to Umbraco's Rich Text Editor (which is bu
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Extension Types**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
-- **Rich Text Editor**: https://docs.umbraco.com/umbraco-cms/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/rich-text-editor
+- **Extension Types**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types
+- **Rich Text Editor**: https://docs.umbraco.com/umbraco-cms/17.latest/model-your-content/property-editors/built-in-umbraco-property-editors/rich-text-editor
 - **Tiptap Docs**: https://tiptap.dev/docs/editor/extensions/overview
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Related Skills
 

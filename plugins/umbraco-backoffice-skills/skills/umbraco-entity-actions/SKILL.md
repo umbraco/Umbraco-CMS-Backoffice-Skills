@@ -1,7 +1,7 @@
 ---
 name: umbraco-entity-actions
 description: Implement entity actions in Umbraco backoffice using official docs
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,9 +14,9 @@ Entity Actions perform an action on a specific item in Umbraco. They provide a g
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/entity-actions
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/entity-actions
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
 
 ## Reference Examples
 

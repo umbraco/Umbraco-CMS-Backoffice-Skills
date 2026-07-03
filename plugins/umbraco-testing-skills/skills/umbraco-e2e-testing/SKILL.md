@@ -1,22 +1,22 @@
 ---
 name: umbraco-e2e-testing
-description: E2E testing for Umbraco backoffice extensions using Playwright and @umbraco/playwright-testhelpers
-version: 1.0.0
+description: E2E testing for Umbraco backoffice extensions using Playwright and @umbraco-cms/acceptance-test-helpers
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
 
 # Umbraco E2E Testing
 
-End-to-end testing for Umbraco backoffice extensions using Playwright and `@umbraco/playwright-testhelpers`. This approach tests against a real running Umbraco instance, validating complete user workflows.
+End-to-end testing for Umbraco backoffice extensions using Playwright and `@umbraco-cms/acceptance-test-helpers`. This approach tests against a real running Umbraco instance, validating complete user workflows.
 
 ## Critical: Use Testhelpers for Core Umbraco
 
-Use `@umbraco/playwright-testhelpers` for **core Umbraco operations**:
+Use `@umbraco-cms/acceptance-test-helpers` for **core Umbraco operations**:
 
 | Package | Purpose | Why Required |
 |---------|---------|--------------|
-| `@umbraco/playwright-testhelpers` | UI and API helpers | Handles auth, navigation, core entity CRUD |
+| `@umbraco-cms/acceptance-test-helpers` | UI and API helpers | Handles auth, navigation, core entity CRUD |
 | `@umbraco/json-models-builders` | Test data builders | Creates valid Umbraco entities with correct structure |
 
 **Why use testhelpers for core Umbraco?**
@@ -31,7 +31,7 @@ await page.goto('/umbraco');
 await page.fill('[name="email"]', 'admin@example.com');
 
 // CORRECT - Testhelpers for core Umbraco
-import { test } from '@umbraco/playwright-testhelpers';
+import { test } from '@umbraco-cms/acceptance-test-helpers';
 
 test('my test', async ({ umbracoApi, umbracoUi }) => {
   await umbracoUi.goToBackOffice();
@@ -94,7 +94,7 @@ Add to `package.json`:
 {
   "devDependencies": {
     "@playwright/test": "^1.56",
-    "@umbraco/playwright-testhelpers": "^17.0.15",
+    "@umbraco-cms/acceptance-test-helpers": "^17.5.1",
     "@umbraco/json-models-builders": "^2.0.42",
     "dotenv": "^16.3.1"
   },
@@ -188,7 +188,7 @@ Create `tests/e2e/auth.setup.ts`:
 ```typescript
 import { test as setup } from '@playwright/test';
 import { STORAGE_STATE } from '../../playwright.config';
-import { ConstantHelper, UiHelpers } from '@umbraco/playwright-testhelpers';
+import { ConstantHelper, UiHelpers } from '@umbraco-cms/acceptance-test-helpers';
 
 setup('authenticate', async ({ page }) => {
   const umbracoUi = new UiHelpers(page);
@@ -245,7 +245,7 @@ my-extension/
 ### Test Fixtures
 
 ```typescript
-import { test } from '@umbraco/playwright-testhelpers';
+import { test } from '@umbraco-cms/acceptance-test-helpers';
 
 test('my test', async ({ umbracoApi, umbracoUi }) => {
   // umbracoApi - API helpers for setup/teardown
@@ -395,7 +395,7 @@ await umbracoUi.content.clickSaveButton();
 
 **Constants:**
 ```typescript
-import { ConstantHelper } from '@umbraco/playwright-testhelpers';
+import { ConstantHelper } from '@umbraco-cms/acceptance-test-helpers';
 
 ConstantHelper.sections.content
 ConstantHelper.sections.settings
@@ -411,7 +411,7 @@ ConstantHelper.buttons.saveAndPublish
 
 ```typescript
 import { expect } from '@playwright/test';
-import { ConstantHelper, NotificationConstantHelper, test } from '@umbraco/playwright-testhelpers';
+import { ConstantHelper, NotificationConstantHelper, test } from '@umbraco-cms/acceptance-test-helpers';
 
 const contentName = 'TestContent';
 const documentTypeName = 'TestDocType';

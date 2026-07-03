@@ -1,7 +1,7 @@
 ---
 name: umbraco-mfa-login-provider
 description: Implement MFA login providers for Umbraco backoffice using official docs
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,9 +14,9 @@ An MFA Login Provider is the UI component for Two-Factor Authentication (2FA) in
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Two-Factor Authentication**: https://docs.umbraco.com/umbraco-cms/reference/security/two-factor-authentication
-- **Extension Types**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Two-Factor Authentication**: https://docs.umbraco.com/umbraco-cms/17.latest/run-in-production/security/two-factor-authentication
+- **Extension Types**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Workflow
 

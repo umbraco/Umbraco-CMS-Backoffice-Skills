@@ -1,7 +1,7 @@
 ---
 name: umbraco-conditions
 description: Understand and use conditions in Umbraco backoffice (foundational concept)
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,9 +14,9 @@ Extension Conditions enable developers to declare requirements that must be met 
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-conditions
-- **Extension Types**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-conditions
+- **Extension Types**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Reference Example
 

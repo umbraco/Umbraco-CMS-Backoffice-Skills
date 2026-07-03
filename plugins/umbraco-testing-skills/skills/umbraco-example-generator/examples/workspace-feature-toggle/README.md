@@ -44,7 +44,7 @@ The E2E tests run against the mocked Umbraco backoffice - no .NET backend requir
 
 ```bash
 cd /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
-VITE_EXTERNAL_EXTENSION=/path/to/this/folder npm run dev:external
+VITE_EXAMPLE_PATH=/absolute/path/to/this/folder VITE_UMBRACO_USE_MSW=on npm run dev
 ```
 
 ### 2. Run Playwright tests

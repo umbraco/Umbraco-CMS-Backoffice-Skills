@@ -1,7 +1,7 @@
 ---
 name: umbraco-granular-user-permissions
 description: Implement granular user permissions in Umbraco backoffice using official docs
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,9 +14,9 @@ Granular User Permissions allow you to create custom permission controls for spe
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **User Permissions**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
+- **User Permissions**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types
 
 ## Reference Example
 

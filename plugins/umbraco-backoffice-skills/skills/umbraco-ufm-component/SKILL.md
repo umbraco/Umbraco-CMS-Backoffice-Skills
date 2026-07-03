@@ -1,7 +1,7 @@
 ---
 name: umbraco-ufm-component
 description: Implement UFM (Umbraco Flavored Markdown) components in Umbraco backoffice using official docs
-version: 1.0.1
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,9 +14,9 @@ UFM (Umbraco Flavored Markdown) Components extend Umbraco's markdown rendering w
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **UFM**: https://docs.umbraco.com/umbraco-cms/reference/umbraco-flavored-markdown
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
+- **UFM**: https://docs.umbraco.com/umbraco-cms/17.latest/model-your-content/property-editors/umbraco-flavored-markdown
 
 ## Reference Example
 
@@ -83,7 +83,7 @@ export { MyUfmComponent as api };
 > **Important**: UFM's post-processing sanitizer only allows custom element
 > tag names that start with `umb-`, `ufm-`, or `uui-`. Any other prefix
 > (e.g. `my-hidden-label`) will be stripped from the rendered output.
-> See the [UFM sanitization docs](https://docs.umbraco.com/umbraco-cms/reference/umbraco-flavored-markdown#post-processing-and-sanitization).
+> See the [UFM sanitization docs](https://docs.umbraco.com/umbraco-cms/17.latest/model-your-content/property-editors/umbraco-flavored-markdown#post-processing-and-sanitization).
 
 ```typescript
 import { html, customElement, property } from '@umbraco-cms/backoffice/external/lit';

@@ -1,7 +1,7 @@
 ---
 name: umbraco-dashboard
 description: Implement dashboards in Umbraco backoffice using official docs
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,10 +14,10 @@ Dashboards are customizable components that appear in Umbraco's backoffice secti
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/dashboard
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **Tutorial**: https://docs.umbraco.com/umbraco-cms/tutorials/creating-a-custom-dashboard
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/dashboard
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
+- **Tutorial**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/tutorials/creating-a-custom-dashboard
 
 ## Reference Example
 

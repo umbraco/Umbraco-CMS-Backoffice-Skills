@@ -61,6 +61,18 @@ import type { TreeItemModel } from "../api/index.js";
 import { NoteswikiService } from "../api/index.js";
 
 /**
+ * Extract offset paging (skip/take) from the tree request args.
+ * Since 16.3 paging moved into `args.paging` (skip/take are deprecated), which is either offset-based
+ * ({ skip, take }) or target-based. This server API only supports offset.
+ */
+function toOffsetQuery(paging: UmbTreeRootItemsRequestArgs["paging"]) {
+  if (paging && "skip" in paging) {
+    return { skip: paging.skip, take: paging.take };
+  }
+  return { skip: 0, take: 100 };
+}
+
+/**
  * Data source for the Notes tree - inlined in repository file for simplicity.
  * Uses UmbTreeServerDataSourceBase with function parameters.
  *
@@ -75,13 +87,15 @@ class NotesTreeDataSource extends UmbTreeServerDataSourceBase<
     super(host, {
       getRootItems: async (args: UmbTreeRootItemsRequestArgs) => {
         const response = await NoteswikiService.getRoot({
-          query: { skip: args.skip, take: args.take },
+          query: toOffsetQuery(args.paging),
         });
 
         return {
           data: {
             items: response.data.items,
             total: response.data.total,
+            totalBefore: 0,
+            totalAfter: 0,
           },
         };
       },
@@ -89,25 +103,29 @@ class NotesTreeDataSource extends UmbTreeServerDataSourceBase<
         // If parent is null, we're requesting root items
         if (args.parent?.unique === null) {
           const response = await NoteswikiService.getRoot({
-            query: { skip: args.skip, take: args.take },
+            query: toOffsetQuery(args.paging),
           });
           return {
             data: {
               items: response.data.items,
               total: response.data.total,
+              totalBefore: 0,
+              totalAfter: 0,
             },
           };
         }
 
         const response = await NoteswikiService.getChildren({
           path: { parentId: args.parent.unique },
-          query: { skip: args.skip, take: args.take },
+          query: toOffsetQuery(args.paging),
         });
 
         return {
           data: {
             items: response.data.items,
             total: response.data.total,
+            totalBefore: 0,
+            totalAfter: 0,
           },
         };
       },

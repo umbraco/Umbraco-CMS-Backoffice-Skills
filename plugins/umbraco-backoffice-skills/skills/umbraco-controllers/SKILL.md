@@ -1,7 +1,7 @@
 ---
 name: umbraco-controllers
 description: Understand and create controllers in Umbraco backoffice (foundational concept)
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,9 +14,9 @@ Controllers are separate classes that contain or reuse logic across elements whi
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/umbraco-controller
-- **Write Custom Controller**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/umbraco-controller/write-your-own-controller
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation/umbraco-controller
+- **Write Custom Controller**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation/umbraco-controller/write-your-own-controller
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Workflow
 

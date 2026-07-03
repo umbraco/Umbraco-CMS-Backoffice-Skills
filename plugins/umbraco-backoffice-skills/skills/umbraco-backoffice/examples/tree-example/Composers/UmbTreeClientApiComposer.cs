@@ -22,10 +22,10 @@ namespace UmbTreeClient.Composers
             builder.Services.Configure<SwaggerGenOptions>(opt =>
             {
                 // Related documentation:
-                // https://docs.umbraco.com/umbraco-cms/tutorials/creating-a-backoffice-api
-                // https://docs.umbraco.com/umbraco-cms/tutorials/creating-a-backoffice-api/adding-a-custom-swagger-document
-                // https://docs.umbraco.com/umbraco-cms/tutorials/creating-a-backoffice-api/versioning-your-api
-                // https://docs.umbraco.com/umbraco-cms/tutorials/creating-a-backoffice-api/access-policies
+                // https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/tutorials/creating-a-backoffice-api
+                // https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/tutorials/creating-a-backoffice-api/adding-a-custom-swagger-document
+                // https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/tutorials/creating-a-backoffice-api/versioning-your-api
+                // https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/tutorials/creating-a-backoffice-api/access-policies
 
                 // Configure the Swagger generation options
                 // Add in a new Swagger API document solely for our own package that can be browsed via Swagger UI
@@ -55,7 +55,7 @@ namespace UmbTreeClient.Composers
 
         // This is used to generate nice operation IDs in our swagger json file
         // So that the gnerated TypeScript client has nice method names and not too verbose
-        // https://docs.umbraco.com/umbraco-cms/tutorials/creating-a-backoffice-api/umbraco-schema-and-operation-ids#operation-ids
+        // https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/tutorials/creating-a-backoffice-api/umbraco-schema-and-operation-ids#operation-ids
         public class CustomOperationHandler : OperationIdHandler
         {
             public CustomOperationHandler(IOptions<ApiVersioningOptions> apiVersioningOptions) : base(apiVersioningOptions)

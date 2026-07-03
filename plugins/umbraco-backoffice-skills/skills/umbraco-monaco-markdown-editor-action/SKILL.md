@@ -1,7 +1,7 @@
 ---
 name: umbraco-monaco-markdown-editor-action
 description: Implement Monaco markdown editor actions in Umbraco backoffice using official docs
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,9 +14,9 @@ Monaco Markdown Editor Actions add custom toolbar buttons and keyboard shortcuts
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **Monaco Editor**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
+- **Monaco Editor**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types
 
 ## Related Foundation Skills
 

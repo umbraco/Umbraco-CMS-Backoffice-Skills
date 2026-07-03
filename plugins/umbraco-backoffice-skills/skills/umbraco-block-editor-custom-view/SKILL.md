@@ -1,7 +1,7 @@
 ---
 name: umbraco-block-editor-custom-view
 description: Implement block editor custom views in Umbraco backoffice using official docs
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,9 +14,9 @@ A Block Editor Custom View provides a custom visual representation for blocks in
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/block-custom-view
-- **Block Editor**: https://docs.umbraco.com/umbraco-cms/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/block-custom-view
+- **Block Editor**: https://docs.umbraco.com/umbraco-cms/17.latest/model-your-content/property-editors/built-in-umbraco-property-editors/block-editor
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Related Foundation Skills
 

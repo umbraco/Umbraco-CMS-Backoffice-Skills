@@ -1,7 +1,7 @@
 ---
 name: umbraco-tree
 description: Implement trees in Umbraco backoffice using official docs
-version: 1.2.0
+version: 1.3.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,10 +14,10 @@ A tree in Umbraco is a hierarchical structure of nodes registered in the Backoff
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/tree
-- **Sections & Trees**: https://docs.umbraco.com/umbraco-cms/customizing/overview
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/tree
+- **Sections & Trees**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
 
 ## CRITICAL: Tree + Workspace Integration
 

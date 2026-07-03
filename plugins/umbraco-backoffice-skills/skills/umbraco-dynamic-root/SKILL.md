@@ -1,7 +1,7 @@
 ---
 name: umbraco-dynamic-root
 description: Implement dynamic root origins and query steps in Umbraco backoffice using official docs
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -18,9 +18,9 @@ These enable flexible content picker configurations that adapt based on context.
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Extension Types**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
-- **Content Picker**: https://docs.umbraco.com/umbraco-cms/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/content-picker
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Extension Types**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types
+- **Content Picker**: https://docs.umbraco.com/umbraco-cms/17.latest/model-your-content/property-editors/built-in-umbraco-property-editors/content-picker
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Workflow
 

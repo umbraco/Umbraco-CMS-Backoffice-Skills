@@ -1,7 +1,7 @@
 ---
 name: umbraco-validation-context
 description: Implement form validation using UmbValidationContext in Umbraco backoffice
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -16,8 +16,8 @@ UmbValidationContext provides a centralized validation system for forms in the U
 
 Always fetch the latest docs before implementing:
 
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
 
 ## Reference Examples
 

@@ -1,7 +1,7 @@
 ---
 name: umbraco-mocked-backoffice
 description: Run Umbraco backoffice with mocked APIs for visual extension testing
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
@@ -130,6 +130,22 @@ export const manifests = import.meta.env.VITE_USE_MOCK_REPO === 'on'
 ---
 
 ## Running Tests
+
+### Self-contained external-example support (automatic)
+
+Loading an extension from a path **outside** the Umbraco client requires the client to
+support an absolute `VITE_EXAMPLE_PATH` (via Vite's `/@fs/`) plus a shared-package resolver
+so `@umbraco-cms/backoffice`, `lit` and `@umbraco-ui/uui` resolve to the client's single
+copy. Stock released v17 only supports relative (`./examples/...`) paths.
+
+To stay self-contained, this repo's mocked configs wire a Playwright `globalSetup`/`globalTeardown`
+(`plugins/umbraco-testing-skills/harness/mocked-backoffice/`) that **injects that support into
+the client at `UMBRACO_CLIENT_PATH` before the dev server starts and reverts it afterwards**
+(file-backup based; it detects clients that already have the support and no-ops). So no CMS
+branch is required — only a **built v17 client** (`npm ci` in `Umbraco.Web.UI.Client`).
+
+> First run against a freshly-patched client may re-optimize deps and briefly restart the dev
+> server (a flaky first navigation); the configs set `retries` to absorb it. Warm runs are stable.
 
 ### Environment Variables
 

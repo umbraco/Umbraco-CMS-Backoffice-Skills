@@ -64,9 +64,9 @@ Use WebFetch on documentation URLs to find correct patterns:
 
 ```typescript
 // Common doc URLs to fetch
-https://docs.umbraco.com/umbraco-cms/customizing/foundation
-https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
-https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/{specific-type}
+https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types
+https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/{specific-type}
 ```
 
 ### 5. Fix Priority Order

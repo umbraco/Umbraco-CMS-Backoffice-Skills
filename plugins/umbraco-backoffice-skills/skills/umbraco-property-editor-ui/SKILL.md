@@ -1,7 +1,7 @@
 ---
 name: umbraco-property-editor-ui
 description: Implement property editor UIs in Umbraco backoffice using official docs
-version: 1.2.0
+version: 1.3.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -14,11 +14,11 @@ A Property Editor UI is the visual component that users interact with in the Umb
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/property-editors
-- **Tutorial**: https://docs.umbraco.com/umbraco-cms/tutorials/creating-a-property-editor
-- **Configuration**: https://docs.umbraco.com/umbraco-cms/tutorials/creating-a-property-editor/adding-configuration-to-a-property-editor
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/property-editors
+- **Tutorial**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/tutorials/creating-a-property-editor
+- **Configuration**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/tutorials/creating-a-property-editor/adding-configuration-to-a-property-editor
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
 
 ## Reference Example
 

@@ -1,9 +1,9 @@
 // Entry point for MSW testing mode
 // Uses real repository that makes API calls (intercepted by MSW)
 // Run with:
-//   VITE_EXTERNAL_EXTENSION=.../tree-example/Client \
-//   VITE_EXTERNAL_MOCKS=.../tree-example/Client/tests/msw/mocks \
-//   npm run dev:external
+//   VITE_EXAMPLE_PATH=/absolute/path/to/tree-example/Client \
+//   VITE_UMBRACO_USE_MSW=on \
+//   npm run dev
 
 // Re-export from src with real repository (NOT mock repository)
 import { manifests as treeManifests } from './src/settingsTree/manifest.js';

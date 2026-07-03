@@ -1,7 +1,7 @@
 ---
 name: umbraco-example-generator
 description: Generate testable example extensions and run them in the Umbraco backoffice
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
@@ -78,7 +78,7 @@ export class MyElement extends LitElement {
 
 ```bash
 cd Umbraco-CMS/src/Umbraco.Web.UI.Client
-VITE_EXTERNAL_EXTENSION=/full/path/to/my-extension npm run dev:external
+VITE_EXAMPLE_PATH=/full/path/to/my-extension VITE_UMBRACO_USE_MSW=on npm run dev
 ```
 
 Open `http://localhost:5173` - your extension appears in the Content section.
@@ -101,27 +101,34 @@ npm run example
 
 **How it works**: Sets `VITE_EXAMPLE_PATH` and imports `./examples/{name}/index.ts`
 
-### 2. External Extensions (`npm run dev:external`)
+### 2. External Extensions (absolute `VITE_EXAMPLE_PATH`)
 
 Extensions from **any location** on your filesystem - perfect for developing packages.
 
 ```bash
 cd Umbraco-CMS/src/Umbraco.Web.UI.Client
-VITE_EXTERNAL_EXTENSION=/path/to/your/extension npm run dev:external
+VITE_EXAMPLE_PATH=/path/to/your/extension VITE_UMBRACO_USE_MSW=on npm run dev
 ```
 
 **How it works**:
-1. Sets `VITE_UMBRACO_USE_MSW=on` (mocked APIs)
-2. Creates `@external-extension` alias pointing to your extension path
-3. Imports `@external-extension/index.ts` and registers exports with `umbExtensionsRegistry`
-4. Resolves `@umbraco-cms/backoffice/*` imports from the main project (avoids duplicate element registrations)
+1. `VITE_UMBRACO_USE_MSW=on` mocks the core Umbraco APIs
+2. An **absolute** `VITE_EXAMPLE_PATH` is served through Vite's `/@fs/` prefix
+3. `index.ts` imports `<VITE_EXAMPLE_PATH>/index.ts` and registers its exports with `umbExtensionsRegistry`
+4. A shared-package resolver maps `@umbraco-cms/backoffice`, `lit` and `@umbraco-ui/uui` to the client's copy (avoids duplicate Lit/UUI)
+
+Absolute-path support (steps 2 & 4) needs a v17 client built with external-example support. When
+running this repo's mocked E2E suites, the Playwright harness injects that support into the client
+at `UMBRACO_CLIENT_PATH` automatically and reverts afterwards — see the `umbraco-mocked-backoffice` skill.
 
 ### Extension Loading (index.ts)
 
 ```typescript
 // From Umbraco-CMS/src/Umbraco.Web.UI.Client/index.ts
-if (import.meta.env.VITE_EXTERNAL_EXTENSION) {
-  const js = await import('@external-extension/index.ts');
+if (import.meta.env.VITE_EXAMPLE_PATH) {
+  const examplePath = import.meta.env.VITE_EXAMPLE_PATH;
+  // Absolute paths (external extensions) are served via Vite's /@fs/ prefix; relative paths load from ./
+  const importPath = examplePath.startsWith('/') ? '/@fs' + examplePath : './' + examplePath;
+  const js = await import(importPath + '/index.ts');
   if (js) {
     Object.keys(js).forEach((key) => {
       const value = js[key];
@@ -216,7 +223,7 @@ export const manifests = [
 
 ```bash
 cd /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
-VITE_EXTERNAL_EXTENSION=/absolute/path/to/my-extension npm run dev:external
+VITE_EXAMPLE_PATH=/absolute/path/to/my-extension VITE_UMBRACO_USE_MSW=on npm run dev
 ```
 
 ### Open in browser
@@ -411,8 +418,8 @@ npm run example
 ### Extension not appearing
 
 1. Check `index.ts` exports a `manifests` array
-2. Verify the path in `VITE_EXTERNAL_EXTENSION` is absolute
-3. Check browser console for `📦 Loading external extension from:` message
+2. Verify the path in `VITE_EXAMPLE_PATH` is absolute
+3. Check browser console for `📦 Loading external example from:` message
 4. Ensure condition matches the section you're viewing
 
 ### Import errors
@@ -421,10 +428,10 @@ Imports should use `@umbraco-cms/backoffice/*`. The Vite plugin resolves these f
 
 ### "CustomElementRegistry" already defined
 
-Your extension's `node_modules` is being used instead of the main project's. The `external-extension-resolver` plugin should handle this, but ensure:
-- You're using `npm run dev:external`
+Your extension's `node_modules` is being used instead of the main project's. The `external-example-resolver` plugin should handle this, but ensure:
+- You're using `VITE_EXAMPLE_PATH=<abs> VITE_UMBRACO_USE_MSW=on npm run dev`
 - Imports use `@umbraco-cms/backoffice/*` not relative paths to node_modules
 
 ### Changes not hot reloading
 
-Ensure the file is within the path specified by `VITE_EXTERNAL_EXTENSION`. Only files in that directory tree are watched.
+Ensure the file is within the path specified by `VITE_EXAMPLE_PATH`. Only files in that directory tree are watched.

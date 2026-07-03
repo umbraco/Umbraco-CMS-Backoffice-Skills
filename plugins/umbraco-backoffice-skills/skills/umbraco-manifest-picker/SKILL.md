@@ -1,7 +1,7 @@
 ---
 name: umbraco-manifest-picker
 description: Use umb-input-manifest to pick registered extensions in Umbraco backoffice
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -16,8 +16,8 @@ The `<umb-input-manifest>` component provides a picker UI for selecting register
 
 Always fetch the latest docs before implementing:
 
-- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Extension Registry**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-registry
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Reference Example
 

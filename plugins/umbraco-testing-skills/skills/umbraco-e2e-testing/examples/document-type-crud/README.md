@@ -1,12 +1,12 @@
 # Document Type CRUD - E2E Testing Example
 
-This example demonstrates how to write E2E tests for Umbraco backoffice using Playwright with `@umbraco/playwright-testhelpers`.
+This example demonstrates how to write E2E tests for Umbraco backoffice using Playwright with `@umbraco-cms/acceptance-test-helpers`.
 
 ## What This Example Shows
 
 This example demonstrates:
 
-- **Test Setup** - Using `@umbraco/playwright-testhelpers` fixtures
+- **Test Setup** - Using `@umbraco-cms/acceptance-test-helpers` fixtures
 - **API Helpers** - Fast test data creation via `umbracoApi`
 - **UI Helpers** - Page interactions via `umbracoUi`
 - **AAA Pattern** - Arrange-Act-Assert test structure
@@ -43,7 +43,7 @@ document-type-crud/
 
 1. **Running Umbraco instance** - Tests run against a real Umbraco backoffice
 2. **Admin credentials** - Valid username/password for the instance
-3. **Matching testhelpers version** - The `@umbraco/playwright-testhelpers` version must match your Umbraco version
+3. **Matching testhelpers version** - The `@umbraco-cms/acceptance-test-helpers` version must match your Umbraco version
 
 ## Environment Variables
 
@@ -111,7 +111,7 @@ The `auth.setup.ts` file uses testhelpers to log in and save the session:
 ```typescript
 import { test as setup } from '@playwright/test';
 import { STORAGE_STATE } from '../playwright.config';
-import { ConstantHelper, UiHelpers } from '@umbraco/playwright-testhelpers';
+import { ConstantHelper, UiHelpers } from '@umbraco-cms/acceptance-test-helpers';
 
 setup('authenticate', async ({ page }) => {
   const umbracoUi = new UiHelpers(page);
@@ -128,7 +128,7 @@ setup('authenticate', async ({ page }) => {
 ### Test with Fixtures
 
 ```typescript
-import { ConstantHelper, test } from '@umbraco/playwright-testhelpers';
+import { ConstantHelper, test } from '@umbraco-cms/acceptance-test-helpers';
 import { expect } from '@playwright/test';
 
 const documentTypeName = 'TestDocumentType';
@@ -170,15 +170,16 @@ test.afterEach(async ({ umbracoApi }) => {
 
 ## Version Compatibility
 
-The `@umbraco/playwright-testhelpers` package is versioned to match Umbraco:
+The `@umbraco-cms/acceptance-test-helpers` package is versioned to match Umbraco:
 
 | Umbraco Version | Testhelpers Version |
 |-----------------|---------------------|
-| Umbraco 17.1.x | `@umbraco/playwright-testhelpers@17.1.0-beta.x` |
-| Umbraco 17.0.x | `@umbraco/playwright-testhelpers@^17.0.x` |
-| Umbraco 14.x | `@umbraco/playwright-testhelpers@^14.x` |
+| Umbraco 17.5.x | `@umbraco-cms/acceptance-test-helpers@^17.5.1` |
+| Umbraco 17.0.x–17.4.x | `@umbraco-cms/acceptance-test-helpers@^17.x` |
 
 **Important**: Use the testhelpers version that matches your Umbraco instance. For pre-release Umbraco versions, use the corresponding beta testhelpers.
+
+> **Package rename:** This package was previously published as `@umbraco/playwright-testhelpers`. From Umbraco 17.3 onward the helpers moved into the CMS acceptance-test project and are published as `@umbraco-cms/acceptance-test-helpers` (following CMS version numbers). The old package is deprecated — use the new one.
 
 ## Troubleshooting
 

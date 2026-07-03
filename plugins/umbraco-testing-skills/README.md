@@ -30,11 +30,11 @@ A comprehensive skill set for testing Umbraco backoffice extensions at all level
 ### Level 3: Mocked Backoffice E2E
 - Testing extension UI in full backoffice
 - No .NET backend required (all APIs mocked)
-- Uses `VITE_EXTERNAL_EXTENSION` with Umbraco-CMS client
+- Uses `VITE_EXAMPLE_PATH` with the Umbraco-CMS client (via the mocked-backoffice harness)
 
 ### Level 4: Real Backend E2E Tests
 - Full acceptance tests against running Umbraco
-- Uses `@umbraco/playwright-testhelpers`
+- Uses `@umbraco-cms/acceptance-test-helpers`
 - Real API and UI interaction
 
 ## Usage

@@ -1,7 +1,7 @@
 ---
 name: umbraco-extension-template
 description: Create new Umbraco backoffice extensions using the official dotnet template
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch, Bash
 ---
@@ -14,9 +14,9 @@ The Umbraco Extension Template is the official .NET template for creating backof
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/development-flow/umbraco-extension-template
-- **Development Flow**: https://docs.umbraco.com/umbraco-cms/customizing/development-flow
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/development-flow/umbraco-extension-template
+- **Development Flow**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/development-flow
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Prerequisites
 

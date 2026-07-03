@@ -1,7 +1,7 @@
 ---
 name: umbraco-repository-pattern
 description: Understand and use repositories in Umbraco backoffice (foundational concept)
-version: 1.0.0
+version: 1.1.0
 location: managed
 allowed-tools: Read, Write, Edit, WebFetch
 ---
@@ -20,10 +20,10 @@ Repositories are the Backoffice's entry point for data requests and update notif
 ## Documentation
 Always fetch the latest docs before implementing:
 
-- **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/foundation/repositories
-- **Working with Data**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Store**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
-- **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
+- **Main docs**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation/repositories
+- **Working with Data**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Store**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
+- **Foundation**: https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/foundation
 
 ## Workflow
 

@@ -118,7 +118,7 @@ Return a structured fix plan:
 
 **After:**
 ```markdown
-[Dashboard docs](https://docs.umbraco.com/umbraco-cms/extending/dashboards)
+[Dashboard docs](https://docs.umbraco.com/umbraco-cms/17.latest/extend-your-project/backoffice-extensions/extending-overview/extension-types/dashboard)
 ```
 
 ---
