@@ -73,9 +73,14 @@ const SUITE_TYPES: Set<TestType> = new Set(
     .map((s) => s.trim())
     .filter(Boolean) as TestType[]
 );
-const TEST_TIMEOUT_UNIT = 60000;
-const TEST_TIMEOUT_MOCKED = 120000;
-const TEST_TIMEOUT_E2E = 180000;
+// Per-suite wall-clock caps (safety net around each spawned test process). Overridable via
+// env because CI needs more headroom: Playwright suites set `retries: CI ? 2 : 0`, so a single
+// slow/flaky test can take timeout×3, and large suites (e.g. notes-wiki's 34 tests) legitimately
+// run longer than the local defaults. Too low a cap kills the suite mid-retry and masks the real
+// pass/fail as a generic "Test timed out".
+const TEST_TIMEOUT_UNIT = Number(process.env.UNIT_TIMEOUT_MS) || 60000;
+const TEST_TIMEOUT_MOCKED = Number(process.env.MOCKED_TIMEOUT_MS) || 120000;
+const TEST_TIMEOUT_E2E = Number(process.env.E2E_TIMEOUT_MS) || 180000;
 const UMBRACO_STARTUP_TIMEOUT = 120000;
 
 // Glob ignores shared by discovery and the orphan audit. Besides the usual build dirs, we

@@ -91,7 +91,25 @@ jobs:
           # non-deterministic content-hash drift (unpinned npm i) that broke the static-asset
           # references on a fresh checkout.
           SkipClientBuild: 'true'
+          # CI headroom: Playwright suites retry twice under CI (60s/test), and notes-wiki has
+          # 34 tests — the local 180s cap kills them mid-retry and hides the real result.
+          E2E_TIMEOUT_MS: '900000'
+          MOCKED_TIMEOUT_MS: '300000'
         run: npx tsx run-tests.ts
+
+      # run-tests.ts is report-only (exits 0 even when suites fail), so gate on the report here.
+      - name: Enforce test results
+        if: always()
+        run: |
+          node -e '
+            const r = require("./test-report.json");
+            const { total, passed, failed, skipped } = r.summary;
+            console.log(`suites: total=${total} passed=${passed} failed=${failed} skipped=${skipped}`);
+            for (const x of r.results) console.log(`  ${x.status.padEnd(7)} ${x.type} ${x.example}`);
+            if ((r.orphans||[]).length) { console.error("orphan tests present"); process.exit(1); }
+            if (failed > 0 || skipped > 0) { console.error("FAIL: some suites failed or were skipped"); process.exit(1); }
+            console.log("all suites passed");
+          '
 
       - name: Upload report
         if: always()
