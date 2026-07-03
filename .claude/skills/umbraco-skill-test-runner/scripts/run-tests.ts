@@ -64,6 +64,15 @@ interface TestableExample {
 let UMBRACO_URL = process.env.UMBRACO_URL || 'https://localhost:44325';
 const UMBRACO_URL_EXPLICIT = !!process.env.UMBRACO_URL;
 const UMBRACO_PROJECT_PATH = join(PROJECT_ROOT, 'Umbraco-CMS.Skills');
+// SUITE_TYPES: optional comma-separated allow-list of suite types to run (e.g. "unit"
+// or "unit,mocked"). Defaults to all three. Lets CI run a cheap unit-only gate on every
+// PR without pulling in the mocked/E2E prerequisites (external client checkout, .NET host).
+const SUITE_TYPES: Set<TestType> = new Set(
+  (process.env.SUITE_TYPES ?? 'unit,mocked,e2e')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean) as TestType[]
+);
 const TEST_TIMEOUT_UNIT = 60000;
 const TEST_TIMEOUT_MOCKED = 120000;
 const TEST_TIMEOUT_E2E = 180000;
@@ -474,6 +483,7 @@ async function runTests(): Promise<TestReport> {
 
   for (const example of examples) {
     for (const test of example.tests) {
+      if (!SUITE_TYPES.has(test.type)) continue; // SUITE_TYPES allow-list (default: all)
       if (test.type === 'unit') {
         unitTests.push({ example, test });
       } else if (test.type === 'mocked') {
@@ -482,6 +492,9 @@ async function runTests(): Promise<TestReport> {
         e2eTests.push({ example, test });
       }
     }
+  }
+  if (SUITE_TYPES.size < 3) {
+    console.error(`Suite filter active (SUITE_TYPES): running only ${[...SUITE_TYPES].join(', ')}`);
   }
 
   // Run unit tests first

@@ -202,10 +202,14 @@ async function checkUmbracoPath(path: string): Promise<boolean> {
   // Fall back to GitHub API
   try {
     const apiPath = path.replace('/Umbraco-CMS/', '').replace(/^\//, '');
+    // Authenticate when a token is present (GITHUB_TOKEN is provided automatically in
+    // GitHub Actions). Raises the rate limit from 60 to 5000 req/hr so CI doesn't flake.
+    const ghToken = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
     const response = await fetch(`${GITHUB_API_BASE}/${apiPath}`, {
       headers: {
         'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'skill-validator'
+        'User-Agent': 'skill-validator',
+        ...(ghToken ? { Authorization: `Bearer ${ghToken}` } : {})
       }
     });
     return response.status === 200;
