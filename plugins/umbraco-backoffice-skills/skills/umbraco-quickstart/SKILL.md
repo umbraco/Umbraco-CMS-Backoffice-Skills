@@ -40,6 +40,10 @@ If arguments not provided, check what exists and prompt for missing names.
 
 ### 2. Check what exists
 
+**Version guard (run first):** Before building anything, invoke `umbraco-version-guard`
+to confirm the site's Umbraco major matches these skills (this line targets **v18**). On
+a mismatch, stop and point the user at the matching skill line — do not generate code.
+
 **Check for Umbraco instance:**
 ```bash
 find . -name "*.csproj" -exec grep -l "Umbraco.Cms" {} \; 2>/dev/null | head -5
