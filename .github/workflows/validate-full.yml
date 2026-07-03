@@ -71,6 +71,13 @@ jobs:
         working-directory: .claude/skills/umbraco-skill-test-runner/scripts
         run: npm install --no-audit --no-fund
 
+      # Pre-build the host so `dotnet run` (started by run-tests) boots within its 120s startup
+      # timeout — a cold NuGet restore + build of the example projects can exceed it otherwise.
+      - name: Build Umbraco host
+        env:
+          SkipClientBuild: 'true'
+        run: dotnet build Umbraco-CMS.Skills/Umbraco-CMS.Skills.csproj -c Debug
+
       - name: Run mocked + E2E suites
         working-directory: .claude/skills/umbraco-skill-test-runner/scripts
         env:
@@ -79,6 +86,11 @@ jobs:
           UMBRACO_USER_LOGIN: admin@example.com
           UMBRACO_USER_PASSWORD: '1234567890'
           UMBRACO_CLIENT_PATH: ${{ github.workspace }}/umbraco-cms/src/Umbraco.Web.UI.Client
+          # MSBuild reads env vars as properties: skip the per-example vite rebuild during the
+          # E2E host build and serve the committed wwwroot/App_Plugins assets verbatim. Avoids
+          # non-deterministic content-hash drift (unpinned npm i) that broke the static-asset
+          # references on a fresh checkout.
+          SkipClientBuild: 'true'
         run: npx tsx run-tests.ts
 
       - name: Upload report

@@ -78,6 +78,26 @@ const TEST_TIMEOUT_MOCKED = 120000;
 const TEST_TIMEOUT_E2E = 180000;
 const UMBRACO_STARTUP_TIMEOUT = 120000;
 
+// Glob ignores shared by discovery and the orphan audit. Besides the usual build dirs, we
+// must exclude the external Umbraco client checkout (UMBRACO_CLIENT_PATH) when it lands
+// INSIDE the repo tree — as it does in CI, where actions/checkout can only clone into the
+// workspace. That client ships its own examples/**/*.test.ts which would otherwise be
+// discovered as suites and flagged as orphans, failing the run with exit 2.
+function externalIgnoreGlobs(): string[] {
+  const ignores: string[] = [];
+  const clientPath = process.env.UMBRACO_CLIENT_PATH;
+  if (clientPath) {
+    const rel = relative(PROJECT_ROOT, resolve(clientPath));
+    // Only ignore when the client is under PROJECT_ROOT (rel doesn't escape upward).
+    if (rel && !rel.startsWith('..')) {
+      const top = rel.split('/')[0];
+      ignores.push(`${top}/**`);
+    }
+  }
+  return ignores;
+}
+const BASE_IGNORES = ['**/node_modules/**', '**/dist/**'];
+
 // Track Umbraco process if we start it
 let umbracoProcess: ChildProcess | null = null;
 let weStartedUmbraco = false;
@@ -88,7 +108,7 @@ let weStartedUmbraco = false;
 async function discoverTestableExamples(): Promise<TestableExample[]> {
   const packageFiles = await glob('**/examples/**/package.json', {
     cwd: PROJECT_ROOT,
-    ignore: ['**/node_modules/**', '**/dist/**']
+    ignore: [...BASE_IGNORES, ...externalIgnoreGlobs()]
   });
 
   const examples: TestableExample[] = [];
@@ -318,6 +338,18 @@ async function runTest(
   const startTime = Date.now();
   const exampleDir = join(PROJECT_ROOT, example.path);
 
+  // Playwright suites (mocked/e2e) launch a browser via the example's OWN pinned @playwright/test
+  // version — which differs across examples (1.49 / 1.56 / 1.57 …), each needing a different
+  // browser build. A single top-level `playwright install` can't satisfy them all, so install
+  // the right browser from within the example here (idempotent; fast when already cached).
+  if (test.type === 'mocked' || test.type === 'e2e') {
+    try {
+      execSync('npx playwright install chromium', { cwd: exampleDir, stdio: 'ignore' });
+    } catch {
+      console.error(`  Warning: playwright browser install failed in ${example.path} — suite may fail to launch`);
+    }
+  }
+
   // Determine timeout
   const timeout = test.type === 'unit' ? TEST_TIMEOUT_UNIT :
                   test.type === 'mocked' ? TEST_TIMEOUT_MOCKED : TEST_TIMEOUT_E2E;
@@ -429,7 +461,7 @@ async function auditTestCoverage(examples: TestableExample[]): Promise<OrphanTes
   // 2) Every spec/test file under examples/ should belong to an example that has a suite.
   const specFiles = await glob('**/examples/**/*.{spec,test}.ts', {
     cwd: PROJECT_ROOT,
-    ignore: ['**/node_modules/**', '**/dist/**', '**/test-results/**', '**/playwright-report/**']
+    ignore: [...BASE_IGNORES, '**/test-results/**', '**/playwright-report/**', ...externalIgnoreGlobs()]
   });
   const testableDirs = examples.filter(e => e.tests.length > 0).map(e => e.path);
   for (const spec of specFiles) {
