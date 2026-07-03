@@ -2,7 +2,7 @@
 
 > **Experimental Beta:** This project is an exploration of what's possible with Skills for Umbraco. It's evolving as we learn what works best.
 
-A Claude Code plugin marketplace with 66 skills for Umbraco backoffice customization and testing.
+A Claude Code plugin marketplace with 67 skills for Umbraco backoffice customization and testing.
 
 ## Quick Start
 
@@ -13,12 +13,46 @@ Add the marketplace:
 
 Install the plugins:
 ```bash
-# Backoffice extension skills (58 skills)
+# Backoffice extension skills (59 skills)
 /plugin install umbraco-cms-backoffice-skills@umbraco-backoffice-marketplace
 
 # Testing skills (8 skills) - optional but recommended
 /plugin install umbraco-cms-backoffice-testing-skills@umbraco-backoffice-marketplace
 ```
+
+---
+
+## ⚠️ Match the skills to your Umbraco major
+
+**These skills are versioned to a single Umbraco major** (tree data sources, auth, OpenAPI
+registration and more differ between majors, so loading the wrong line produces
+confidently-incorrect code). Each major gets its own line, following one rule:
+
+- **The default `main` branch always targets the latest supported major.**
+- **Older majors live on a `vN/main` branch** (e.g. `v17/main`).
+
+So pick your install by your site's major:
+
+| Your site is… | Install command |
+|---|---|
+| **The latest major** (whatever `main` currently targets) | `/plugin marketplace add umbraco/Umbraco-CMS-Backoffice-Skills` |
+| **An older major `N`** | `/plugin marketplace add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills.git#vN/main` |
+
+> _Currently `main` targets Umbraco 18, and `v17/main` is available for Umbraco 17. When a
+> new major ships, `main` moves to it and the previous major moves to its own `vN/main`._
+
+For the **Vercel Skills CLI** (Cursor/Copilot/Windsurf), point the repo URL at the matching
+branch — `main` for the latest major, or `.../tree/vN/main/...` for an older one.
+
+**Not sure which major your site is?** Check the `Umbraco.Cms` version in your project's
+`.csproj`, or the `@umbraco-cms/backoffice` version in your `Client/package.json`.
+
+**Automatic safety net:** the `umbraco-version-guard` skill runs as a preflight inside the
+entry skills (`umbraco-quickstart`, `umbraco-backoffice`, `umbraco-extension-template`). It
+derives the major these skills target from the plugin itself, detects your site's major,
+and **stops with a warning if they don't match** — so a mismatch can't silently produce
+wrong code, and the check stays correct as new majors ship. Run it directly any time with
+`/umbraco-version-guard`.
 
 ---
 
@@ -42,7 +76,7 @@ npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill '*' -a windsurf
 
 Or install each skill set separately:
 ```bash
-# Backoffice extension skills (58 skills)
+# Backoffice extension skills (59 skills)
 npx skills add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills/tree/main/plugins/umbraco-backoffice-skills/skills -a cursor
 
 # Testing skills (8 skills) - optional but recommended
@@ -64,7 +98,7 @@ npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill umbraco-dashboard -
 | **Windsurf** | Current | `.windsurf/skills/` |
 | **Claude Code** | Current (use Quick Start above) | `.claude/skills/` |
 
-All of these editors load skills **on-demand** — only the skill relevant to your current task is loaded into context, so installing all 66 skills won't affect performance.
+All of these editors load skills **on-demand** — only the skill relevant to your current task is loaded into context, so installing all 67 skills won't affect performance.
 
 ---
 
@@ -354,7 +388,7 @@ Umbraco-CMS-Backoffice-Skills/
 │   │   └── skills/
 │   │       ├── umbraco-dashboard/SKILL.md
 │   │       ├── umbraco-tree/SKILL.md
-│   │       └── ... (57 skills)
+│   │       └── ... (58 skills)
 │   └── umbraco-testing-skills/         # Plugin with 8 testing skills
 │       ├── .claude-plugin/plugin.json
 │       └── skills/
