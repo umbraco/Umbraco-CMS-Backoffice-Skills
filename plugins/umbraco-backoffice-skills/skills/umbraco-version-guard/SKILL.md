@@ -1,6 +1,6 @@
 ---
 name: umbraco-version-guard
-description: Deterministically verify that the Umbraco major version of the site you are working on matches the major these skills target (this line targets Umbraco 18). Run this FIRST, before any Umbraco backoffice work, to avoid mixing v17 and v18 guidance. Trigger on the first Umbraco task in a session, or whenever the site's version is uncertain.
+description: Deterministically verify that the Umbraco major of the site you are working on matches the major these skills target. Run this FIRST, before any Umbraco backoffice work, to avoid mixing guidance across Umbraco majors (e.g. 17 vs 18 vs 19). Trigger on the first Umbraco task in a session, or whenever the site's version is uncertain.
 version: 1.0.0
 location: managed
 allowed-tools: Bash, Read, Grep, Glob, WebFetch
@@ -11,40 +11,41 @@ user_invocable: true
 
 ## What this skill does
 
-The Umbraco backoffice API changes between majors (v17 → v18 changed tree data
-sources, auth, OpenAPI registration, and more). **These skills target one specific
-major.** Applying them to a site on a different major produces confidently-wrong code.
+The Umbraco backoffice API changes between majors (tree data sources, auth, OpenAPI
+registration, and more). **These skills target one specific major.** Applying them to a
+site on a different major produces confidently-wrong code.
 
-This skill is a **preflight check**: it determines the target site's Umbraco major
-deterministically and compares it to the major these skills target. On a mismatch it
-STOPS and tells the user to install the matching skill line — it does not guess.
+This skill is a **preflight check**: it derives the target major from the plugin itself
+(so it never goes stale as new majors ship), detects the target site's major
+deterministically, compares them, and STOPS with the correct install command on a
+mismatch. Nothing here hardcodes a specific major number — both sides are computed.
 
-## The major these skills target
+## Step 1 — Determine the major these skills target
 
-> **This skill line targets Umbraco `18`.**
-
-That number is the single source of truth for this branch. (The `v17/main` branch ships
-its own copy of this skill stating `17`.) You can cross-check it against the installed
-plugin's version when available:
+The plugin's own version is the source of truth, and it bumps every major at release. Read
+it and take the leading number:
 
 ```bash
-# Optional confirmation — the plugin's own major. First path works when installed as a
-# Claude Code plugin; second when the skill was copied into an editor's skills dir.
-cat "${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json" 2>/dev/null | grep -m1 '"version"' \
-  || grep -m1 '"version"' ../../.claude-plugin/plugin.json 2>/dev/null
+# Primary: the installed plugin's version. First path is the Claude Code plugin layout;
+# the greps are fallbacks for when the skill was copied flat into an editor's skills dir.
+cat "${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json" 2>/dev/null \
+  || cat ../../.claude-plugin/plugin.json 2>/dev/null \
+  | grep -m1 '"version"' | grep -oE '[0-9]+' | head -1
 ```
 
-If that version's major disagrees with the `18` stated above, trust `plugin.json` and
-warn the user their install is inconsistent.
+Call this **TARGET_MAJOR**. If none of the paths resolve (a flat copy with no
+`plugin.json` alongside), fall back to the marketplace version, and only then to reading
+the value a sibling skill states — never invent a number. If you genuinely cannot
+determine it, say so and skip the guard rather than guessing.
 
-## Step 1 — Detect the site's Umbraco major (deterministic, no running instance needed)
+## Step 2 — Detect the site's Umbraco major (deterministic, no running instance needed)
 
-Try these signals in order and stop at the first that yields a number.
+Try these signals in order and stop at the first that yields a number. Each extracts just
+the **major**, so it works with `18.0.0`, `18.*`, `[18.0.0,)`, or plain `18`.
 
-**A. `Umbraco.Cms` package reference (ground truth — what is actually installed).**
-Extracts just the **major**, so it works with `18.0.0`, `18.*`, `[18.0.0,)`, or plain
-`18`. Covers `*.csproj` PackageReference and central-package-management `*.props`
-(PackageVersion); the trailing `"` after `Cms` excludes `Umbraco.Cms.DevelopmentMode` etc.
+**A. `Umbraco.Cms` package reference (ground truth — what is actually installed).** Covers
+`*.csproj` PackageReference and central-package-management `*.props` (PackageVersion); the
+trailing `"` after `Cms` excludes `Umbraco.Cms.DevelopmentMode` etc.
 
 ```bash
 grep -rhoE 'Umbraco\.Cms"[^0-9]*[0-9]+' --include='*.csproj' --include='*.props' . 2>/dev/null \
@@ -58,46 +59,48 @@ grep -rhoE '"@umbraco-cms/backoffice":[^0-9]*[0-9]+' --include='package.json' . 
   | grep -oE '[0-9]+$' | sort -u
 ```
 
-**C. Last resort — a running instance's Server Information API** (needs the site up; the
-`^` version may be an internal build number, so prefer A/B):
+**C. Last resort — a running instance's Server Information API** (needs the site up; prefer A/B):
 
 ```
 GET {baseUrl}/umbraco/management/api/v1/server/information
 ```
 
-Take the **major** (the first number) of whatever you find. If A/B/C all return nothing,
-there is no Umbraco site in the workspace yet — say so and continue (nothing to guard).
+Call the result **SITE_MAJOR**. If A/B/C all return nothing, there is no Umbraco site in
+the workspace yet — say so and continue (nothing to guard). If multiple different majors
+are found (a mixed solution), surface all of them and ask which project is the target.
 
-## Step 2 — Compare majors
+## Step 3 — Compare and act
 
-- **Site major == target major (18)** → ✅ Silent pass. Say one line confirming the match
-  (e.g. "Site is Umbraco 18.x — matches these skills.") and proceed with the task.
-- **Site major != target major** → ⛔ STOP. Do not generate version-specific code. Warn
-  as below.
-- **Multiple different majors detected** (e.g. a solution with mixed references) → surface
-  all of them and ask the user which project is the target before proceeding.
+- **`SITE_MAJOR == TARGET_MAJOR`** → ✅ Silent pass. Say one line confirming the match
+  (e.g. "Site is Umbraco {SITE_MAJOR}.x — matches these skills.") and proceed.
+- **`SITE_MAJOR != TARGET_MAJOR`** → ⛔ STOP. Do not generate version-specific code. Warn
+  as below, then only continue if the user explicitly confirms.
 
-## Step 3 — On mismatch, warn and point to the right line
+**Which skill line to recommend** follows the repo's branch convention — the *latest*
+major lives on `main`; every older major `N` lives on a `vN/main` branch:
 
-Tell the user plainly, then stop for their decision:
+- **`SITE_MAJOR < TARGET_MAJOR`** (site is older than these skills) → point at the older
+  line for the site's major:
+  ```
+  /plugin marketplace add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills.git#v{SITE_MAJOR}/main
+  ```
+- **`SITE_MAJOR > TARGET_MAJOR`** (these skills are older than the site) → the latest major
+  lives on the default `main`, so re-add and update the default marketplace:
+  ```
+  /plugin marketplace add umbraco/Umbraco-CMS-Backoffice-Skills
+  ```
+  If no released line exists yet for `SITE_MAJOR`, say so — the skills may not have caught
+  up to that major.
 
-> ⚠️ **Version mismatch.** This site is Umbraco **`<detected>`**, but the loaded skills
-> target Umbraco **18**. The backoffice API differs between these majors, so this skill
-> set will produce incorrect code for your site.
+Substitute the actual numbers when you present this. Template for the message:
+
+> ⚠️ **Version mismatch.** This site is Umbraco **{SITE_MAJOR}**, but the loaded skills
+> target Umbraco **{TARGET_MAJOR}**. The backoffice API differs between majors, so this
+> skill set will produce incorrect code for your site. Install the matching line:
+> `<computed command above>`
 >
-> Install the matching skill line instead:
->
-> - **Umbraco 18** (default / `main`):
->   ```
->   /plugin marketplace add umbraco/Umbraco-CMS-Backoffice-Skills
->   ```
-> - **Umbraco 17** (`v17/main` branch):
->   ```
->   /plugin marketplace add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills.git#v17/main
->   ```
->   Or, for the Vercel Skills CLI in other editors, add `#v17/main` to the repo URL.
-
-Only continue if the user explicitly confirms they understand and want to proceed anyway.
+> For the Vercel Skills CLI (Cursor/Copilot/Windsurf), point the repo URL at the matching
+> branch (`main` for the latest major, `v{N}/main` for an older one).
 
 ## When to run this
 

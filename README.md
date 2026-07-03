@@ -22,28 +22,37 @@ Install the plugins:
 
 ---
 
-## ⚠️ Match the skills to your Umbraco version (17 vs 18)
+## ⚠️ Match the skills to your Umbraco major
 
-**These skills are versioned to a single Umbraco major.** The backoffice API differs
-between majors (tree data sources, auth, OpenAPI registration, and more), so loading the
-wrong line produces confidently-incorrect code. Pick the line that matches **your site**:
+**These skills are versioned to a single Umbraco major** (tree data sources, auth, OpenAPI
+registration and more differ between majors, so loading the wrong line produces
+confidently-incorrect code). Each major gets its own line, following one rule:
 
-| Your site is… | Skills line | Install command |
-|---|---|---|
-| **Umbraco 18** (current) | `main` (default) | `/plugin marketplace add umbraco/Umbraco-CMS-Backoffice-Skills` |
-| **Umbraco 17** | `v17/main` branch | `/plugin marketplace add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills.git#v17/main` |
+- **The default `main` branch always targets the latest supported major.**
+- **Older majors live on a `vN/main` branch** (e.g. `v17/main`).
 
-For the **Vercel Skills CLI** (Cursor/Copilot/Windsurf), point at the `v17/main` branch in
-the repo URL for v17, e.g. `.../Umbraco-CMS-Backoffice-Skills/tree/v17/main/...`.
+So pick your install by your site's major:
+
+| Your site is… | Install command |
+|---|---|
+| **The latest major** (whatever `main` currently targets) | `/plugin marketplace add umbraco/Umbraco-CMS-Backoffice-Skills` |
+| **An older major `N`** | `/plugin marketplace add https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills.git#vN/main` |
+
+> _Currently `main` targets Umbraco 18, and `v17/main` is available for Umbraco 17. When a
+> new major ships, `main` moves to it and the previous major moves to its own `vN/main`._
+
+For the **Vercel Skills CLI** (Cursor/Copilot/Windsurf), point the repo URL at the matching
+branch — `main` for the latest major, or `.../tree/vN/main/...` for an older one.
 
 **Not sure which major your site is?** Check the `Umbraco.Cms` version in your project's
 `.csproj`, or the `@umbraco-cms/backoffice` version in your `Client/package.json`.
 
 **Automatic safety net:** the `umbraco-version-guard` skill runs as a preflight inside the
-entry skills (`umbraco-quickstart`, `umbraco-backoffice`, `umbraco-extension-template`).
-It detects your site's major and **stops with a warning if it doesn't match the loaded
-skills**, so a mismatch can't silently produce wrong code. You can also run it directly
-with `/umbraco-version-guard`.
+entry skills (`umbraco-quickstart`, `umbraco-backoffice`, `umbraco-extension-template`). It
+derives the major these skills target from the plugin itself, detects your site's major,
+and **stops with a warning if they don't match** — so a mismatch can't silently produce
+wrong code, and the check stays correct as new majors ship. Run it directly any time with
+`/umbraco-version-guard`.
 
 ---
 

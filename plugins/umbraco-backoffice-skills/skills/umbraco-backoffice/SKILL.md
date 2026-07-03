@@ -28,8 +28,8 @@ For details on individual extension types, invoke the referenced sub-skills.
 **CRITICAL**: This workflow is MANDATORY for ALL extension development.
 
 **Step 0 — Version guard:** Before planning, invoke `umbraco-version-guard` to confirm
-the site's Umbraco major matches these skills (this line targets **v18**). Stop on a
-mismatch — v17 and v18 backoffice APIs differ and these skills will produce wrong code.
+the site's Umbraco major matches the major these skills target. Stop on a mismatch — the
+backoffice API differs between Umbraco majors and these skills will produce wrong code.
 
 ```
 1. PLAN ──► Read PRE-BUILD-PLANNING.md FIRST
