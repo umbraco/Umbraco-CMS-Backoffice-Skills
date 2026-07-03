@@ -6,6 +6,11 @@ name: Validate Skills (full — mocked + E2E)
 # run-tests.ts directly, which auto-starts and stops the Umbraco-CMS.Skills host.
 
 on:
+  # TEMPORARY: pull_request trigger so this heavy workflow can be verified on PR #92 before
+  # merge. schedule/workflow_dispatch only fire once the workflow is on the default branch,
+  # so this is the only way to test it pre-merge. REMOVE this block before merging.
+  pull_request:
+    branches: [dev]
   schedule:
     - cron: '0 3 * * *' # 03:00 UTC nightly
   workflow_dispatch:
