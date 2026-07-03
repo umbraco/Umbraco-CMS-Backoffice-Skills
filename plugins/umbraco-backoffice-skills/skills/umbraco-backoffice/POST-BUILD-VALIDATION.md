@@ -80,6 +80,14 @@ Run validate-skills
 
 After code review passes, test in the browser:
 
+> **Validating with Claude-in-Chrome?** Load the `umbraco-chrome-navigation` skill
+> **before** you start driving the backoffice with the `mcp__claude-in-chrome` tools. The
+> backoffice is Lit/web-components with open shadow DOM, so the built-in `find`/`read_page`
+> tools see nothing and screenshots lag the live DOM — that skill gives you a
+> shadow-DOM-piercing helper toolkit and a navigation playbook so you read state from the
+> DOM instead of guessing from pixels. (This is specific to Claude-in-Chrome; it is not
+> needed for Playwright E2E validation.)
+
 ### 1. Start Umbraco
 
 ```bash

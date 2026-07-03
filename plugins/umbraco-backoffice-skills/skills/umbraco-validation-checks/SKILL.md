@@ -47,6 +47,11 @@ Reference skill containing validation checks for manual browser testing of Umbra
 
 **Always load this skill before starting manual browser validation.**
 
+This skill covers *what to check*. If you are driving the backoffice with **Claude-in-Chrome**
+(`mcp__claude-in-chrome` tools), also load `umbraco-chrome-navigation` for *how to drive it* —
+the backoffice is Lit/shadow-DOM, so its shadow-DOM-piercing helpers are what let you actually
+navigate, act, and read the state these checks refer to.
+
 Read all check files when validating a new extension, or focus on specific categories based on the symptoms you observe.
 
 | Symptom | Load Files |
@@ -79,6 +84,7 @@ This compounds knowledge over time - every validation session improves future se
 
 | Pattern Area | Skill |
 |--------------|-------|
+| Driving the backoffice via Claude-in-Chrome | `umbraco-chrome-navigation` |
 | Tree implementation | `umbraco-tree` |
 | Section setup | `umbraco-sections` |
 | API client setup | `umbraco-openapi-client` |

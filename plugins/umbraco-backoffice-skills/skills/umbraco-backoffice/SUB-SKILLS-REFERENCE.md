@@ -113,3 +113,4 @@ Essential patterns used across all extensions:
 | Entry Point | `umbraco-entry-point` | Runtime initialization |
 | Extension Template | `umbraco-extension-template` | Project scaffolding |
 | **Add Extension Reference** | `umbraco-add-extension-reference` | **Register extension in Umbraco instance** |
+| Browser validation (Claude-in-Chrome) | `umbraco-chrome-navigation` | Shadow-DOM-piercing helpers + playbook for validating a built extension via the `mcp__claude-in-chrome` tools |
