@@ -2,7 +2,7 @@
 
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { glob } from 'glob';
-import { dirname, resolve, join } from 'path';
+import { dirname, resolve, join, basename } from 'path';
 import { fileURLToPath } from 'url';
 import { retry, handleAll, ExponentialBackoff } from 'cockatiel';
 
@@ -65,6 +65,8 @@ const SKIP_URL_PATTERNS = [
   /^https?:\/\/example\.com/,
   /^https?:\/\/my-docs\.com/,  // Example placeholder
   /^http:\/\/www\.w3\.org/,     // XML namespaces
+  /[{}]/,                        // Template placeholders, e.g. {SITE_MAJOR} — not real URLs
+  /\.git\/?(?:$|[?#])/,      // GitHub .git clone URLs always 301 to the non-.git page
 ];
 
 // Find all SKILL.md files
@@ -75,6 +77,17 @@ async function discoverSkills(basePath: string): Promise<string[]> {
     ignore: ['**/node_modules/**', '**/dist/**']
   });
   return files.map(f => join(basePath, f));
+}
+
+// Find all agent names (agents live as `<name>.md` under a plugin `agents/` dir). Agents are
+// referenced from SKILL.md like skills (e.g. `umbraco-extension-reviewer`) but aren't skills,
+// so they must join the known-names set or they'd be flagged as missing skills.
+async function discoverAgentNames(basePath: string): Promise<string[]> {
+  const files = await glob('**/agents/*.md', {
+    cwd: basePath,
+    ignore: ['**/node_modules/**', '**/dist/**']
+  });
+  return files.map(f => basename(f, '.md')).filter(Boolean);
 }
 
 // Extract links from content with line numbers
@@ -202,10 +215,14 @@ async function checkUmbracoPath(path: string): Promise<boolean> {
   // Fall back to GitHub API
   try {
     const apiPath = path.replace('/Umbraco-CMS/', '').replace(/^\//, '');
+    // Authenticate when a token is present (GITHUB_TOKEN is provided automatically in
+    // GitHub Actions). Raises the rate limit from 60 to 5000 req/hr so CI doesn't flake.
+    const ghToken = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
     const response = await fetch(`${GITHUB_API_BASE}/${apiPath}`, {
       headers: {
         'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'skill-validator'
+        'User-Agent': 'skill-validator',
+        ...(ghToken ? { Authorization: `Bearer ${ghToken}` } : {})
       }
     });
     return response.status === 200;
@@ -329,11 +346,14 @@ async function validate(): Promise<ValidationReport> {
   const skillPaths = await discoverSkills(basePath);
   console.error(`Found ${skillPaths.length} SKILL.md files`);
 
-  // Extract all skill names for reference checking
-  const allSkillNames = skillPaths.map(p => {
+  // Extract all skill names for reference checking, plus agent names (referenced the same
+  // way in SKILL.md but not skills themselves — e.g. umbraco-extension-reviewer).
+  const skillNames = skillPaths.map(p => {
     const dir = dirname(p);
     return dir.split('/').pop() || '';
   }).filter(Boolean);
+  const agentNames = await discoverAgentNames(basePath);
+  const allSkillNames = [...skillNames, ...agentNames];
 
   const stats: ValidationReport['statistics'] = {
     urlsChecked: 0,

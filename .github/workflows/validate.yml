@@ -1,0 +1,110 @@
+name: Validate Skills
+
+# Fast, always-on gate. Runs the same deterministic scripts that /validate-skills drives,
+# but directly (no Claude, no tokens) so it can block merges cheaply. The heavy mocked +
+# E2E suites (external v17 client checkout + .NET host) run separately — see validate-full.yml.
+
+on:
+  pull_request:
+    branches: [v17/dev, v17/main]
+  push:
+    branches: [v17/dev]
+  workflow_dispatch:
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    name: Link validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install validator deps
+        working-directory: .claude/skills/umbraco-skill-validator/scripts
+        run: npm install --no-audit --no-fund
+      - name: Validate links & references
+        working-directory: .claude/skills/umbraco-skill-validator/scripts
+        # GITHUB_TOKEN lifts the GitHub contents-API rate limit (60 -> 5000/hr).
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npx tsx validate-links.ts
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report
+          path: validation-report.json
+          if-no-files-found: ignore
+
+  code:
+    name: Code analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install analyzer deps
+        working-directory: .claude/skills/umbraco-skill-code-analyzer/scripts
+        run: npm install --no-audit --no-fund
+      - name: Analyze code examples
+        working-directory: .claude/skills/umbraco-skill-code-analyzer/scripts
+        # Set CHECK_TYPESCRIPT=true here for full tsc compilation (slower).
+        run: npx tsx analyze-code.ts
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-analysis-report
+          path: code-analysis-report.json
+          if-no-files-found: ignore
+
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install test-runner deps
+        working-directory: .claude/skills/umbraco-skill-test-runner/scripts
+        run: npm install --no-audit --no-fund
+      - name: Install Playwright chromium
+        run: npx --yes playwright install --with-deps chromium
+      - name: Run unit suites
+        working-directory: .claude/skills/umbraco-skill-test-runner/scripts
+        # SUITE_TYPES=unit skips the mocked/E2E suites, which need an external client
+        # checkout and the .NET host (those run in validate-full.yml).
+        env:
+          SUITE_TYPES: unit
+        run: npx tsx run-tests.ts
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-unit
+          path: test-report.json
+          if-no-files-found: ignore
+      # run-tests.ts is report-only (exits 0 even when suites fail), so gate on the report here
+      # or a failing unit suite would silently pass the job.
+      - name: Enforce test results
+        if: always()
+        run: |
+          node -e '
+            const r = require("./test-report.json");
+            const { total, passed, failed, skipped } = r.summary;
+            console.log(`unit suites: total=${total} passed=${passed} failed=${failed} skipped=${skipped}`);
+            for (const x of r.results) console.log(`  ${x.status.padEnd(7)} ${x.path}`);
+            if ((r.orphans||[]).length) { console.error("orphan tests present"); process.exit(1); }
+            if (failed > 0 || skipped > 0) { console.error("FAIL: some unit suites failed or were skipped"); process.exit(1); }
+            console.log("all unit suites passed");
+          '
