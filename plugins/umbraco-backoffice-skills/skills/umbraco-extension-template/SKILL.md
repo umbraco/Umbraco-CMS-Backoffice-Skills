@@ -25,6 +25,8 @@ Always fetch the latest docs before implementing:
 
 ## Workflow
 
+0. **Version guard**: Invoke `umbraco-version-guard` first to confirm the target site's
+   Umbraco major matches the major these skills target. Stop on a mismatch.
 1. **Install template** (one-time): `dotnet new install Umbraco.Templates`
 2. **Create extension**: `dotnet new umbraco-extension -n MyExtension`
 3. **Install dependencies**: `cd MyExtension/Client && npm install`

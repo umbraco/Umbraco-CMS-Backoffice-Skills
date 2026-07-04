@@ -64,10 +64,44 @@ interface TestableExample {
 let UMBRACO_URL = process.env.UMBRACO_URL || 'https://localhost:44325';
 const UMBRACO_URL_EXPLICIT = !!process.env.UMBRACO_URL;
 const UMBRACO_PROJECT_PATH = join(PROJECT_ROOT, 'Umbraco-CMS.Skills');
-const TEST_TIMEOUT_UNIT = 60000;
-const TEST_TIMEOUT_MOCKED = 120000;
-const TEST_TIMEOUT_E2E = 180000;
+// SUITE_TYPES: optional comma-separated allow-list of suite types to run (e.g. "unit"
+// or "unit,mocked"). Defaults to all three. Lets CI run a cheap unit-only gate on every
+// PR without pulling in the mocked/E2E prerequisites (external client checkout, .NET host).
+const SUITE_TYPES: Set<TestType> = new Set(
+  (process.env.SUITE_TYPES ?? 'unit,mocked,e2e')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean) as TestType[]
+);
+// Per-suite wall-clock caps (safety net around each spawned test process). Overridable via
+// env because CI needs more headroom: Playwright suites set `retries: CI ? 2 : 0`, so a single
+// slow/flaky test can take timeout×3, and large suites (e.g. notes-wiki's 34 tests) legitimately
+// run longer than the local defaults. Too low a cap kills the suite mid-retry and masks the real
+// pass/fail as a generic "Test timed out".
+const TEST_TIMEOUT_UNIT = Number(process.env.UNIT_TIMEOUT_MS) || 60000;
+const TEST_TIMEOUT_MOCKED = Number(process.env.MOCKED_TIMEOUT_MS) || 120000;
+const TEST_TIMEOUT_E2E = Number(process.env.E2E_TIMEOUT_MS) || 180000;
 const UMBRACO_STARTUP_TIMEOUT = 120000;
+
+// Glob ignores shared by discovery and the orphan audit. Besides the usual build dirs, we
+// must exclude the external Umbraco client checkout (UMBRACO_CLIENT_PATH) when it lands
+// INSIDE the repo tree — as it does in CI, where actions/checkout can only clone into the
+// workspace. That client ships its own examples/**/*.test.ts which would otherwise be
+// discovered as suites and flagged as orphans, failing the run with exit 2.
+function externalIgnoreGlobs(): string[] {
+  const ignores: string[] = [];
+  const clientPath = process.env.UMBRACO_CLIENT_PATH;
+  if (clientPath) {
+    const rel = relative(PROJECT_ROOT, resolve(clientPath));
+    // Only ignore when the client is under PROJECT_ROOT (rel doesn't escape upward).
+    if (rel && !rel.startsWith('..')) {
+      const top = rel.split('/')[0];
+      ignores.push(`${top}/**`);
+    }
+  }
+  return ignores;
+}
+const BASE_IGNORES = ['**/node_modules/**', '**/dist/**'];
 
 // Track Umbraco process if we start it
 let umbracoProcess: ChildProcess | null = null;
@@ -79,7 +113,7 @@ let weStartedUmbraco = false;
 async function discoverTestableExamples(): Promise<TestableExample[]> {
   const packageFiles = await glob('**/examples/**/package.json', {
     cwd: PROJECT_ROOT,
-    ignore: ['**/node_modules/**', '**/dist/**']
+    ignore: [...BASE_IGNORES, ...externalIgnoreGlobs()]
   });
 
   const examples: TestableExample[] = [];
@@ -309,6 +343,17 @@ async function runTest(
   const startTime = Date.now();
   const exampleDir = join(PROJECT_ROOT, example.path);
 
+  // Every suite here launches a browser via the example's OWN pinned Playwright — mocked/e2e via
+  // @playwright/test, unit via @web/test-runner-playwright — and those versions differ across
+  // examples (1.49 / 1.56 / 1.57 …), each needing a different browser build. A single top-level
+  // `playwright install` can't satisfy them all, so install the right browser from within the
+  // example here (idempotent; fast when already cached).
+  try {
+    execSync('npx playwright install chromium', { cwd: exampleDir, stdio: 'ignore' });
+  } catch {
+    console.error(`  Warning: playwright browser install failed in ${example.path} — suite may fail to launch`);
+  }
+
   // Determine timeout
   const timeout = test.type === 'unit' ? TEST_TIMEOUT_UNIT :
                   test.type === 'mocked' ? TEST_TIMEOUT_MOCKED : TEST_TIMEOUT_E2E;
@@ -420,7 +465,7 @@ async function auditTestCoverage(examples: TestableExample[]): Promise<OrphanTes
   // 2) Every spec/test file under examples/ should belong to an example that has a suite.
   const specFiles = await glob('**/examples/**/*.{spec,test}.ts', {
     cwd: PROJECT_ROOT,
-    ignore: ['**/node_modules/**', '**/dist/**', '**/test-results/**', '**/playwright-report/**']
+    ignore: [...BASE_IGNORES, '**/test-results/**', '**/playwright-report/**', ...externalIgnoreGlobs()]
   });
   const testableDirs = examples.filter(e => e.tests.length > 0).map(e => e.path);
   for (const spec of specFiles) {
@@ -474,6 +519,7 @@ async function runTests(): Promise<TestReport> {
 
   for (const example of examples) {
     for (const test of example.tests) {
+      if (!SUITE_TYPES.has(test.type)) continue; // SUITE_TYPES allow-list (default: all)
       if (test.type === 'unit') {
         unitTests.push({ example, test });
       } else if (test.type === 'mocked') {
@@ -482,6 +528,9 @@ async function runTests(): Promise<TestReport> {
         e2eTests.push({ example, test });
       }
     }
+  }
+  if (SUITE_TYPES.size < 3) {
+    console.error(`Suite filter active (SUITE_TYPES): running only ${[...SUITE_TYPES].join(', ')}`);
   }
 
   // Run unit tests first
