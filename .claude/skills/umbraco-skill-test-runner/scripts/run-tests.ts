@@ -343,16 +343,15 @@ async function runTest(
   const startTime = Date.now();
   const exampleDir = join(PROJECT_ROOT, example.path);
 
-  // Playwright suites (mocked/e2e) launch a browser via the example's OWN pinned @playwright/test
-  // version — which differs across examples (1.49 / 1.56 / 1.57 …), each needing a different
-  // browser build. A single top-level `playwright install` can't satisfy them all, so install
-  // the right browser from within the example here (idempotent; fast when already cached).
-  if (test.type === 'mocked' || test.type === 'e2e') {
-    try {
-      execSync('npx playwright install chromium', { cwd: exampleDir, stdio: 'ignore' });
-    } catch {
-      console.error(`  Warning: playwright browser install failed in ${example.path} — suite may fail to launch`);
-    }
+  // Every suite here launches a browser via the example's OWN pinned Playwright — mocked/e2e via
+  // @playwright/test, unit via @web/test-runner-playwright — and those versions differ across
+  // examples (1.49 / 1.56 / 1.57 …), each needing a different browser build. A single top-level
+  // `playwright install` can't satisfy them all, so install the right browser from within the
+  // example here (idempotent; fast when already cached).
+  try {
+    execSync('npx playwright install chromium', { cwd: exampleDir, stdio: 'ignore' });
+  } catch {
+    console.error(`  Warning: playwright browser install failed in ${example.path} — suite may fail to launch`);
   }
 
   // Determine timeout

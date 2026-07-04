@@ -94,3 +94,17 @@ jobs:
           name: test-report-unit
           path: test-report.json
           if-no-files-found: ignore
+      # run-tests.ts is report-only (exits 0 even when suites fail), so gate on the report here
+      # or a failing unit suite would silently pass the job.
+      - name: Enforce test results
+        if: always()
+        run: |
+          node -e '
+            const r = require("./test-report.json");
+            const { total, passed, failed, skipped } = r.summary;
+            console.log(`unit suites: total=${total} passed=${passed} failed=${failed} skipped=${skipped}`);
+            for (const x of r.results) console.log(`  ${x.status.padEnd(7)} ${x.path}`);
+            if ((r.orphans||[]).length) { console.error("orphan tests present"); process.exit(1); }
+            if (failed > 0 || skipped > 0) { console.error("FAIL: some unit suites failed or were skipped"); process.exit(1); }
+            console.log("all unit suites passed");
+          '
