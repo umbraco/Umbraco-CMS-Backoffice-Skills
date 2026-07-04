@@ -74,19 +74,29 @@ jobs:
         working-directory: .claude/skills/umbraco-skill-test-runner/scripts
         run: npm install --no-audit --no-fund
 
-      # Build every example client FRESH. The examples split two ways: tree-example and
-      # notes-wiki gitignore their built wwwroot/App_Plugins (so skipping the build leaves
-      # their extensions absent — their E2E then can't find any UI); Blueprint and TimeDashboard
-      # commit theirs (so rebuilding drifts the vite content-hashes away from the committed
-      # static-asset references and breaks the .NET build). Deleting all committed App_Plugins
-      # first lets every client rebuild into a clean dir — no stale references, real frontends.
-      - name: Clean committed client assets
-        run: rm -rf plugins/umbraco-backoffice-skills/skills/umbraco-backoffice/examples/*/wwwroot/App_Plugins
+      # tree-example and notes-wiki gitignore their built wwwroot/App_Plugins, so a fresh
+      # checkout has no frontend for them and their E2E can't find any UI. Build those two
+      # clients explicitly BEFORE the host build so their assets exist in wwwroot when the
+      # .NET static-web-asset composition globs it. (Blueprint/TimeDashboard commit their
+      # assets, so they're already present.) Rebuilding must NOT happen inside the .NET build
+      # itself (SkipClientBuild below) — that drifts the committed examples' vite hashes and
+      # breaks their static-asset references.
+      - name: Build gitignored example clients
+        run: |
+          for d in tree-example notes-wiki; do
+            dir="plugins/umbraco-backoffice-skills/skills/umbraco-backoffice/examples/$d/Client"
+            echo "== building $dir =="
+            npm --prefix "$dir" ci
+            npm --prefix "$dir" run build
+          done
 
       # Pre-build the host so `dotnet run` (started by run-tests) boots within its 120s startup
-      # timeout — a cold NuGet restore + build of the example projects can exceed it otherwise.
-      # This runs each example's BuildClient target (npm i + vite) into the cleaned dirs.
+      # timeout — a cold NuGet restore + build can exceed it otherwise. SkipClientBuild makes the
+      # .NET build serve the assets already in wwwroot (committed + the two just built above)
+      # verbatim, without re-running vite (which would drift the committed examples' hashes).
       - name: Build Umbraco host
+        env:
+          SkipClientBuild: 'true'
         run: dotnet build Umbraco-CMS.Skills/Umbraco-CMS.Skills.csproj -c Debug
 
       # Diagnostic: did the tree-example extension actually build into the host's served assets?
@@ -109,6 +119,8 @@ jobs:
           UMBRACO_USER_LOGIN: admin@example.com
           UMBRACO_USER_PASSWORD: '1234567890'
           UMBRACO_CLIENT_PATH: ${{ runner.temp }}/umbraco-cms/src/Umbraco.Web.UI.Client
+          # Serve the assets built above verbatim; don't let `dotnet run` re-run vite.
+          SkipClientBuild: 'true'
           # CI headroom: Playwright suites retry twice under CI (60s/test), and notes-wiki has
           # 34 tests — the local 180s cap kills them mid-retry and hides the real result.
           E2E_TIMEOUT_MS: '900000'
