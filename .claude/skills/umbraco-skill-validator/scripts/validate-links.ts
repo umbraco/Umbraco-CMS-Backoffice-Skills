@@ -66,6 +66,7 @@ const SKIP_URL_PATTERNS = [
   /^https?:\/\/my-docs\.com/,  // Example placeholder
   /^http:\/\/www\.w3\.org/,     // XML namespaces
   /[{}]/,                        // Template placeholders, e.g. {SITE_MAJOR} — not real URLs
+  /\.git\/?(?:$|[?#])/,      // GitHub .git clone URLs always 301 to the non-.git page
 ];
 
 // Find all SKILL.md files
