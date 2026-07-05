@@ -1,0 +1,33 @@
+# Dependabot configuration.
+#
+# Every npm manifest in this repo belongs to a *build/test/dev-tooling* tree:
+# the example projects' Client folders and this repo's own validation scripts.
+# None of these packages ship to consumers — the "product" is the SKILL.md docs
+# plus the pre-built wwwroot/App_Plugins/ bundles that are committed to git.
+#
+# Without this file Dependabot ran security-only updates with no grouping, which
+# meant one PR per (package x lockfile) — dozens of PRs. This config:
+#   * covers every npm directory via a glob (`/**`),
+#   * groups all updates into ONE PR per directory (grouping applies to both
+#     version and security updates), and
+#   * caps the number of open PRs so a fresh batch of advisories can't flood us.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directories:
+      - "/**"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 10
+    groups:
+      # One grouped PR per directory covering all dependency updates.
+      npm-dependencies:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "chore(deps)"

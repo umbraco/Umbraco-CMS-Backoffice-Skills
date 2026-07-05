@@ -151,6 +151,11 @@ When the user describes what they want:
 ### Step 5: Browser Validation
 Check if browser automation is available (any of: `dev-browser` skill, Playwright MCP, Claude computer use).
 
+If validating with **Claude-in-Chrome** (`mcp__claude-in-chrome` tools): load the
+`umbraco-chrome-navigation` skill first — the backoffice is Lit/shadow-DOM, so the built-in
+find/read_page tools and raw screenshots are unreliable; that skill provides the
+shadow-DOM-piercing helpers and navigation playbook needed to validate it.
+
 If browser automation IS available:
 - [ ] Navigate to backoffice login (http://localhost:5000/umbraco)
 - [ ] Login with credentials
