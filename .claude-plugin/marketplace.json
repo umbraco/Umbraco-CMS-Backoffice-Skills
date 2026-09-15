@@ -7,7 +7,7 @@
   "metadata": {
     "description": "Umbraco backoffice customization skills for Claude Code",
     "version": "18.0.2",
-    "homepage": "https://github.com/hifi-phil/UmbracoCMS_Skills"
+    "homepage": "https://github.com/umbraco/Umbraco-CMS-Backoffice-Skills"
   },
   "plugins": [
     {
