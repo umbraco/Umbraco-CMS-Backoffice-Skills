@@ -57,7 +57,7 @@ public class MyApiComposer : IComposer
     public void Compose(IUmbracoBuilder builder) =>
 
         // Registers a dedicated backoffice OpenAPI document, served at
-        // /umbraco/swagger/{ApiName}/swagger.json and browsable via Swagger UI.
+        // /umbraco/openapi/{ApiName}.json and browsable via Swagger UI.
         // See https://docs.umbraco.com/umbraco-cms/extend-your-project/tutorials/creating-a-backoffice-api
         builder.AddBackOfficeOpenApiDocument(
             Constants.ApiName,
@@ -87,7 +87,7 @@ Add to your `Client/package.json`:
 ```json
 {
   "scripts": {
-    "generate-client": "node scripts/generate-openapi.js https://localhost:44325/umbraco/swagger/myextension/swagger.json"
+    "generate-client": "node scripts/generate-openapi.js https://localhost:44325/umbraco/openapi/myextension.json"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.97.0",
@@ -170,13 +170,11 @@ export const onInit: UmbEntryPointOnInit = (host, _extensionRegistry) => {
   host.consumeContext(UMB_AUTH_CONTEXT, (authContext) => {
     if (!authContext) return;
 
-    const config = authContext.getOpenApiConfiguration();
-
-    client.setConfig({
-      baseUrl: config.base,
-      credentials: config.credentials,
-      auth: config.token,  // This provides the bearer token!
-    });
+    // configureClient() sets baseUrl/credentials/bearer token AND binds the
+    // default interceptors (401 retry, problem-details error notifications).
+    // It guards against configuring the same client twice, so it's safe to
+    // call for umbHttpClient and your own generated client alike.
+    authContext.configureClient(client);
 
     console.log("API client configured with auth");
   });
@@ -186,6 +184,28 @@ export const onUnload: UmbEntryPointOnUnload = (_host, _extensionRegistry) => {
   // Cleanup if needed
 };
 ```
+
+<details>
+<summary>Manual alternative (skips the default interceptors)</summary>
+
+If you need full control over the client config and don't want the default
+interceptors, you can configure the client by hand instead:
+
+```typescript
+const config = authContext.getOpenApiConfiguration();
+
+client.setConfig({
+  baseUrl: config.base,
+  credentials: config.credentials,
+  auth: config.token,  // This provides the bearer token!
+});
+```
+
+This authenticates correctly, but you lose the 401-retry and problem-details
+error handling that `configureClient()` wires up — and you're coupled to
+today's bearer-token mechanism instead of treating auth as a black box.
+
+</details>
 
 ### 5. Using the Generated Client
 
